@@ -10,5 +10,6 @@ all:
 	@mkdir -p bin
 	g++ $(INCDIRS) $(FLAGS) -o $(BIN)/ratioscore $(SRC)/ratioscore.cpp $(LIBDIRS) $(LIBS)
 
-
+test:
+	bin/ratioscore tests/test1.txt
 
