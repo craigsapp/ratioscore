@@ -1,0 +1,6 @@
+external/humlib
+external/midifile
+.DS_Store
+bin
+err
+*.mid
