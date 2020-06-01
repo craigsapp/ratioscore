@@ -14,7 +14,7 @@
 // 0	1	1	20g
 // 1.5	2	2	30
 // 1.64	3	0	.
-// 2.6	3/2g	5/4c100	50
+// 2.6	3/2g	5/4+c100	50
 // 3.1	.	3/2	50
 // 4.2	6/5G	.	.
 // *-	*-	*-	*-
@@ -24,6 +24,7 @@
 #include "MidiFile.h"
 
 #include <string>
+#include <cmath>
 
 using namespace std;
 using namespace smf;
@@ -31,9 +32,12 @@ using namespace hum;
 
 
 // function declarations:
-string    getOutputFilename (const string& filename);
-bool      convertFile       (MidiFile& outfile, HumdrumFile& infile);
-void      generateTrack     (MidiFile& outfile, int track, HTp pstart, int dtrack, HumdrumFile& infile);
+string  getOutputFilename (const string& filename);
+bool    convertFile       (MidiFile& outfile, HumdrumFile& infile);
+void    generateTrack     (MidiFile& outfile, int track, HTp pstart, int dtrack, HumdrumFile& infile);
+void    buildTimemap      (HTp sstart, HumdrumFile& infile);
+double  getMidiNoteNumber (string refpitch);
+int     getEndTime        (HTp stok);
 
 
 // variables:
@@ -41,6 +45,8 @@ vector<HTp> m_sstarts;
 vector<HTp> m_partStarts;
 int         m_timeTrack = -1;
 vector<int> m_dynTrack;
+vector<int> m_timemap;
+double      m_tuning = 440.0; // A4
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -116,10 +122,12 @@ int main(int argc, char** argv) {
 
 bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	infile.getSpineStartList(m_sstarts);
+	HTp timespine = NULL;
 
 	for (int i=0; i<(int)m_sstarts.size(); i++) {
 		if (*m_sstarts[i] == "**time") {
 			m_timeTrack = m_sstarts[i]->getTrack();
+			timespine = m_sstarts[i];
 			break;
 		}
 	}
@@ -142,6 +150,11 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 		}
 	}
 
+	buildTimemap(timespine, infile);
+	// for (int i=0; i<(int)m_timemap.size(); i++) {
+	// 	cout << m_timemap[i] << endl;
+	// }
+
 	outfile.clear();
 	if (m_partStarts.empty()) {
 		return false;
@@ -155,9 +168,85 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 		generateTrack(outfile, i+1, m_partStarts[i], m_dynTrack[i], infile);
 	}
 
+	outfile.sortTracks();
 	return true;
 }
 
+
+
+//////////////////////////////
+//
+// buildTimemap -- Convert time spine into millisecond values, interpolating
+//   evenly when the data contains a null.
+//
+
+void buildTimemap(HTp sstart, HumdrumFile& infile) {
+	m_timemap.clear();
+	m_timemap.resize(infile.getLineCount());
+
+	vector<int*> tdata;
+	tdata.reserve(m_timemap.size());
+
+	fill(m_timemap.begin(), m_timemap.end(), -2);
+	HTp current = sstart;
+	while (current) {
+		if (!current->isData()) {
+			current = current->getNextToken();
+			continue;
+		}
+		int line = current->getLineIndex();
+		tdata.push_back(&m_timemap.at(line));
+
+		if (current->isNull()) {
+			m_timemap[line] = -1;
+		} else {
+			m_timemap[line] = int(stod(*current) * 1000.0 + 0.5);
+		}
+
+		current = current->getNextToken();
+	}
+
+	if (tdata.empty()) {
+		// no time data
+		return;
+	}
+
+	// set initial part of score to zero:
+	for (int i=0; i<(int)m_timemap.size(); i++) {
+		if (m_timemap[i] < 0) {
+			m_timemap[i] = 0;
+		} else {
+			break;
+		}
+	}
+
+	// interpolate null tokens as evenly spaced data
+	int lastone = 0;
+	int nextone = 0;
+	int counter = 0;
+	for (int i=1; i<(int)tdata.size(); i++) {
+		if (*tdata[i] == -1) {
+			counter++;
+			if (*tdata[i-1] > -1) {
+				lastone = *tdata[i-1];
+			}
+		} else if (counter > 0) {
+			nextone = *tdata[i];
+			double increment = (nextone - lastone) / (double)(counter + 1);
+			for (int j=0; j<counter; j++) {
+				*tdata[i-counter+j] = int((lastone + increment * (j + 1)) * 1000.0 + 0.5);
+			}
+		}
+	}
+
+	// fill in timgs for nondata:
+	for (int i=1; i<(int)m_timemap.size(); i++) {
+		if (m_timemap[i] < 0) {
+			m_timemap[i] = m_timemap[i-1];
+		}
+	}
+
+}
 
 
 //////////////////////////////
@@ -169,12 +258,37 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 	HTp current = pstart;
 	HumRegex hre;
 	HumNum value;
-	double cents;
+	double rcents;
+	double pcents;
+	string refpitch;
+	string refcents;
+	string direction;
 	int top;
 	int bot;
 	string botstring;
+	double reference;
+
 	while (current) {
 		if (current->isInterpretation()) {
+			if (hre.search(current, "^\\*ref:([A-G][#-b]?\\d+)([+-]c?\\d+\\.?\\d*)?")) {
+				refpitch = hre.getMatch(1);
+				reference = getMidiNoteNumber(refpitch);
+				refcents  = hre.getMatch(2);
+				// cerr << "REF PITCH " << refpitch << ", " << reference << endl;
+				// cerr << "REF CENTS " << refcents << endl;
+				if (!refcents.empty()) {
+					if (hre.search(refcents, "([+-])c?(\\d+\\.?\\d*)")) {
+						direction = hre.getMatch(1);
+						rcents = hre.getMatchDouble(2);
+						if (direction == "-") {
+							reference -= rcents / 100.0;
+						} else {
+							reference += rcents / 100.0;
+						}
+					}
+				}
+				// cerr << "NEW REFERENCE " << reference << endl;
+			}
 		} else if (current->isData()) {
 			if (current->isNull()) {
 				current = current->getNextToken();
@@ -194,6 +308,7 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 					bot = hre.getMatchInt(2);
 				}
 				if (top == 0) {
+					cerr << "TOP should not be zero: " << current << endl;
 					current = current->getNextToken();
 					continue;
 				}
@@ -203,23 +318,65 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 				}
 				value = top;
 				value /= bot;
-				cents = 0.0;
-				if (hre.search(current, "c(\\d+\\.\\d*)")) {
-					cents = hre.getMatchDouble(1);
+				double cvalue = log2(value.getFloat()) * 12;
+				if (hre.search(current, "([+-])c?(\\d+\\.\\d*)")) {
+					pcents = hre.getMatchDouble(2);
+					string direction = hre.getMatch(1);
+					if (direction == "-") {
+						pcents = hre.getMatchDouble(2);
+					} else {
+						pcents = -hre.getMatchDouble(2);
+					}
 				}
-				if (fabs(cents) > 200.0) {
-					cerr << "Error: cents value is too large: " << cents << ". Clipped to 200.\n";
-					cents = cents > 200.0 ? 200.0 : -200.0;
+				double pitch = reference + cvalue + pcents;
+				// cerr << "\tRATIO " << value << " CENTS " << pcents << "\t";
+				// cerr << "CRATIO " << cvalue << endl;
+				// cerr << "\tPITCH: " << pitch << endl;
+				int starttime = m_timemap[current->getLineIndex()];
+				int endtime = getEndTime(current);
+				// cerr << "\t\tSTARTTIME: " << starttime << "\tENDTIME: " << endtime << endl;
+				int channel = track;
+				int velocity = 64;
+				outfile.addNoteOn(track, starttime, channel, int(pitch), velocity);
+				outfile.addNoteOff(track, endtime, channel, int(pitch), velocity);
+				double pbend = pitch - int(pitch);
+				pbend = pbend * 0.5;   // range is +/- 200 cents by default so normalize
+				int ptime = starttime - 1;
+				if (ptime < 0) {
+					ptime = 0;
 				}
-				cerr << "RATIO " << value << " CENTS " << cents << endl;
+				// cerr << "STARTTIME " << starttime << " PTIME " << ptime << endl;
+				outfile.addPitchBend(track, ptime, channel, pbend);
 			}
 		}
 		current = current->getNextToken();
 		continue;
 	}
+}
 
 
 
+//////////////////////////////
+//
+// getEndTime --
+//
+
+int getEndTime(HTp stok) {
+	HTp current = stok->getNextToken();
+	while (current) {
+		if (!current->isData()) {
+			current = current->getNextToken();
+			continue;
+		}
+		if (current->isNull()) {
+			current = current->getNextToken();
+			continue;
+		}
+		int line = current->getLineIndex();
+		return m_timemap[line];
+		current = current->getNextToken();
+	}
+	return m_timemap.back();
 }
 
 
@@ -241,6 +398,59 @@ string getOutputFilename(const string& filename) {
 	} else {
 		output += ".mid";
 	}
+	return output;
+}
+
+
+
+
+/////////////////////////////
+//
+// getMidiNoteNumber -- Input:
+//     [A-G][-bf#s+]*\d+
+//
+
+double getMidiNoteNumber(string refpitch) {
+	string diatonic;
+	string accid;
+	string octave;
+	HumRegex hre;
+	if (!hre.search(refpitch, "([A-G])([-bf#s+]*)(\\d+)")) {
+		return 0.0;
+	}
+	diatonic = hre.getMatch(1);
+	accid    = hre.getMatch(2);
+	octave   = hre.getMatch(3);
+	
+	int alter = 0;
+	if (!accid.empty()) {
+		for (int i=0; i<(int)accid.size(); i++) {
+			switch (accid[i]) {
+				case '-':
+				case 'f':
+				case 'b':
+					alter--;
+					break;
+				case '#':
+				case 's':
+					alter++;
+			}
+		}
+	}
+	int output = 0;
+	switch (refpitch[0]) {
+		case 'C': output = 0;  break;
+		case 'D': output = 2;  break;
+		case 'E': output = 4;  break;
+		case 'F': output = 5;  break;
+		case 'G': output = 7;  break;
+		case 'A': output = 9;  break;
+		case 'B': output = 11; break;
+	}
+	output += alter;
+	// octave must be 1 or higher for now.
+	int oct = stoi(octave);
+	output += 12 * (oct + 1);
 	return output;
 }
 

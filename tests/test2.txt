@@ -1,0 +1,15 @@
+**time	**ratio	**ratio	**mdyn
+*	*ref:E5+25	*ref:C4-50	*
+0	1	1	20g
+1.5	2	2	30
+*	*^	*	*
+*	*	*ref:A4	*	*
+1.64	3	6/5	0	.
+2.6	3/2g	.	5/4-25	50
+*	*v	*v	*	*
+3.1	.	3/2	50
+4.2	6/5G	.	.
+*-	*-	*-	*-
+!!!RDF**ratio: m = multiphonic
+!!!RDF**ratio: n = natural harmonic
+!!!RDF**ratio: a = artificial harmonic

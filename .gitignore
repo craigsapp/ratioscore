@@ -4,3 +4,4 @@ external/midifile
 bin
 err
 *.mid
+*.mp3
