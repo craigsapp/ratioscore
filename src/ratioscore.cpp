@@ -38,6 +38,7 @@ void    generateTrack     (MidiFile& outfile, int track, HTp pstart, int dtrack,
 void    buildTimemap      (HTp sstart, HumdrumFile& infile);
 double  getMidiNoteNumber (string refpitch);
 int     getEndTime        (HTp stok);
+void    addTempoMessages  (MidiFile& outfile, HTp sstart);
 
 
 // variables:
@@ -47,6 +48,7 @@ int         m_timeTrack = -1;
 vector<int> m_dynTrack;
 vector<int> m_timemap;
 double      m_tuning = 440.0; // A4
+int         m_first_tempo_time = -1;
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -124,6 +126,8 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	infile.getSpineStartList(m_sstarts);
 	HTp timespine = NULL;
 
+	outfile.setTPQ(1000);
+
 	for (int i=0; i<(int)m_sstarts.size(); i++) {
 		if (*m_sstarts[i] == "**time") {
 			m_timeTrack = m_sstarts[i]->getTrack();
@@ -168,8 +172,48 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 		generateTrack(outfile, i+1, m_partStarts[i], m_dynTrack[i], infile);
 	}
 
+	addTempoMessages(outfile, timespine);
+
 	outfile.sortTracks();
 	return true;
+}
+
+
+
+//////////////////////////////
+//
+// addTempoMessages -- Check **time spine for tempo changes.
+//
+
+void addTempoMessages(MidiFile& outfile, HTp sstart) {
+	HumRegex hre;
+	HTp current = sstart->getNextToken();
+	while (current) {
+		if (!current->isInterpretation()) {
+			current = current->getNextToken();
+			continue;
+		}
+		if (hre.search(current, "^\\*MM(\\d+\\.?\\d*)$")) {
+			double tempo = hre.getMatchDouble(1);
+			int starttime = m_timemap[current->getLineIndex()];
+			if (m_first_tempo_time >= 0) {
+				if (starttime < m_first_tempo_time) {
+					m_first_tempo_time = starttime;
+				}
+			} else {
+				m_first_tempo_time = starttime;
+			}
+			outfile.addTempo(0, starttime, tempo);
+		}
+		current = current->getNextToken();
+	}
+
+	if (m_first_tempo_time != 0) {
+		// set the default tempo to 60 bpm:
+		outfile.addTempo(0, 0, 60.0);
+	}
+
+
 }
 
 
@@ -265,12 +309,34 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 	string direction;
 	int top;
 	int bot;
+	int channel = track;
+	int velocity = 64;
 	string botstring;
 	double reference;
+	HumInstrument instrument;
 
 	while (current) {
 		if (current->isInterpretation()) {
-			if (hre.search(current, "^\\*ref:([A-G][#-b]?\\d+)([+-]c?\\d+\\.?\\d*)?")) {
+			if (hre.search(current, "^\\*I[a-z]{3,6}$")) {
+				// Process an instrument name
+				int inst = instrument.getGM(*current);
+				int starttime = m_timemap[current->getLineIndex()];
+				outfile.addTimbre(track, starttime, channel, inst);
+			} else if (hre.search(current, "^\\*MM(\\d+\\.?\\d*)$")) {
+				// Process a tempo change.  It should not be
+				// here, but rather in the **time spine, but
+				// process these anyway.
+				double tempo = hre.getMatchDouble(1);
+				int starttime = m_timemap[current->getLineIndex()];
+				if (m_first_tempo_time >= 0) {
+					if (starttime < m_first_tempo_time) {
+						m_first_tempo_time = starttime;
+					}
+				} else {
+					m_first_tempo_time = starttime;
+				}
+				outfile.addTempo(0, starttime, tempo);
+			} else if (hre.search(current, "^\\*ref:([A-G][#-b]?\\d+)([+-]c?\\d+\\.?\\d*)?")) {
 				refpitch = hre.getMatch(1);
 				reference = getMidiNoteNumber(refpitch);
 				refcents  = hre.getMatch(2);
@@ -335,8 +401,6 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 				int starttime = m_timemap[current->getLineIndex()];
 				int endtime = getEndTime(current);
 				// cerr << "\t\tSTARTTIME: " << starttime << "\tENDTIME: " << endtime << endl;
-				int channel = track;
-				int velocity = 64;
 				outfile.addNoteOn(track, starttime, channel, int(pitch), velocity);
 				outfile.addNoteOff(track, endtime, channel, int(pitch), velocity);
 				double pbend = pitch - int(pitch);
@@ -376,7 +440,7 @@ int getEndTime(HTp stok) {
 		return m_timemap[line];
 		current = current->getNextToken();
 	}
-	return m_timemap.back();
+	return m_timemap.back() + 1000;  // note at end given 1.0 second duration
 }
 
 

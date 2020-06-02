@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+
+use strict;
+
+chomp (my $timidity = `which timidity`);
+chomp (my $lame = `which lame`);
+
+die "Cannot find timidity command\n" if $timidity =~ /^\s*$/;
+die "Cannot find lame command\n" if $lame =~ /^\s*$/;
+
+foreach my $file (@ARGV) {
+	my $base = $file;
+	$base =~ s/\.midi?$//i;
+	next if $base eq $file;
+	print "Converting $file...\n";
+	my $result = `timidity $file -Ow -o - 2> /dev/null | $lame - -b 64 $base.mp3 2> /dev/null`;
+}
