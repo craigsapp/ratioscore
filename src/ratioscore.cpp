@@ -52,7 +52,7 @@ void    addTempoMessages  (MidiFile& outfile, HTp sstart);
 void    addGlissando      (MidiFile& outfile, int track, HTp current, double spitch, double reference, int channel);
 double  getPitchInfo      (HTp token, double reference);
 double  getPitchBend      (double pitch, int channel);
-double  getPitchBend      (double pitch, int spitch, int channel);
+double  getPitchBend      (double pitch, double spitch, int channel);
 HTp     getNextPitchToken (HTp token);
 
 
@@ -335,6 +335,7 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 		// avoid the drum channel
 		channel++;
 	}
+	double lastattack = 0.0;
 	
 	int velocity = 64;
 	double reference;
@@ -423,8 +424,12 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 				outfile.addNoteOn(track, starttime, channel, int(pitch), velocity);
 				outfile.addNoteOff(track, endtime, channel, int(pitch), velocity);
 				outfile.addPitchBend(track, ptime, channel, pbend);
+				lastattack = pitch;
 			} else {
-				// this is a tied note, so ignored for note attacks
+				// this is a tied note, so ignored for note attacks, but add
+				// pitch bend:
+				pbend = getPitchBend(pitch, lastattack, channel);
+				outfile.addPitchBend(track, ptime, channel, pbend);
 			}
 
 			if (current->find('H') != string::npos) {
@@ -568,11 +573,11 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 		outfile.addPitchBend(track, x, channel, pbend);
 		x += m_glissTime.at(humtrack);
 	}
-	if (nexttok->find('_') != string::npos) {
-		// add ending glissando on next note if it is not an attack
-		double pbend = getPitchBend(y2, spitch, channel);
-		outfile.addPitchBend(track, x2-1, channel, pbend);
-	}
+	//if (nexttok->find('_') != string::npos) {
+	//	// add ending glissando on next note if it is not an attack
+	//	double pbend = getPitchBend(y2, spitch, channel);
+	//	outfile.addPitchBend(track, x2-1, channel, pbend);
+	//}
 
 	if (nexttok->find('h') == string::npos) {
 		addGlissando(outfile, track, nexttok, spitch, reference, channel);
