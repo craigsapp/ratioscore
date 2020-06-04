@@ -492,8 +492,24 @@ double getPitchInfo(HTp token, double reference) {
 		cerr << "Error cannot use 0 as the denominator, setting to 1" << endl;
 		bot = 1;
 	}
+
+	if (hre.search(token, "\\(\\d+/?\\d*\\)\\^(\\d+)")) {
+		int power = hre.getMatchInt(1);
+		top = pow(top, power);
+		bot = pow(bot, power);
+		if (top < 0) {
+			cerr << "Error: integer overflow for numerator in " << token << endl;
+			return reference;
+		}
+		if (bot < 0) {
+			cerr << "Error: integer overflow for denominator in " << token << endl;
+			return reference;
+		}
+	}
+
 	value = top;
 	value /= bot;
+
 	double cvalue = log2(value.getFloat()) * 12;
 	if (hre.search(token, "([+-])(\\d+\\.?\\d*)c")) {
 		pcents = hre.getMatchDouble(2);
