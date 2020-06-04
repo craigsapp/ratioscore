@@ -65,7 +65,7 @@ vector<int> m_timemap;               // timestamp for each line of file
 double      m_tuning = 440.0;        // Tuning of A4 (current fixed: add RPN to change)
 int         m_first_tempo_time = -1; // timestamp of first tempo message in score (default MM60)
 vector<double> m_pbrange;            // pitch bend range by channel
-int         m_glissTime = 50;        // 50 ms between gliss adjustments
+vector<int> m_glissTime;             // time between gliss adjustments
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -145,6 +145,9 @@ int main(int argc, char** argv) {
 bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	infile.getSpineStartList(m_sstarts);
 	HTp timespine = NULL;
+
+	m_glissTime.resize(infile.getTrackCount() + 1);
+	fill(m_glissTime.begin(), m_glissTime.end(), 50);
 
 	outfile.setTPQ(1000);
 
@@ -373,6 +376,12 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 				int starttime = m_timemap[current->getLineIndex()];
 				outfile.setPitchBendRange(track, starttime, channel, range);
 				m_pbrange.at(channel) = range;
+			} else if (hre.search(current, "^\\*gliss[:=]?(\\d+)$")) {
+				int value = hre.getMatchInt(1);
+				if (value > 0) {
+					int track = current->getTrack();
+					m_glissTime[track] = value;
+				}
 			} else if (hre.search(current, "^\\*ref[:=]?([A-G][#-b]?\\d+)([+-]c?\\d+\\.?\\d*)?")) {
 				refpitch = hre.getMatch(1);
 				reference = getMidiNoteNumber(refpitch);
@@ -513,6 +522,8 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 	if (nexttok == NULL) {
 		return;
 	}
+	int humtrack = starttok->getTrack();
+
 	double npitch = getPitchInfo(nexttok, reference);
 	double sspitch = getPitchInfo(starttok, reference);
 	double starttime = m_timemap[starttok->getLineIndex()];
@@ -529,7 +540,7 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 
 	double m = (y2 - y1)/(x2 - x1);
 	double b = (x2*y1 - x1*y2)/(x2 - x1);
-	double x = x1 + 50;
+	double x = x1 + m_glissTime.at(humtrack);
 	double y;
 	while (x < x2) {
 		y = m * x + b;
@@ -539,7 +550,7 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 			return;
 		}
 		outfile.addPitchBend(track, x, channel, pbend);
-		x += m_glissTime;
+		x += m_glissTime.at(humtrack);
 	}
 	if (nexttok->find('_') != string::npos) {
 		// add ending glissando on next note if it is not an attack
