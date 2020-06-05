@@ -5,3 +5,9 @@ bin
 err
 *.mid
 *.mp3
+.*
+!.gitignore
+!.gitmodules
+*~
+components/
+_site/
