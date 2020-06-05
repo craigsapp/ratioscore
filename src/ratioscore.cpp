@@ -66,6 +66,7 @@ double      m_tuning = 440.0;        // Tuning of A4 (current fixed: add RPN to 
 int         m_first_tempo_time = -1; // timestamp of first tempo message in score (default MM60)
 vector<double> m_pbrange;            // pitch bend range by channel
 vector<int> m_glissTime;             // time between gliss adjustments
+int         m_pbadjust = 0;          // anticipation time for pitch bend before note
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -414,16 +415,16 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 			double pbend = getPitchBend(pitch, channel);
 
 			int starttime = m_timemap[current->getLineIndex()];
-			int endtime = getEndTime(current);
-			int ptime = starttime - 1;
+			int endtime = getEndTime(current) - 1;
+			int ptime = starttime - m_pbadjust;
 			if (ptime < 0) {
 				ptime = 0;
 			}
 
 			if (current->find('_') == string::npos) {
+				outfile.addPitchBend(track, ptime, channel, pbend);
 				outfile.addNoteOn(track, starttime, channel, int(pitch), velocity);
 				outfile.addNoteOff(track, endtime, channel, int(pitch), velocity);
-				outfile.addPitchBend(track, ptime, channel, pbend);
 				lastattack = pitch;
 			} else {
 				// this is a tied note, so ignored for note attacks, but add
