@@ -60,6 +60,8 @@ HTp     getNextPitchToken (HTp token);
 vector<HTp> m_sstarts;               // starting tokens of spines
 vector<HTp> m_partStarts;            // starting tokens of parts
 int         m_timeTrack = -1;        // track number for time spine
+int         m_dtimeTrack = -1;       // track number for dtime spine
+int         m_recipTrack = -1;       // track number for recip spine
 vector<int> m_dynTrack;              // dynamic track number for each part
 vector<int> m_timemap;               // timestamp for each line of file
 double      m_tuning = 440.0;        // Tuning of A4 (current fixed: add RPN to change)
@@ -67,6 +69,7 @@ int         m_first_tempo_time = -1; // timestamp of first tempo message in scor
 vector<double> m_pbrange;            // pitch bend range by channel
 vector<int> m_glissTime;             // time between gliss adjustments
 int         m_pbadjust = 0;          // anticipation time for pitch bend before note
+int         m_lastDuration = 1000;   // duration of last event in score (if not rest).
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -157,9 +160,14 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 			m_timeTrack = m_sstarts[i]->getTrack();
 			timespine = m_sstarts[i];
 			break;
+		} else if (*m_sstarts[i] == "**dtime") {
+			m_dtimeTrack = m_sstarts[i]->getTrack();
+			timespine = m_sstarts[i];
+			break;
 		}
 	}
-	if (m_timeTrack < 0) {
+	if ((m_timeTrack < 0) && (m_dtimeTrack < 0)) {
+		// need a timing spine
 		return false;
 	}
 
@@ -254,6 +262,12 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 	vector<int*> tdata;
 	tdata.reserve(m_timemap.size());
 
+	bool dtime = false;
+	double lasttime = 0.0;
+	if (sstart->find("dtime") != string::npos) {
+		dtime = true;
+	}
+
 	fill(m_timemap.begin(), m_timemap.end(), -2);
 	HTp current = sstart;
 	while (current) {
@@ -268,6 +282,12 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 			m_timemap[line] = -1;
 		} else {
 			m_timemap[line] = int(stod(*current) * 1000.0 + 0.5);
+		}
+		if (dtime) {
+			m_lastDuration = m_timemap[line];
+			int tempval = m_timemap[line] += lasttime;
+			m_timemap[line] = lasttime;
+			lasttime = tempval;
 		}
 
 		current = current->getNextToken();
@@ -625,7 +645,7 @@ int getEndTime(HTp stok) {
 		return m_timemap[line];
 		current = current->getNextToken();
 	}
-	return m_timemap.back() + 1000;  // note at end given 1.0 second duration
+	return m_timemap.back() + m_lastDuration;
 }
 
 
