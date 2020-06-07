@@ -164,9 +164,13 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 			m_dtimeTrack = m_sstarts[i]->getTrack();
 			timespine = m_sstarts[i];
 			break;
+		} else if (*m_sstarts[i] == "**recip") {
+			m_recipTrack = m_sstarts[i]->getTrack();
+			timespine = m_sstarts[i];
+			break;
 		}
 	}
-	if ((m_timeTrack < 0) && (m_dtimeTrack < 0)) {
+	if ((m_timeTrack < 0) && (m_dtimeTrack < 0) && (m_recipTrack < 0)) {
 		// need a timing spine
 		return false;
 	}
@@ -263,8 +267,13 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 	tdata.reserve(m_timemap.size());
 
 	bool dtime = false;
+	bool recip = false;
 	double lasttime = 0.0;
 	if (sstart->find("dtime") != string::npos) {
+		dtime = true;
+	}
+	if (sstart->find("recip") != string::npos) {
+		recip = true;
 		dtime = true;
 	}
 
@@ -281,7 +290,12 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 		if (current->isNull()) {
 			m_timemap[line] = -1;
 		} else {
-			m_timemap[line] = int(stod(*current) * 1000.0 + 0.5);
+			if (!recip) {
+				m_timemap[line] = int(stod(*current) * 1000.0 + 0.5);
+			} else {
+				double value = Convert::recipToDuration(*current).getFloat();
+				m_timemap[line] = int(value * 1000.0 + 0.5);
+			}
 		}
 		if (dtime) {
 			m_lastDuration = m_timemap[line];
