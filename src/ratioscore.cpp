@@ -44,7 +44,7 @@ using namespace hum;
 // function declarations:
 string  getOutputFilename (const string& filename);
 bool    convertFile       (MidiFile& outfile, HumdrumFile& infile);
-void    generateTrack     (MidiFile& outfile, int track, HTp pstart, int dtrack, HumdrumFile& infile);
+void    generateTrack     (MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile);
 void    buildTimemap      (HTp sstart, HumdrumFile& infile);
 double  getMidiNoteNumber (string refpitch);
 int     getEndTime        (HTp stok);
@@ -54,15 +54,20 @@ double  getPitchInfo      (HTp token, double reference);
 double  getPitchBend      (double pitch, int channel);
 double  getPitchBend      (double pitch, double spitch, int channel);
 HTp     getNextPitchToken (HTp token);
+int     getVelocity       (HTp rtoken);
 
 
 // variables:
 vector<HTp> m_sstarts;               // starting tokens of spines
+vector<HTp> m_dynStarts;             // starting tokens of dynamics spines
 vector<HTp> m_partStarts;            // starting tokens of parts
+bool        m_hasDyn = false;        // does the score have dynamics
+bool        m_hasTime = true;        // does the score have a timeline
 int         m_timeTrack = -1;        // track number for time spine
 int         m_dtimeTrack = -1;       // track number for dtime spine
 int         m_recipTrack = -1;       // track number for recip spine
-vector<int> m_dynTrack;              // dynamic track number for each part
+int         m_msTrack = -1;          // track number for millisecond spine
+int         m_dmsTrack = -1;         // track number for millisecond spine
 vector<int> m_timemap;               // timestamp for each line of file
 double      m_tuning = 440.0;        // Tuning of A4 (current fixed: add RPN to change)
 int         m_first_tempo_time = -1; // timestamp of first tempo message in score (default MM60)
@@ -70,6 +75,7 @@ vector<double> m_pbrange;            // pitch bend range by channel
 vector<int> m_glissTime;             // time between gliss adjustments
 int         m_pbadjust = 0;          // anticipation time for pitch bend before note
 int         m_lastDuration = 1000;   // duration of last event in score (if not rest).
+int         m_velocity = 64;         // default attack velocity of notes
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -159,34 +165,53 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 		if (*m_sstarts[i] == "**time") {
 			m_timeTrack = m_sstarts[i]->getTrack();
 			timespine = m_sstarts[i];
+			m_hasTime = true;
 			break;
 		} else if (*m_sstarts[i] == "**dtime") {
 			m_dtimeTrack = m_sstarts[i]->getTrack();
 			timespine = m_sstarts[i];
+			m_hasTime = true;
 			break;
 		} else if (*m_sstarts[i] == "**recip") {
 			m_recipTrack = m_sstarts[i]->getTrack();
 			timespine = m_sstarts[i];
+			m_hasTime = true;
+			break;
+		} else if (*m_sstarts[i] == "**ms") {
+			m_msTrack = m_sstarts[i]->getTrack();
+			timespine = m_sstarts[i];
+			m_hasTime = true;
+			break;
+		} else if (*m_sstarts[i] == "**dms") {
+			m_dmsTrack = m_sstarts[i]->getTrack();
+			timespine = m_sstarts[i];
+			m_hasTime = true;
 			break;
 		}
 	}
-	if ((m_timeTrack < 0) && (m_dtimeTrack < 0) && (m_recipTrack < 0)) {
+	if (!m_hasTime) {
 		// need a timing spine
 		return false;
 	}
 
 	m_partStarts.resize(0);
-	m_dynTrack.resize(0);
+	m_dynStarts.resize(0);
+	m_hasDyn = false;
+	HTp dynStart = NULL;
 
-	int dtrack = -1;
 	for (int i=(int)m_sstarts.size() - 1; i>=0; i--) {
 		if (*m_sstarts[i] == "**mdyn") {
-			dtrack = m_sstarts[i]->getTrack();
+			dynStart = m_sstarts[i];
 		}
 		if (*m_sstarts[i] == "**ratio") {
 			m_partStarts.push_back(m_sstarts[i]);
-			m_dynTrack.push_back(dtrack);
-			dtrack = -1;
+			if (dynStart) {
+				m_dynStarts.push_back(dynStart);
+				dynStart = NULL;
+				m_hasDyn = true;
+			} else {
+				m_dynStarts.push_back(NULL);
+			}
 		}
 	}
 
@@ -205,7 +230,7 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	outfile.addTempo(0, 0, 60.0);
 
 	for (int i=0; i<(int)m_partStarts.size(); i++) {
-		generateTrack(outfile, i+1, m_partStarts[i], m_dynTrack[i], infile);
+		generateTrack(outfile, i+1, m_partStarts[i], m_dynStarts[i], infile);
 	}
 
 	addTempoMessages(outfile, timespine);
@@ -268,13 +293,16 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 
 	bool dtime = false;
 	bool recip = false;
+	bool ms = false;
+	bool dms = false;
+	bool delta = false;
 	double lasttime = 0.0;
 	if (sstart->find("dtime") != string::npos) {
 		dtime = true;
 	}
 	if (sstart->find("recip") != string::npos) {
 		recip = true;
-		dtime = true;
+		delta = true;
 	}
 
 	fill(m_timemap.begin(), m_timemap.end(), -2);
@@ -290,14 +318,18 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 		if (current->isNull()) {
 			m_timemap[line] = -1;
 		} else {
-			if (!recip) {
-				m_timemap[line] = int(stod(*current) * 1000.0 + 0.5);
-			} else {
+			if (recip) {
 				double value = Convert::recipToDuration(*current).getFloat();
 				m_timemap[line] = int(value * 1000.0 + 0.5);
+			} else if (ms) {
+				m_timemap[line] = stoi(*current);
+			} else if (dms) {
+				m_timemap[line] = stoi(*current);
+			} else { // **time
+				m_timemap[line] = int(stod(*current) * 1000.0 + 0.5);
 			}
 		}
-		if (dtime) {
+		if (delta) {
 			m_lastDuration = m_timemap[line];
 			int tempval = m_timemap[line] += lasttime;
 			m_timemap[line] = lasttime;
@@ -358,7 +390,7 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 //    the track number (avoiding the drum channel of general MIDI).
 //
 
-void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, HumdrumFile& infile) {
+void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile) {
 	HTp current = pstart;
 	HumRegex hre;
 	double rcents;
@@ -372,9 +404,13 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 	}
 	double lastattack = 0.0;
 	
-	int velocity = 64;
+	int velocity = m_velocity;
 	double reference;
 	HumInstrument instrument;
+	bool hasDyn = false;
+	if (dstart != NULL) {
+		hasDyn = true;
+	}
 
 	while (current) {
 		if (current->isInterpretation()) {
@@ -455,6 +491,10 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 				ptime = 0;
 			}
 
+			if (hasDyn) {
+				velocity = getVelocity(current);
+			}
+
 			if (current->find('_') == string::npos) {
 				outfile.addPitchBend(track, ptime, channel, pbend);
 				outfile.addNoteOn(track, starttime, channel, int(pitch), velocity);
@@ -474,6 +514,49 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 		current = current->getNextToken();
 		continue;
 	}
+}
+
+
+
+//////////////////////////////
+//
+// getVelocity --
+//
+
+int getVelocity(HTp rtoken) {
+	HTp current = rtoken->getNextField();
+	while (current) {
+		if (current->isDataType("**ratio")) {
+			break;
+		}
+		if (current->isDataType("**mdyn")) {
+			if (current->isNull()) {
+				HTp resolve = current->resolveNull();
+				if (resolve->isNull()) {
+					break;
+				}
+				int value = stoi(*resolve);
+				if (value < 0) {
+					value = 1;
+				}
+				if (value > 127) {
+					value = 127;
+				}
+				return value;
+			} else {
+				int value = stoi(*current);
+				if (value < 0) {
+					value = 1;
+				}
+				if (value > 127) {
+					value = 127;
+				}
+				return value;
+			}
+		}
+		current = current->getNextField();
+	}
+	return m_velocity;
 }
 
 
