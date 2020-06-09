@@ -291,6 +291,7 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 	vector<int*> tdata;
 	tdata.reserve(m_timemap.size());
 
+	bool time = false;
 	bool dtime = false;
 	bool recip = false;
 	bool ms = false;
@@ -299,10 +300,19 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 	double lasttime = 0.0;
 	if (sstart->find("dtime") != string::npos) {
 		dtime = true;
-	}
-	if (sstart->find("recip") != string::npos) {
+		delta = true;
+	} else if (sstart->find("recip") != string::npos) {
 		recip = true;
 		delta = true;
+	} else if (sstart->find("dms") != string::npos) {
+		dms = true;
+		delta = true;
+	} else if (sstart->find("ms") != string::npos) {
+		ms = true;
+	} else if (sstart->find("time") != string::npos) {
+		time = true;
+	} else {
+		cerr << "Error: unknown time spine: " << sstart << endl;
 	}
 
 	fill(m_timemap.begin(), m_timemap.end(), -2);
@@ -325,7 +335,7 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 				m_timemap[line] = stoi(*current);
 			} else if (dms) {
 				m_timemap[line] = stoi(*current);
-			} else { // **time
+			} else { // **time or **dtime
 				m_timemap[line] = int(stod(*current) * 1000.0 + 0.5);
 			}
 		}
