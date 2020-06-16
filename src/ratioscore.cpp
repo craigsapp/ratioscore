@@ -464,6 +464,19 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 					int track = current->getTrack();
 					m_glissTime[track] = value;
 				}
+			} else if (hre.search(current, "^\\*pan[:=]?(-?\\d*\\.\\d*)$")) {
+				string match = hre.getMatch(1);
+				if (!match.empty()) {
+					double panvalue = hre.getMatchDouble(1);
+					int pan = int(((panvalue + 1.0)/2.0) * 127);
+					if (pan < 0) {
+						pan = 0;
+					} else if (pan > 127) {
+						pan = 127;
+					}
+					int starttime = m_timemap[current->getLineIndex()];
+					outfile.addController(track, starttime, channel, 10, pan);
+				}
 			} else if (hre.search(current, "^\\*ref[:=]?([A-G][#-b]?\\d+)([+-]c?\\d+\\.?\\d*)?")) {
 				refpitch = hre.getMatch(1);
 				reference = getMidiNoteNumber(refpitch);
