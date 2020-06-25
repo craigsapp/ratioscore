@@ -1,5 +1,6 @@
 !!!OTL: Demonstration of panning left (-1.0) to right (1.0).
 **dtime	**ratio
+*	*Iviola
 *MM300	*ref:C3
 *	*pan:-1.0
 1	1
