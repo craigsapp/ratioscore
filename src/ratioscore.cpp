@@ -19,6 +19,12 @@
 // 4.2	6/5G	.	.
 // *-	*-	*-	*-
 //
+// *MM120   = 120 quarter notes (seconds) per minute
+// *Ivioln  = use violin sound
+// *I#40    = use General MIDI instrument 40 (0-indexed)
+// H = start of glissando
+// h = end of glissando
+//
 
 #include "humlib.h"
 #include "MidiFile.h"
@@ -322,6 +328,15 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 				int inst = instrument.getGM(*current);
 				int starttime = m_timemap[current->getLineIndex()];
 				outfile.addTimbre(track, starttime, channel, inst);
+			} else if (hre.search(current, "^\\*I#(\\d{,3})")) {
+				// Process an instrument number
+				int inst = hre.getMatchInt(1);
+				if (inst > 127) {
+					inst = 127;
+				}
+				int starttime = m_timemap[current->getLineIndex()];
+				outfile.addTimbre(track, starttime, channel, inst);
+
 			} else if (hre.search(current, "^\\*MM(\\d+\\.?\\d*)$")) {
 				// Process a tempo change.  It should not be
 				// here, but rather in the **time spine, but
