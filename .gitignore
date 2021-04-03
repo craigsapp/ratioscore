@@ -1,7 +1,14 @@
 external/humlib
 external/midifile
 .DS_Store
+Gemfile.lock
 bin
 err
 *.mid
 *.mp3
+.*
+!.gitignore
+!.gitmodules
+*~
+components/
+_site/

@@ -1,7 +1,7 @@
 //
 // Programmer:    Craig Stuart Sapp <craig@ccrma.stanford.edu>
 // Creation Date: Wed May 20 09:52:32 PDT 2020
-// Last Modified: Wed May 20 12:00:31 PDT 2020
+// Last Modified: Tue Jun  2 22:45:42 PDT 2020
 // Filename:      ratioscore.cpp
 // URL:           https://github.com/craigsapp/ratioscore/blob/master/src/ratioscore.cpp
 // Syntax:        C++11
@@ -20,8 +20,13 @@
 // *-	*-	*-	*-
 //
 // *MM120   = 120 quarter notes (seconds) per minute
-// *Ivioln  = use violin sound
-// *I#40    = use General MIDI instrument 40 (0-indexed)
+// *I#20 = use MIDI instrument 20 (0-indexed, range 0 to 127)
+// *Ivioln = use general MIDI instrument for violin
+// *Iviola = use general MIDI instrument for viola
+// *Icello = use general MIDI instrument for cello
+// See 
+//     https://github.com/craigsapp/humlib/blob/master/src/HumInstrument.cpp
+// for a list of known instrument labels.
 // H = start of glissando
 // h = end of glissando
 //
@@ -40,21 +45,38 @@ using namespace hum;
 // function declarations:
 string  getOutputFilename (const string& filename);
 bool    convertFile       (MidiFile& outfile, HumdrumFile& infile);
-void    generateTrack     (MidiFile& outfile, int track, HTp pstart, int dtrack, HumdrumFile& infile);
+void    generateTrack     (MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile);
 void    buildTimemap      (HTp sstart, HumdrumFile& infile);
 double  getMidiNoteNumber (string refpitch);
 int     getEndTime        (HTp stok);
 void    addTempoMessages  (MidiFile& outfile, HTp sstart);
+void    addGlissando      (MidiFile& outfile, int track, HTp current, double spitch, double reference, int channel);
+double  getPitchInfo      (HTp token, double reference);
+double  getPitchBend      (double pitch, int channel);
+double  getPitchBend      (double pitch, double spitch, int channel);
+HTp     getNextPitchToken (HTp token);
+int     getVelocity       (HTp rtoken);
 
 
 // variables:
-vector<HTp> m_sstarts;
-vector<HTp> m_partStarts;
-int         m_timeTrack = -1;
-vector<int> m_dynTrack;
-vector<int> m_timemap;
-double      m_tuning = 440.0; // A4
-int         m_first_tempo_time = -1;
+vector<HTp> m_sstarts;               // starting tokens of spines
+vector<HTp> m_dynStarts;             // starting tokens of dynamics spines
+vector<HTp> m_partStarts;            // starting tokens of parts
+bool        m_hasDyn = false;        // does the score have dynamics
+bool        m_hasTime = true;        // does the score have a timeline
+int         m_timeTrack = -1;        // track number for time spine
+int         m_dtimeTrack = -1;       // track number for dtime spine
+int         m_recipTrack = -1;       // track number for recip spine
+int         m_msTrack = -1;          // track number for millisecond spine
+int         m_dmsTrack = -1;         // track number for millisecond spine
+vector<int> m_timemap;               // timestamp for each line of file
+double      m_tuning = 440.0;        // Tuning of A4 (current fixed: add RPN to change)
+int         m_first_tempo_time = -1; // timestamp of first tempo message in score (default MM60)
+vector<double> m_pbrange;            // pitch bend range by channel
+vector<int> m_glissTime;             // time between gliss adjustments
+int         m_pbadjust = 0;          // anticipation time for pitch bend before note
+int         m_lastDuration = 1000;   // duration of last event in score (if not rest).
+int         m_velocity = 64;         // default attack velocity of notes
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -66,6 +88,9 @@ int main(int argc, char** argv) {
 
 	HumdrumFile infile;
 	MidiFile outfile;
+
+	m_pbrange.resize(16);
+	fill(m_pbrange.begin(), m_pbrange.end(), 2.0);
 
 	if (options.getArgCount() == 0) {
 		infile.read(cin);
@@ -132,31 +157,62 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	infile.getSpineStartList(m_sstarts);
 	HTp timespine = NULL;
 
+	m_glissTime.resize(infile.getTrackCount() + 1);
+	fill(m_glissTime.begin(), m_glissTime.end(), 50);
+
 	outfile.setTPQ(1000);
 
 	for (int i=0; i<(int)m_sstarts.size(); i++) {
 		if (*m_sstarts[i] == "**time") {
 			m_timeTrack = m_sstarts[i]->getTrack();
 			timespine = m_sstarts[i];
+			m_hasTime = true;
+			break;
+		} else if (*m_sstarts[i] == "**dtime") {
+			m_dtimeTrack = m_sstarts[i]->getTrack();
+			timespine = m_sstarts[i];
+			m_hasTime = true;
+			break;
+		} else if (*m_sstarts[i] == "**recip") {
+			m_recipTrack = m_sstarts[i]->getTrack();
+			timespine = m_sstarts[i];
+			m_hasTime = true;
+			break;
+		} else if (*m_sstarts[i] == "**ms") {
+			m_msTrack = m_sstarts[i]->getTrack();
+			timespine = m_sstarts[i];
+			m_hasTime = true;
+			break;
+		} else if (*m_sstarts[i] == "**dms") {
+			m_dmsTrack = m_sstarts[i]->getTrack();
+			timespine = m_sstarts[i];
+			m_hasTime = true;
 			break;
 		}
 	}
-	if (m_timeTrack < 0) {
+	if (!m_hasTime) {
+		// need a timing spine
 		return false;
 	}
 
 	m_partStarts.resize(0);
-	m_dynTrack.resize(0);
+	m_dynStarts.resize(0);
+	m_hasDyn = false;
+	HTp dynStart = NULL;
 
-	int dtrack = -1;
 	for (int i=(int)m_sstarts.size() - 1; i>=0; i--) {
 		if (*m_sstarts[i] == "**mdyn") {
-			dtrack = m_sstarts[i]->getTrack();
+			dynStart = m_sstarts[i];
 		}
 		if (*m_sstarts[i] == "**ratio") {
 			m_partStarts.push_back(m_sstarts[i]);
-			m_dynTrack.push_back(dtrack);
-			dtrack = -1;
+			if (dynStart) {
+				m_dynStarts.push_back(dynStart);
+				dynStart = NULL;
+				m_hasDyn = true;
+			} else {
+				m_dynStarts.push_back(NULL);
+			}
 		}
 	}
 
@@ -175,11 +231,12 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	outfile.addTempo(0, 0, 60.0);
 
 	for (int i=0; i<(int)m_partStarts.size(); i++) {
-		generateTrack(outfile, i+1, m_partStarts[i], m_dynTrack[i], infile);
+		generateTrack(outfile, i+1, m_partStarts[i], m_dynStarts[i], infile);
 	}
 
 	addTempoMessages(outfile, timespine);
 
+	outfile.markSequence();
 	outfile.sortTracks();
 	return true;
 }
@@ -218,8 +275,6 @@ void addTempoMessages(MidiFile& outfile, HTp sstart) {
 		// set the default tempo to 60 bpm:
 		outfile.addTempo(0, 0, 60.0);
 	}
-
-
 }
 
 
@@ -237,6 +292,30 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 	vector<int*> tdata;
 	tdata.reserve(m_timemap.size());
 
+	bool time = false;
+	bool dtime = false;
+	bool recip = false;
+	bool ms = false;
+	bool dms = false;
+	bool delta = false;
+	double lasttime = 0.0;
+	if (sstart->find("dtime") != string::npos) {
+		dtime = true;
+		delta = true;
+	} else if (sstart->find("recip") != string::npos) {
+		recip = true;
+		delta = true;
+	} else if (sstart->find("dms") != string::npos) {
+		dms = true;
+		delta = true;
+	} else if (sstart->find("ms") != string::npos) {
+		ms = true;
+	} else if (sstart->find("time") != string::npos) {
+		time = true;
+	} else {
+		cerr << "Error: unknown time spine: " << sstart << endl;
+	}
+
 	fill(m_timemap.begin(), m_timemap.end(), -2);
 	HTp current = sstart;
 	while (current) {
@@ -250,7 +329,22 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 		if (current->isNull()) {
 			m_timemap[line] = -1;
 		} else {
-			m_timemap[line] = int(stod(*current) * 1000.0 + 0.5);
+			if (recip) {
+				double value = Convert::recipToDuration(*current).getFloat();
+				m_timemap[line] = int(value * 1000.0 + 0.5);
+			} else if (ms) {
+				m_timemap[line] = stoi(*current);
+			} else if (dms) {
+				m_timemap[line] = stoi(*current);
+			} else { // **time or **dtime
+				m_timemap[line] = int(stod(*current) * 1000.0 + 0.5);
+			}
+		}
+		if (delta) {
+			m_lastDuration = m_timemap[line];
+			int tempval = m_timemap[line] += lasttime;
+			m_timemap[line] = lasttime;
+			lasttime = tempval;
 		}
 
 		current = current->getNextToken();
@@ -299,27 +393,35 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 }
 
 
+
 //////////////////////////////
 //
-// generateTrack --
+// generateTrack -- Convert a part spine into a MIDI track.  Each track
+//    should be given a unique channel.  Currently the channel is derive from
+//    the track number (avoiding the drum channel of general MIDI).
 //
 
-void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, HumdrumFile& infile) {
+void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile) {
 	HTp current = pstart;
 	HumRegex hre;
-	HumNum value;
 	double rcents;
-	double pcents;
 	string refpitch;
 	string refcents;
 	string direction;
-	int top;
-	int bot;
-	int channel = track;
-	int velocity = 64;
-	string botstring;
+	int channel = track - 1;
+	if (channel >= 9) {
+		// avoid the drum channel
+		channel++;
+	}
+	double lastattack = 0.0;
+	
+	int velocity = m_velocity;
 	double reference;
 	HumInstrument instrument;
+	bool hasDyn = false;
+	if (dstart != NULL) {
+		hasDyn = true;
+	}
 
 	while (current) {
 		if (current->isInterpretation()) {
@@ -351,14 +453,41 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 					m_first_tempo_time = starttime;
 				}
 				outfile.addTempo(0, starttime, tempo);
-			} else if (hre.search(current, "^\\*ref:([A-G][#-b]?\\d+)([+-]c?\\d+\\.?\\d*)?")) {
+			} else if (hre.search(current, "^\\*bend[:=]?(\\d+\\.?\\d*)$")) {
+				// Set the pitch bend range/depth/sensitivity
+				// Default is 2.0.
+				double range = hre.getMatchDouble(1);
+				if (range <= 1.0) {
+					range = 2.0;
+				}
+				int starttime = m_timemap[current->getLineIndex()];
+				outfile.setPitchBendRange(track, starttime, channel, range);
+				m_pbrange.at(channel) = range;
+			} else if (hre.search(current, "^\\*gliss[:=]?(\\d+)$")) {
+				int value = hre.getMatchInt(1);
+				if (value > 0) {
+					int track = current->getTrack();
+					m_glissTime[track] = value;
+				}
+			} else if (hre.search(current, "^\\*pan[:=]?(-?\\d*\\.\\d*)$")) {
+				string match = hre.getMatch(1);
+				if (!match.empty()) {
+					double panvalue = hre.getMatchDouble(1);
+					int pan = int(((panvalue + 1.0)/2.0) * 127);
+					if (pan < 0) {
+						pan = 0;
+					} else if (pan > 127) {
+						pan = 127;
+					}
+					int starttime = m_timemap[current->getLineIndex()];
+					outfile.addController(track, starttime, channel, 10, pan);
+				}
+			} else if (hre.search(current, "^\\*ref[:=]?([A-G][#-b]?\\d+)([+-]c?\\d+\\.?\\d*)?")) {
 				refpitch = hre.getMatch(1);
 				reference = getMidiNoteNumber(refpitch);
 				refcents  = hre.getMatch(2);
-				// cerr << "REF PITCH " << refpitch << ", " << reference << endl;
-				// cerr << "REF CENTS " << refcents << endl;
 				if (!refcents.empty()) {
-					if (hre.search(refcents, "([+-])c?(\\d+\\.?\\d*)")) {
+					if (hre.search(refcents, "([+-])(\\d+\\.?\\d*)c")) {
 						direction = hre.getMatch(1);
 						rcents = hre.getMatchDouble(2);
 						if (direction == "-") {
@@ -368,7 +497,6 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 						}
 					}
 				}
-				// cerr << "NEW REFERENCE " << reference << endl;
 			}
 		} else if (current->isData()) {
 			if (current->isNull()) {
@@ -380,57 +508,239 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, int dtrack, Humdrum
 				current = current->getNextToken();
 				continue;
 			}
-			if (hre.search(current, "^(\\d+)(?:/(\\d+))?")) {
-				top = hre.getMatchInt(1);
-				botstring = hre.getMatch(2);
-				if (botstring.empty()) {
-					bot = 1;
-				} else {
-					bot = hre.getMatchInt(2);
-				}
-				if (top == 0) {
-					cerr << "TOP should not be zero: " << current << endl;
-					current = current->getNextToken();
-					continue;
-				}
-				if (bot == 0) {
-					cerr << "Error cannot use 0 as the denominator, setting to 1" << endl;
-					bot = 1;
-				}
-				value = top;
-				value /= bot;
-				double cvalue = log2(value.getFloat()) * 12;
-				if (hre.search(current, "([+-])c?(\\d+\\.\\d*)")) {
-					pcents = hre.getMatchDouble(2);
-					string direction = hre.getMatch(1);
-					if (direction == "-") {
-						pcents = hre.getMatchDouble(2);
-					} else {
-						pcents = -hre.getMatchDouble(2);
-					}
-				}
-				double pitch = reference + cvalue + pcents;
-				// cerr << "\tRATIO " << value << " CENTS " << pcents << "\t";
-				// cerr << "CRATIO " << cvalue << endl;
-				// cerr << "\tPITCH: " << pitch << endl;
-				int starttime = m_timemap[current->getLineIndex()];
-				int endtime = getEndTime(current);
-				// cerr << "\t\tSTARTTIME: " << starttime << "\tENDTIME: " << endtime << endl;
+
+			double pitch = getPitchInfo(current, reference);
+			double pbend = getPitchBend(pitch, channel);
+
+			int starttime = m_timemap[current->getLineIndex()];
+			int endtime = getEndTime(current) - 1;
+			int ptime = starttime - m_pbadjust;
+			if (ptime < 0) {
+				ptime = 0;
+			}
+
+			if (hasDyn) {
+				velocity = getVelocity(current);
+			}
+
+			if (current->find('_') == string::npos) {
+				outfile.addPitchBend(track, ptime, channel, pbend);
 				outfile.addNoteOn(track, starttime, channel, int(pitch), velocity);
 				outfile.addNoteOff(track, endtime, channel, int(pitch), velocity);
-				double pbend = pitch - int(pitch);
-				pbend = pbend * 0.5;   // range is +/- 200 cents by default so normalize
-				int ptime = starttime - 1;
-				if (ptime < 0) {
-					ptime = 0;
-				}
-				// cerr << "STARTTIME " << starttime << " PTIME " << ptime << endl;
+				lastattack = pitch;
+			} else {
+				// this is a tied note, so ignored for note attacks, but add
+				// pitch bend:
+				pbend = getPitchBend(pitch, lastattack, channel);
 				outfile.addPitchBend(track, ptime, channel, pbend);
+			}
+
+			if (current->find('H') != string::npos) {
+				addGlissando(outfile, track, current, pitch, reference, channel);
 			}
 		}
 		current = current->getNextToken();
 		continue;
 	}
+}
+
+
+
+//////////////////////////////
+//
+// getVelocity --
+//
+
+int getVelocity(HTp rtoken) {
+	HTp current = rtoken->getNextField();
+	while (current) {
+		if (current->isDataType("**ratio")) {
+			break;
+		}
+		if (current->isDataType("**mdyn")) {
+			if (current->isNull()) {
+				HTp resolve = current->resolveNull();
+				if (resolve->isNull()) {
+					break;
+				}
+				int value = stoi(*resolve);
+				if (value < 0) {
+					value = 1;
+				}
+				if (value > 127) {
+					value = 127;
+				}
+				return value;
+			} else {
+				int value = stoi(*current);
+				if (value < 0) {
+					value = 1;
+				}
+				if (value > 127) {
+					value = 127;
+				}
+				return value;
+			}
+		}
+		current = current->getNextField();
+	}
+	return m_velocity;
+}
+
+
+
+//////////////////////////////
+//
+// getPitchBend --
+//
+
+double getPitchBend(double pitch, int channel) {
+	double pbend = pitch - int(pitch);
+	double prange = m_pbrange.at(channel);
+	pbend = pbend / prange;  // normalize to pitch bend range
+	return pbend;
+}
+
+double getPitchBend(double pitch, double spitch, int channel) {
+	double pbend = pitch - int(spitch);
+	double prange = m_pbrange.at(channel);
+	pbend = pbend / prange;  // normalize to pitch bend range
+	return pbend;
+}
+
+
+
+//////////////////////////////
+//
+// getPitchInfo -- Convert ratio token into floating-point MIDI note number.
+//
+
+double getPitchInfo(HTp token, double reference) {
+	int top;
+	int bot;
+	HumNum value;
+	HumRegex hre;
+	double pcents;
+	string botstring;
+
+	if (!hre.search(token, "(\\d+)(?:/(\\d+))?")) {
+		cerr << "Problem with ratio: " << token << endl;
+		return 0.0;
+	}
+
+	top = hre.getMatchInt(1);
+	botstring = hre.getMatch(2);
+	if (botstring.empty()) {
+		bot = 1;
+	} else {
+		bot = hre.getMatchInt(2);
+	}
+	if (top == 0) {
+		cerr << "TOP should not be zero: " << token << endl;
+		return 0.0;
+	}
+	if (bot == 0) {
+		cerr << "Error cannot use 0 as the denominator, setting to 1" << endl;
+		bot = 1;
+	}
+
+	if (hre.search(token, "\\(\\d+/?\\d*\\)\\^(\\d+)")) {
+		int power = hre.getMatchInt(1);
+		top = pow(top, power);
+		bot = pow(bot, power);
+		if (top < 0) {
+			cerr << "Error: integer overflow for numerator in " << token << endl;
+			return reference;
+		}
+		if (bot < 0) {
+			cerr << "Error: integer overflow for denominator in " << token << endl;
+			return reference;
+		}
+	}
+
+	value = top;
+	value /= bot;
+
+	double cvalue = log2(value.getFloat()) * 12;
+	if (hre.search(token, "([+-])(\\d+\\.?\\d*)c")) {
+		pcents = hre.getMatchDouble(2);
+		string direction = hre.getMatch(1);
+		if (direction == "-") {
+			pcents = hre.getMatchDouble(2);
+		} else {
+			pcents = -hre.getMatchDouble(2);
+		}
+	} else {
+		pcents = 0;
+	}
+	double pitch = reference + cvalue + pcents / 100.0;
+	return pitch;
+}
+
+
+
+//////////////////////////////
+//
+// addGlissando -- do a linear interpolation between the starting and ending pitches.
+//
+
+void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, double reference, int channel) {
+	HTp nexttok = getNextPitchToken(starttok);
+	if (nexttok == NULL) {
+		return;
+	}
+	int humtrack = starttok->getTrack();
+
+	double npitch = getPitchInfo(nexttok, reference);
+	double sspitch = getPitchInfo(starttok, reference);
+	double starttime = m_timemap[starttok->getLineIndex()];
+	double endtime = m_timemap[nexttok->getLineIndex()];
+
+	double x1 = starttime;
+	double x2 = endtime;
+	double y1 = sspitch;
+	double y2 = npitch;
+
+	if (x2 <= x1) {
+		return;
+	}
+
+	double m = (y2 - y1)/(x2 - x1);
+	double b = (x2*y1 - x1*y2)/(x2 - x1);
+	double x = x1 + m_glissTime.at(humtrack);
+	double y;
+	while (x < x2) {
+		y = m * x + b;
+		double pbend = getPitchBend(y, spitch, channel);
+		if (fabs(pbend) > 1.0) {
+			cerr << "Warning: Pitch bend exceeds maximum (increase pitch bend range)" << endl;
+			return;
+		}
+		outfile.addPitchBend(track, x, channel, pbend);
+		x += m_glissTime.at(humtrack);
+	}
+	//if (nexttok->find('_') != string::npos) {
+	//	// add ending glissando on next note if it is not an attack
+	//	double pbend = getPitchBend(y2, spitch, channel);
+	//	outfile.addPitchBend(track, x2-1, channel, pbend);
+	//}
+
+	if (nexttok->find('h') == string::npos) {
+		addGlissando(outfile, track, nexttok, spitch, reference, channel);
+	}
+}
+
+
+
+
+//////////////////////////////
+//
+// getNextPitchToken --
+//
+
+HTp getNextPitchToken(HTp token) {
+	HTp current = token->getNextNonNullDataToken();
+	return current;
 }
 
 
@@ -451,11 +761,16 @@ int getEndTime(HTp stok) {
 			current = current->getNextToken();
 			continue;
 		}
+		if (current->find('_') != string::npos) {
+			// skip sustain notes
+			current = current->getNextToken();
+			continue;
+		}
 		int line = current->getLineIndex();
 		return m_timemap[line];
 		current = current->getNextToken();
 	}
-	return m_timemap.back() + 1000;  // note at end given 1.0 second duration
+	return m_timemap.back() + m_lastDuration;
 }
 
 

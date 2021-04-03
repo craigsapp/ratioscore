@@ -1,0 +1,24 @@
+!!!OTL: Articulation test
+**time	**ratio
+*	*Iclars
+*	*bend:13
+*MM120	*ref:C4
+!! Just major scale, attacking each note:
+0	1
+1	9/8
+2	5/4
+3	4/3
+4	3/2
+5	5/3
+6	15/8
+7	2
+!! Playing without reattacking notes:
+8	1
+9	_9/8
+10	_5/4
+11	_4/3
+12	_3/2
+13	_5/3
+14	_15/8
+15	_2
+*-	*-
