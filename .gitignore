@@ -6,6 +6,7 @@ bin
 err
 *.mid
 *.mp3
+.jekyll-metadata
 .*
 !.gitignore
 !.gitmodules

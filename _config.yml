@@ -1,0 +1,8 @@
+
+
+exclude:
+   - src
+   - include
+   - scores
+   - external
+   - tests
