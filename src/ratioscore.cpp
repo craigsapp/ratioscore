@@ -430,7 +430,7 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 				int inst = instrument.getGM(*current);
 				int starttime = m_timemap[current->getLineIndex()];
 				outfile.addTimbre(track, starttime, channel, inst);
-			} else if (hre.search(current, "^\\*I#(\\d{,3})")) {
+			} else if (hre.search(current, "^\\*I#(\\d{1,3})")) {
 				// Process an instrument number
 				int inst = hre.getMatchInt(1);
 				if (inst > 127) {
@@ -438,7 +438,6 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 				}
 				int starttime = m_timemap[current->getLineIndex()];
 				outfile.addTimbre(track, starttime, channel, inst);
-
 			} else if (hre.search(current, "^\\*MM(\\d+\\.?\\d*)$")) {
 				// Process a tempo change.  It should not be
 				// here, but rather in the **time spine, but
