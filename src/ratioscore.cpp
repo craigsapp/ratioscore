@@ -56,6 +56,14 @@ double  getPitchBend      (double pitch, int channel);
 double  getPitchBend      (double pitch, double spitch, int channel);
 HTp     getNextPitchToken (HTp token);
 int     getVelocity       (HTp rtoken);
+void    prepareTimeline   (HumdrumFile& infile);
+void    getTimeData       (HTp sstart, vector<double>& numbers,
+                           vector<double>& tempo, int lines);
+void    prepareTimelineRecip(vector<double>& timeline, HTp sstart, int lines);
+void    prepareTimelineDtime(vector<double>& timeline, HTp sstart, int lines);
+void    prepareTimelineTime(vector<double>& timeline, HTp sstart, int lines);
+double  getTimeNumber     (HTp token);
+void    addSecondsSpine   (ostream& out, HumdrumFile& infile);
 
 
 // variables:
@@ -77,6 +85,8 @@ vector<int> m_glissTime;             // time between gliss adjustments
 int         m_pbadjust = 0;          // anticipation time for pitch bend before note
 int         m_lastDuration = 1000;   // duration of last event in score (if not rest).
 int         m_velocity = 64;         // default attack velocity of notes
+double      m_maxtime = 0.0;         // maximum time of output MIDI file
+vector<double> m_timeline;           // used with --max-time option.
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -85,7 +95,10 @@ int main(int argc, char** argv) {
 	Options options;
 	options.define("o|output=s", "output name for MIDI file when using standard input.");
 	options.define("r|raw=b",    "output raw MIDI data to stdout.");
+	options.define("x|max-time=d:0.0", "maximum duration of output MIDI file in seconds");
+	options.define("s|seconds=b", "add time in seconds spine (resolving tempo changes)");
 	options.process(argc, argv);
+	m_maxtime = options.getDouble("max-time");
 
 	HumdrumFile infile;
 	MidiFile outfile;
@@ -95,6 +108,10 @@ int main(int argc, char** argv) {
 
 	if (options.getArgCount() == 0) {
 		infile.read(cin);
+		if (options.getBoolean("seconds")) {
+			addSecondsSpine(cout, infile);
+			return 0;
+		}
 		bool status = convertFile(outfile, infile);
 		if (!status) {
 			cerr << "Problem converting score." << endl;
@@ -115,6 +132,10 @@ int main(int argc, char** argv) {
 		}
 	} else if (options.getArgCount() == 1) {
 		infile.read(options.getArg(1));
+		if (options.getBoolean("seconds")) {
+			addSecondsSpine(cout, infile);
+			return 0;
+		}
 		bool status = convertFile(outfile, infile);
 		if (!status) {
 			cerr << "Problem converting score." << endl;
@@ -165,6 +186,11 @@ int main(int argc, char** argv) {
 bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	infile.getSpineStartList(m_sstarts);
 	HTp timespine = NULL;
+	if (m_maxtime > 0.0) {
+		prepareTimeline(infile);
+	} else {
+		m_timeline.clear();
+	}
 
 	m_glissTime.resize(infile.getTrackCount() + 1);
 	fill(m_glissTime.begin(), m_glissTime.end(), 50);
@@ -406,7 +432,7 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 //////////////////////////////
 //
 // generateTrack -- Convert a part spine into a MIDI track.  Each track
-//    should be given a unique channel.  Currently the channel is derive from
+//    should be given a unique channel.  Currently the channel is derived from
 //    the track number (avoiding the drum channel of general MIDI).
 //
 
@@ -433,6 +459,13 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 	}
 
 	while (current) {
+		if (m_maxtime > 0.0) {
+			if (m_timeline[current->getLineIndex()] > m_maxtime) {
+				// limit the length of the output MIDI file.
+				cerr << "LIMITING MIDIFILE " << m_maxtime << " == " << m_timeline[current->getLineIndex()] << endl;
+				break;
+			}
+		}
 		if (current->isInterpretation()) {
 			if (hre.search(current, "^\\*I[a-z]{3,6}$")) {
 				// Process an instrument name
@@ -854,6 +887,262 @@ double getMidiNoteNumber(string refpitch) {
 	int oct = stoi(octave);
 	output += 12 * (oct + 1);
 	return output;
+}
+
+
+
+//////////////////////////////
+//
+// prepareTimeline --
+//
+
+void prepareTimeline(HumdrumFile& infile) {
+	vector<HTp> starts;
+	HTp timespine = NULL;
+	infile.getSpineStartList(starts);
+	for (int i=0; i<(int)starts.size(); i++) {
+		if (*starts[i] == "**time") {
+			timespine = starts[i];
+			break;
+		} else if (*starts[i] == "**dtime") {
+			timespine = starts[i];
+			break;
+		} else if (*starts[i] == "**recip") {
+			timespine = starts[i];
+			break;
+		}
+	}
+
+	if (*timespine == "**time") {
+		prepareTimelineTime(m_timeline, timespine, infile.getLineCount());
+	} else if (*timespine == "**dtime") {
+		prepareTimelineDtime(m_timeline, timespine, infile.getLineCount());
+	} else if (*timespine == "**recip") {
+		prepareTimelineRecip(m_timeline, timespine, infile.getLineCount());
+	}
+}
+
+
+
+//////////////////////////////
+//
+// prepareTimelineTime --
+//
+
+void prepareTimelineTime(vector<double>& timeline, HTp sstart, int lines) {
+	vector<double> tempos;
+	vector<double> numbers;
+	getTimeData(sstart, numbers, tempos, lines);
+	m_timeline.resize(lines);
+	fill(m_timeline.begin(), m_timeline.end(), -1);
+	double lastvalue = 0.0;
+	double value;
+	double lasttime = 0.0;
+	double curtime = 0.0;
+	double deltavalue;
+	double deltatime;
+	double tempo = 60;
+	for (int i=0; i<(int)m_timeline.size(); i++) {
+		if (tempos[i] > 0.0) {
+			tempo = tempos[i];
+		}
+		if (numbers[i] >= 0) {
+			value = numbers[i];
+			deltavalue = value - lastvalue;
+			deltatime = deltavalue * 60.0 / tempo;
+			curtime = lasttime + deltatime;
+			m_timeline[i] = curtime;
+			lasttime = curtime;
+			lastvalue = value;
+		}
+	}
+}
+
+
+
+//////////////////////////////
+//
+// prepareTimelineDtime --
+//
+
+void prepareTimelineDtime(vector<double>& timeline, HTp sstart, int lines) {
+	vector<double> tempos;
+	vector<double> numbers;
+	getTimeData(sstart, numbers, tempos, lines);
+	m_timeline.resize(lines);
+	fill(m_timeline.begin(), m_timeline.end(), -1);
+	double lastvalue = 0.0;
+	double value;
+	double lasttime = 0.0;
+	double curtime = 0.0;
+	double deltavalue;
+	double deltatime;
+	double tempo = 60;
+	double nexttempo = -1;
+	for (int i=0; i<(int)m_timeline.size(); i++) {
+		if (numbers[i] >= 0) {
+			value = numbers[i];
+			deltavalue = lastvalue;
+			deltatime = deltavalue * 60.0 / tempo;
+			curtime = lasttime + deltatime;
+			m_timeline[i] = curtime;
+			lasttime = curtime;
+			lastvalue = value;
+			if (nexttempo > 0.0) {
+				tempo = nexttempo;
+				nexttempo = -1;
+			}
+		}
+		if (tempos[i] > 0.0) {
+			nexttempo = tempos[i];
+		}
+	}
+}
+
+
+
+//////////////////////////////
+//
+// prepareTimelineRecip --
+//
+
+void prepareTimelineRecip(vector<double>& timeline, HTp sstart, int lines) {
+	vector<double> tempos;
+	vector<double> numbers;
+	getTimeData(sstart, numbers, tempos, lines);
+	m_timeline.resize(lines);
+	fill(m_timeline.begin(), m_timeline.end(), -1);
+	double lastvalue = 0.0;
+	double value;
+	double lasttime = 0.0;
+	double curtime = 0.0;
+	double deltavalue;
+	double deltatime;
+	double tempo = 60;
+	double nexttempo = -1;
+	for (int i=0; i<(int)m_timeline.size(); i++) {
+		if (numbers[i] >= 0) {
+	 		value = numbers[i] / 4.0; // convert from whole notes to quarter note units
+			deltavalue = lastvalue;
+			deltatime = deltavalue * 60.0 / tempo;
+			curtime = lasttime + deltatime;
+			m_timeline[i] = curtime;
+			lasttime = curtime;
+			lastvalue = value;
+			if (nexttempo > 0.0) {
+				tempo = nexttempo;
+				nexttempo = -1;
+			}
+		}
+		if (tempos[i] > 0.0) {
+			nexttempo = tempos[i];
+		}
+	}
+}
+
+
+
+//////////////////////////////
+//
+// getTimeData --
+//
+
+void getTimeData(HTp sstart, vector<double>& numbers,
+		vector<double>& tempo, int lines) {
+	numbers.resize(lines);
+	tempo.resize(lines);
+	fill(numbers.begin(), numbers.end(), -1);
+	fill(tempo.begin(), tempo.end(), -1);
+	HTp current = sstart;
+	HumRegex hre;
+	while (current) {
+		if (current->isInterpretation()) {
+			if (hre.search(current, "^\\*MM(\\d+\\.?\\d*)")) {
+				tempo[current->getLineIndex()] = hre.getMatchDouble(1);
+			}
+		}
+		if (!current->isData()) {
+			current = current->getNextToken();
+			continue;
+		}
+		if (current->isNull()) {
+			current = current->getNextToken();
+			continue;
+		}
+		double number = getTimeNumber(current);
+		numbers[current->getLineIndex()] = number;
+		current = current->getNextToken();
+		continue;
+	}
+}
+
+
+
+//////////////////////////////
+//
+// getTimeNumber --  floating-point number, rational number, or compound rational number.
+//
+
+double getTimeNumber(HTp token) {
+	HumRegex hre;
+	if (hre.search(token, "^(\\d+\\.?\\d*)$")) {
+		return hre.getMatchDouble(1);
+	} else if (hre.search(token, "^(\\d*\\.?\\d+)$")) {
+		return hre.getMatchDouble(1);
+	} else if (hre.search(token, "^(\\d+)/(\\d+)")) {
+		int value1 = hre.getMatchInt(1);
+		int value2 = hre.getMatchInt(2);
+		if (value2 == 0) {
+			return 0;
+		}
+		double value = value1;
+		value /= value2;
+		return value;
+	} else if (hre.search(token, "^(\\d+)\\s*(\\+|\\s+)\\s*(\\d+)/(\\d+)")) {
+		int integer = hre.getMatchInt(1);
+		int value1 = hre.getMatchInt(3);
+		int value2 = hre.getMatchInt(4);
+		double value = integer;
+		value += (double)value1/(double)value2;
+		return value;
+	}
+	return -1;
+}
+
+
+
+//////////////////////////////
+//
+// addSecondsSpine -- Compile timeline into pure floating-point seconds,
+//     removing tempo changes and rational times.
+//
+
+void addSecondsSpine(ostream& out, HumdrumFile& infile) {
+	prepareTimeline(infile);
+	for (int i=0; i<infile.getLineCount(); i++) {
+		if (!infile[i].hasSpines()) {
+			out << infile[i] << "\n";
+			continue;
+		}
+		if (infile[i].isInterpretation()) {
+			HTp token = infile.token(i, 0);
+			if (token->compare(0, 2, "**") == 0) {
+				out << "**sec";
+			} else if (*token == "*-") {
+				out << "*-";
+			} else {
+				out << "*";
+			}
+		} else if (infile[i].isComment()) {
+			out << "!";
+		} else if (infile[i].isBarline()) {
+			HTp token = infile.token(i, 0);
+			out << token;
+		} else {
+			out << m_timeline[i];
+		}
+		out << "\t" << infile[i] << endl;
+	}
 }
 
 
