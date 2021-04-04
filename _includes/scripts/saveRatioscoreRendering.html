@@ -2,31 +2,35 @@
 <script>
 // vim: ts=3:nowrap
 
-function saveRatioScoreRendering(event, id) {
+function saveRatioscoreRendering(event, id) {
 	console.log("PROCESSING ID", id);
-	var form = document.querySelector('#' + id);
+	let form = document.querySelector('#form-' + id);
+	if (!form) {
+		console.log("Error: Form not found for #form-" + id);
+		return;
+	}
 	console.log("FORM:", form);
-	var formdata = new FormData(form);
-	var dataelement = document.querySelector("#inputdata-" + id);
-	var data = dataelement.innerText;
-	var blob = new Blob([data], { type: "text/plain"});
+	let formdata = new FormData(form);
+	let dataelement = document.querySelector("#inputdata-" + id);
+	let data = dataelement.innerText;
+	let blob = new Blob([data], { type: "text/plain"});
 	formdata.append("inputdata", data);
 	console.log("FORM PARAMETERS:", formdata);
-	for (var pair of formdata.entries()) {
+	for (let pair of formdata.entries()) {
   		console.log(pair[0] + ': ' + pair[1]);
 	}
-	var request = new XMLHttpRequest();
-	request.open("POST", "http://data.ratioscore.humdrum.org/cgi-bin/ratioscore");
+	let request = new XMLHttpRequest();
+	request.open("POST", "https://data.ratioscore.humdrum.org");
 	request.responseType = "blob";
 	request.onload = function () {
 		console.log("THIS", this);
-		var myblob = this.response;
-		// var reader = new FileReader();
+		let myblob = this.response;
+		// let reader = new FileReader();
 		// reader.onload = function () {
 		// 	console.log("CONTENTS", reader.result);
 		// }
 		// reader.readAsText(myblob);
-		var url = window.URL.createObjectURL(myblob);
+		let url = window.URL.createObjectURL(myblob);
 		window.open(url);
 	};
 	request.send(formdata);
