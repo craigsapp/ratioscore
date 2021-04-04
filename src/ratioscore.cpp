@@ -1,7 +1,7 @@
 //
 // Programmer:    Craig Stuart Sapp <craig@ccrma.stanford.edu>
 // Creation Date: Wed May 20 09:52:32 PDT 2020
-// Last Modified: Tue Jun  2 22:45:42 PDT 2020
+// Last Modified: Sat 03 Apr 2021 10:58:34 PM PDT
 // Filename:      ratioscore.cpp
 // URL:           https://github.com/craigsapp/ratioscore/blob/master/src/ratioscore.cpp
 // Syntax:        C++11
@@ -24,7 +24,7 @@
 // *Ivioln = use general MIDI instrument for violin
 // *Iviola = use general MIDI instrument for viola
 // *Icello = use general MIDI instrument for cello
-// See 
+// See
 //     https://github.com/craigsapp/humlib/blob/master/src/HumInstrument.cpp
 // for a list of known instrument labels.
 // H = start of glissando
@@ -84,6 +84,7 @@ int         m_velocity = 64;         // default attack velocity of notes
 int main(int argc, char** argv) {
 	Options options;
 	options.define("o|output=s", "output name for MIDI file when using standard input.");
+	options.define("r|raw=b",    "output raw MIDI data to stdout.");
 	options.process(argc, argv);
 
 	HumdrumFile infile;
@@ -99,14 +100,18 @@ int main(int argc, char** argv) {
 			cerr << "Problem converting score." << endl;
 			exit(1);
 		}
-		string filename = options.getString("output");
-		if (filename.empty()){ 
-			cout << outfile;
+		if (options.getBoolean("raw")) {
+			outfile.write(cout);
 		} else {
-			if (filename.find(".mid") == string::npos) {
-				filename += ".mid";
+			string filename = options.getString("output");
+			if (filename.empty()) {
+				cout << outfile;
+			} else {
+				if (filename.find(".mid") == string::npos) {
+					filename += ".mid";
+				}
+				outfile.write(filename);
 			}
-			outfile.write(filename);
 		}
 	} else if (options.getArgCount() == 1) {
 		infile.read(options.getArg(1));
@@ -115,19 +120,23 @@ int main(int argc, char** argv) {
 			cerr << "Problem converting score." << endl;
 			exit(1);
 		}
-		if (options.getBoolean("output")) {
-			string filename = options.getString("output");
-			if (filename.empty()){ 
-				cout << outfile;
-			} else {
-				if (filename.find(".mid") == string::npos) {
-					filename += ".mid";
+		if (options.getBoolean("raw")) {
+			outfile.write(cout);
+		} else {
+			if (options.getBoolean("output")) {
+				string filename = options.getString("output");
+				if (filename.empty()){
+					cout << outfile;
+				} else {
+					if (filename.find(".mid") == string::npos) {
+						filename += ".mid";
+					}
+					outfile.write(filename);
 				}
+			} else {
+				string filename = getOutputFilename(options.getArg(1));
 				outfile.write(filename);
 			}
-		} else {
-			string filename = getOutputFilename(options.getArg(1));
-			outfile.write(filename);
 		}
 	} else {
 		for (int i=0; i<options.getArgCount(); i++) {
@@ -414,7 +423,7 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 		channel++;
 	}
 	double lastattack = 0.0;
-	
+
 	int velocity = m_velocity;
 	double reference;
 	HumInstrument instrument;
@@ -814,7 +823,7 @@ double getMidiNoteNumber(string refpitch) {
 	diatonic = hre.getMatch(1);
 	accid    = hre.getMatch(2);
 	octave   = hre.getMatch(3);
-	
+
 	int alter = 0;
 	if (!accid.empty()) {
 		for (int i=0; i<(int)accid.size(); i++) {
