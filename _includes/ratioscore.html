@@ -13,26 +13,30 @@
 		action="http://data.ratioscore.sapp.org/cgi-bin/ratioscore"
 		method="post"
 		onsubmit="event.preventDefault(); saveRatioscoreRendering(event, '{{include.id}}');">
+
 	<script
 			id="inputdata-{{include.id}}"
+			style="resize:both; overflow:auto;"
 			name="inputdata"
 			spellcheck="false"
 			contenteditable type="text/plain"
 			class="databox"></script>
+
 	<table style="padding-top:0px">
-		<tr valign="top">
-			<td style="padding-right:20px; padding-top:-10px;">
-				<br/>
+		<tr style="margin:0; padding:0;" valign="top">
+			<td style="height:24px; valign=center; padding-right:0px;">
 				<input id="render-{{include.id}}"
 						style="font-size:24px; border:0; padding:5px; padding-left:8px; padding-right:8px; border-radius:3px; background-color:#aa1155; color:#ffffff"
 						type="submit"
 						name="action"
 						value="Render">
 			</td>
-			<td style="padding-top:13px;">
+			<td style="padding-top:4px;">
 				<div style="width:450px; font-size:24px;">
-					<input type="radio" name="outputformat" value="mid" checked> MIDI <br>
-					<input type="radio" name="outputformat" value="mp3"> MP3 <br>
+					<select style="margin-top:-10px; font-size:30px;" name="outputformat">
+						<option value="mp3"> MP3 </option>
+						<option value="mid"> MIDI </option>
+					</select>
 				</div>
 			</td>
 		</tr>

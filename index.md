@@ -23,7 +23,7 @@ vim: ts=3
 
 {% include droparea/main.html %}
 
-<h1 style="padding-top:50px;"> Documentation </h1>
+<h2 style="padding-top:50px;"> Documentation </h2>
 
 {% include documentation.html %}
 
