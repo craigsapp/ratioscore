@@ -75,7 +75,7 @@ Here is a list of General MIDI instruments that can be used in Ratioscores:
 			<tr><td>28</td><td>Muted eletric guitar</td></tr>
 			<tr><td>29</td><td>Overdriven guitar</td></tr>
 			<tr><td>30</td><td>Distortion guitar</td></tr>
-			<tr><td>31</td><td>Guitar harminics</td></tr>
+			<tr><td>31</td><td>Guitar harmonics</td></tr>
 		</table>
 	</li>
 
