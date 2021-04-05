@@ -3,27 +3,30 @@
 // vim: ts=3:nowrap
 
 function saveRatioscoreRendering(event, id) {
-	console.log("PROCESSING ID", id);
+	if (document.body.classList.contains("waiting")) {
+		alert("Already converting a score");
+		return;
+	}
+	document.body.classList.add("waiting");
+
 	let form = document.querySelector('#form-' + id);
 	if (!form) {
 		console.log("Error: Form not found for #form-" + id);
 		return;
 	}
-	console.log("FORM:", form);
 	let formdata = new FormData(form);
 	let dataelement = document.querySelector("#inputdata-" + id);
 	let data = dataelement.innerText;
 	let blob = new Blob([data], { type: "text/plain"});
 	formdata.append("inputdata", data);
-	console.log("FORM PARAMETERS:", formdata);
-	for (let pair of formdata.entries()) {
-  		console.log(pair[0] + ': ' + pair[1]);
-	}
+	//for (let pair of formdata.entries()) {
+  	//	console.log(pair[0] + ': ' + pair[1]);
+	//}
 	let request = new XMLHttpRequest();
 	request.open("POST", "https://data.ratioscore.humdrum.org");
 	request.responseType = "blob";
 	request.onload = function () {
-		console.log("THIS", this);
+		document.body.classList.remove("waiting");
 		let myblob = this.response;
 		// let reader = new FileReader();
 		// reader.onload = function () {
