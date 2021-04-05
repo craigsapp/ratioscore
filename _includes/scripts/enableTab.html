@@ -1,0 +1,30 @@
+
+<script>
+
+// vim: ts=3
+
+function enableTab(id) {
+	var element = document.querySelector("#" + id);
+	if (!element) {
+		return;
+	}
+	element.addEventListener("keydown", function (element) {
+		if (element.keyCode === 9) { // tab key
+			element.preventDefault();  // prevent tabbing out of element
+			// now insert four non-breaking spaces for the tab key
+			var doc = this.ownerDocument.defaultView;
+			var sel = doc.getSelection();
+			var range = sel.getRangeAt(0);
+			var tabNode = document.createTextNode("\t");
+			range.insertNode(tabNode);
+			range.setStartAfter(tabNode);
+			range.setEndAfter(tabNode); 
+			sel.removeAllRanges();
+			sel.addRange(range);
+		}
+	});
+}
+
+
+
+</script>

@@ -4,6 +4,8 @@
 		id      = id of source
 -->
 
+<div class="ratioscore">
+
 <form
 		target="_blank"
 		style="margin-top:30px;"
@@ -19,16 +21,16 @@
 			class="databox"></script>
 	<table style="padding-top:0px">
 		<tr valign="top">
-			<td style="padding-right:20px; padding-top:0px;">
+			<td style="padding-right:20px; padding-top:-10px;">
 				<br/>
 				<input id="render-{{include.id}}"
-						style="font-size:1rem; border:0; padding:5px; padding-left:8px; padding-right:8px; border-radius:3px; background-color:#aa1155; color:#ffffff"
+						style="font-size:24px; border:0; padding:5px; padding-left:8px; padding-right:8px; border-radius:3px; background-color:#aa1155; color:#ffffff"
 						type="submit"
 						name="action"
 						value="Render">
 			</td>
 			<td style="padding-top:13px;">
-				<div>
+				<div style="width:450px; font-size:24px;">
 					<input type="radio" name="outputformat" value="mid" checked> MIDI <br>
 					<input type="radio" name="outputformat" value="mp3"> MP3 <br>
 				</div>
@@ -37,9 +39,7 @@
 	</table>
 </form>
 
-
-
-
+</div>
 
 <script>
 
@@ -52,20 +52,20 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 	let contents = celement.textContent;
 	contents = contents.replace(/^\s*/s, "").replace(/\s*$/s, "");
-console.log("CONTENTS", contents);
 	let target = document.querySelector("#inputdata-{{include.id}}");
 	if (!target) {
 		console.log("Warning: no targetelement id inputdata-{{include.id}}");
 		return;
 	}
 	target.textContent = contents;
-	console.log("TARGET", target);
+
+	enableTab("inputdata-{{include.id}}");
 });
 
+
+
+
 </script>
-
-
-
 
 
 

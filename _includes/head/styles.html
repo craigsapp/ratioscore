@@ -6,95 +6,124 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans');
 
 * {
-        /* font-family: 'Noto Sans JP', sans-serif; */
-        font-family: 'Open Sans', serif;
+	/* font-family: 'Noto Sans JP', sans-serif; */
+	font-family: 'Open Sans', serif;
 }
 
 body.waiting * {
-    cursor: progress;
+	cursor: progress;
 }
 
+
 body {
-        margin-top: 15px;
-        margin-left: 5px;
-        background-color: #dddddd;
-        color: #321e04;
-        padding-bottom: 200px;
-        cursor: auto;
+	margin-top: 15px;
+	margin-left: 5px;
+	background-color: #dddddd;
+	color: #321e04;
+	padding-bottom: 200px;
+	cursor: auto;
+	font-size: calc(16px + 1vw);
+	line-height: calc(1.1em + 0.5vw);
+}
+
+script {
+	line-height: 1.25;
+	font-size: calc(1rem + 0.5vw) !important;
 }
 
 a:link, a:visited, a:active {
-        color: #6699bb;
-        text-decoration: none;
+	color: #6699bb;
+	text-decoration: none;
 }
 
 a:hover, {
-        color: #6699bb;
+	color: #6699bb;
+}
+
+
+h1 {
+	font-size: calc(3rem + 1vw);
+	font-weight: bold;
+	line-height: calc(3rem);
+}
+
+h2 {
+	font-size: calc(2.5rem + 1vw);
+	font-weight: bold;
+	line-height: calc(2.5rem);
 }
 
 
 #databox, .databox {
-        background: white;
-        border: 1px #0096be solid;
-        border-radius: 5px;
-        display: block;
-        font-family: Courier;
-        font-size: 0.75rem;
-        height:300px;
-        overflow: hidden;
-        overflow: scroll;
-        white-space: pre;
-        width:750px;
-        padding: 10px;
+	background: white;
+	border: 1px #0096be solid;
+	border-radius: 5px;
+	display: block;
+	font-family: Courier;
+	font-size: 0.75rem;
+	height:300px;
+	overflow: hidden;
+	overflow: scroll;
+	white-space: pre;
+	width:750px;
+	padding: 10px;
 }
 
 #databox:focus, .databox:focus {
-        outline: none;
+	outline: none;
 }
 
 table.option {
-        border-collapse: collapse;
+	border-collapse: collapse;
 }
 
 table.option td, table.option tr {
-        margin: 0;
-        padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 table.option td:nth-child(1) {
-        width: 165px;
+	width: 165px;
 }
 
 table.option td:nth-child(2) {
-        width: 50px;
+	width: 50px;
 }
 
 input[type="submit"]:hover {
-        background-color: limegreen !important;
+	background-color: limegreen !important;
 }
 
 .note {
-        color: #aaaaaa;
-        font-size: small;
+	color: #aaaaaa;
+	font-size: small;
 }
 
 table.olist {
-        padding-top:20px;
+	padding-top:20px;
 }
 
 
 table.olist td:nth-child(1) {
-        font-weight: bold;
-        font-family: Courier;
-        padding-right: 20px;
+	font-weight: bold;
+	font-family: Courier;
+	padding-right: 20px;
 }
 
 #header {
-        padding-bottom: 0px;
-        display:flex;
-        justify-text:center;
-        padding-left:100px;
-        padding-right:100px;
+	padding-left: 50px;
+	padding-right: 50px;
+	padding-bottom: 20px;
+	text-align:left;
+	width:calc(80vu);
+}
+
+#content {
+	padding-left: 50px;
+	padding-right: 50px;
+	padding-bottom: 200px;
+	text-align:left;
+	width:calc(80vu);
 }
 
 </style>

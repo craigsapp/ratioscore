@@ -4,13 +4,11 @@ permalink: /index.html
 vim: ts=3
 ---
 
-<center>
-<div style="text-align:left; width:750px">
 
 {% include ratioscore.html id="example" %}
 <script type="application/x-ratioscore" id="example">
 **time	**ratio
-*	*Ivioln
+*	*Iclars
 *	*ref:G3
 0	1
 1	3
@@ -25,7 +23,9 @@ vim: ts=3
 
 {% include droparea/main.html %}
 
-</div>
-</center>
+<h1 style="padding-top:50px;"> Documentation </h1>
+
+{% include documentation.html %}
+
 
 
