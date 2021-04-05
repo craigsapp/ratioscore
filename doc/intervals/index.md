@@ -110,6 +110,16 @@ largest.
 
 
 {% include intervalscore.html
+	title="Just perfect fourth"
+	id="just-perfect-fourth"
+	ratio="4/3"
+	cents="498.05"
+%}
+{% include ratioscore.html id="just-perfect-fourth" %}
+
+
+
+{% include intervalscore.html
 	title="Just perfect fifth"
 	id="just-perfect-fifth"
 	ratio="3/2"
