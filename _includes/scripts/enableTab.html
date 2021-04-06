@@ -9,7 +9,22 @@ function enableTab(id) {
 		return;
 	}
 	element.addEventListener("keydown", function (element) {
-		if (element.keyCode === 9) { // tab key
+		if (element.key === "Enter") { // enter key
+
+			element.preventDefault();  // prevent tabbing out of element
+			// now insert four non-breaking spaces for the tab key
+			var doc = this.ownerDocument.defaultView;
+			var sel = doc.getSelection();
+			var range = sel.getRangeAt(0);
+			var tabNode = document.createTextNode("\n");
+			range.insertNode(tabNode);
+			range.setStartAfter(tabNode);
+			range.setEndAfter(tabNode); 
+			sel.removeAllRanges();
+			sel.addRange(range);
+
+		} else if (element.keyCode === 9) { // tab key
+
 			element.preventDefault();  // prevent tabbing out of element
 			// now insert four non-breaking spaces for the tab key
 			var doc = this.ownerDocument.defaultView;
@@ -21,10 +36,18 @@ function enableTab(id) {
 			range.setEndAfter(tabNode); 
 			sel.removeAllRanges();
 			sel.addRange(range);
+
 		}
 	});
-}
 
+	// Also paste only plain text and not HTML code:
+	element.addEventListener("paste", function(event) {
+		event.preventDefault();
+		var text = (event.originalEvent || event).clipboardData.getData('text/plain');
+		document.execCommand("insertHTML", false, text);
+	});
+
+}
 
 
 </script>
