@@ -1,0 +1,34 @@
+
+<script>
+// vim: ts=3
+
+document.addEventListener("DOMContentLoaded", function () {
+	document.addEventListener("keydown", function (event) {
+		if (event.target.nodeName !== "SCRIPT") {
+			processKeyEvent(event);
+		}
+	});
+});
+
+
+//////////////////////////////
+//
+// processKeyEvent -- Keyboard shortcuts for page:
+//     h = hide ratioscores
+//     s = show ratioscores
+//
+
+function processKeyEvent(event) {
+	key = event.key;
+	if (key === "h") {
+		hideRatioscoresButton();
+		event.preventDefault();
+	} else if (key === "s") {
+		showRatioscoresButton();
+		event.preventDefault();
+	}
+}
+
+</script>
+
+

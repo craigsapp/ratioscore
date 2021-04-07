@@ -1,0 +1,171 @@
+
+<style>
+
+audio:not([controls]) {
+  display: none;
+  height: 0;
+}
+
+audio {
+	width:100%;
+}
+
+.ratioscore-play-button {
+	padding-left: 3px;
+	padding-right: 100px;
+}
+
+</style>
+
+
+
+<script>
+// vim: ts=3
+
+var AUDIO = null;
+var AUDIOid = null;
+var AUDIOurl = null;
+var AUDIOratioscore = null;
+
+//////////////////////////////
+//
+// PlayAudioFile -- play/pause an audio file.
+//
+
+function PlayAudioFile(id, element, starttime) {
+	// The JRPID is not the same as the currently playing file
+	// (or there is no file playing).  So start the new one.
+	if (!AUDIO) {
+	   AUDIO = document.getElementById('audio');
+   	}
+	if (!AUDIO) {
+		AUDIO = document.createElement("AUDIO");
+		AUDIO.id = "audio";
+		document.body.appendChild(AUDIO);
+	}
+   if (!AUDIO) {
+		console.log('Error: could not set up audio interface\n');
+		return false;
+   }
+	AUDIO.setAttribute('controls', 'controls');
+	AUDIO.style.position = 'fixed';
+	AUDIO.style.bottom = '0';
+	AUDIO.style.right = '0';
+	AUDIO.style.zIndex = '1';
+
+	AUDIO.onpause = function () {
+		// TurnOffAllNotes();
+	}
+
+	var audiobutton;
+
+	var inputelement = document.querySelector("#inputdata-" + id);
+	if (!inputelement) {
+		console.log("Cannot find input element for", id);
+		return;
+	}
+	var inputtext = inputelement.textContent;
+	if ((inputtext == null) || (inputtext !== AUDIOratioscore)) {
+		console.log("DOWNLOADING SCORE FOR ID", id);
+		downloadRatioscoreMp3(id, element, starttime);
+		return;
+	}
+
+//   if (id != AUDIOid) {
+		if (!!AUDIOid) {
+			// turn of previously playing audio file:
+			audiobutton = document.getElementById(AUDIOid);
+			if (!!audiobutton && !!audiobutton.className) {
+				if (audiobutton.className.match(/mp3/)) {
+					audiobutton.className = 'mp3play';
+				} else {
+					audiobutton.className = 'play';
+				}
+			}
+		}
+		AUDIO.removeAttribute('controls');
+      AUDIO.pause();
+
+      AUDIOid = element.id;
+		var source = AUDIO.querySelector("source");
+		// Can't have seekable dynamic content in audio element:
+		//source += '<source src="/data?a=mp3&id=' + id + '" ';
+		if (!source) {
+			source = document.createElement("SOURCE");
+			AUDIO.appendChild(source);
+		}
+		if (AUDIOurl) {
+			source.src = AUDIOurl;
+		}
+		// source.type = "audio/mpeg";
+		// AUDIO.innerHTML = source;
+
+		AUDIOid = id;
+		AUDIO.load();
+		if (starttime) {
+			AUDIO.currentTime = starttime;
+		}
+
+		AUDIO.play();
+
+		AUDIO.setAttribute('controls', 'controls');
+		var newelement = document.getElementById(AUDIOid);
+
+		AUDIO.addEventListener("ended", function() {
+			newelement.className = "play";
+		});
+
+		if (newelement.className.match(/mp3/)) {
+			newelement.className = 'mp3pause';
+		} else {
+			newelement.className = 'pause';
+		}
+
+		return;
+//	}
+
+
+	// The audio file is the same, so start it or pause it depending
+	// on its current state:
+	if (AUDIO.paused) {
+		audiobutton = document.getElementById(AUDIOid);
+ 		if (!audiobutton) {
+console.log("RETURNING HERE YYY");
+			return;
+		}
+
+		if (audiobutton.className.match(/mp3/)) {
+			audiobutton.className = 'mp3play';
+		} else {
+			audiobutton.className = 'play';
+		}
+		AUDIO.play();
+		AUDIO.setAttribute('controls', 'controls');
+	} else {
+		audiobutton = document.getElementById(AUDIOid);
+ 		if (!audiobutton) {
+console.log("RETURNING HERE HHH");
+			return;
+		}
+
+		if (audiobutton.className.match(/mp3/)) {
+			audiobutton.className = 'mp3pause';
+		} else {
+			audiobutton.className = 'pause';
+		}
+		if (element.className.match(/mp3/)) {
+			element.className = 'mp3play';
+		} else {
+			element.className = 'play';
+		}
+		AUDIO.pause();
+		AUDIO.removeAttribute('controls');
+	}
+console.log("RETURNING HERE RRR");
+}
+
+
+</script>
+
+
+

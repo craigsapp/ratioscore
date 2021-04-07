@@ -3,11 +3,11 @@
 // vim: ts=3:nowrap
 
 function saveRatioscoreRendering(event, id) {
+console.log("SAVE RATIO SCORE RENDERING ===============", id);
 	if (document.body.classList.contains("waiting")) {
 		alert("Already converting a score");
 		return;
 	}
-	document.body.classList.add("waiting");
 
 	let form = document.querySelector('#form-' + id);
 	if (!form) {
@@ -17,24 +17,84 @@ function saveRatioscoreRendering(event, id) {
 	let formdata = new FormData(form);
 	let dataelement = document.querySelector("#inputdata-" + id);
 	let data = dataelement.innerText;
-	let blob = new Blob([data], { type: "text/plain"});
 	formdata.append("inputdata", data);
-	//for (let pair of formdata.entries()) {
-  	//	console.log(pair[0] + ': ' + pair[1]);
-	//}
+	// let blob = new Blob([data], { type: "text/plain"});
+	var outputformat = "txt";
+	var inputdata = "";
+	for (let pair of formdata.entries()) {
+  		// console.log(pair[0] + ':: ' + pair[1]);
+		if (pair[0] === "outputformat") {
+			outputformat = pair[1];
+		}
+		if (pair[0] === "inputdata") {
+			inputdata = pair[1];
+		}
+	}
+
+	// Save text-based Ratioscore (input data from script box):
+	if (outputformat === "ratioscore") {
+		let mytextblob = new Blob([inputdata], {type: "text/plain;charset=utf-8"});
+		let url = window.URL.createObjectURL(mytextblob);
+		let link = document.createElement("a");
+		document.body.appendChild(link);
+		link.style = "display: none";
+		link.href = url;
+		link.download = id + ".txt";
+		link.click();
+		window.URL.revokeObjectURL(url);
+		document.body.removeChild(link);
+		return;
+	}
+
+	// Save MP3 (if it was already downloaded):
+	if ((outputformat === "mp3") && (inputdata === AUDIOratioscore)) {
+		console.log("ALREADY created MP3 for Ratioscore.");
+		let link = document.createElement("a");
+		document.body.appendChild(link);
+		link.style = "display: none";
+		link.href = AUDIOurl;
+		link.download = id + ".mp3";
+		link.click();
+		// window.URL.revokeObjectURL(url);
+		document.body.removeChild(link);
+		return;
+	}
+
+	document.body.classList.add("waiting");
 	let request = new XMLHttpRequest();
 	request.open("POST", "https://data.ratioscore.humdrum.org");
 	request.responseType = "blob";
 	request.onload = function () {
 		document.body.classList.remove("waiting");
 		let myblob = this.response;
+
+		let url = window.URL.createObjectURL(myblob);
+
+		if (outputformat === "mp3") {
+			console.log("STORING AUDIO in AUDIOurl");
+			AUDIOratioscore = inputdata;
+			AUDIOurl = url;
+		}
+
+		// open in another window:
+		// window.open(url);
+
+		// or save to a file:
+		let link = document.createElement("a");
+		document.body.appendChild(link);
+		link.style = "display: none";
+		link.href = url;
+		link.download = id + "." + outputformat;
+		link.click();
+		// window.URL.revokeObjectURL(url);
+		document.body.removeChild(link);
+
 		// let reader = new FileReader();
 		// reader.onload = function () {
 		// 	console.log("CONTENTS", reader.result);
 		// }
 		// reader.readAsText(myblob);
-		let url = window.URL.createObjectURL(myblob);
-		window.open(url);
+
 	};
 	request.send(formdata);
 }

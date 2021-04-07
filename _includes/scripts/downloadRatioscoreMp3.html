@@ -1,0 +1,73 @@
+
+<script>
+// vim: ts=3:nowrap
+
+
+//////////////////////////////
+//
+// downloadRatioscoreMp3 -- used by audio.html to download
+//     MP3 before starting to play.
+//
+
+function downloadRatioscoreMp3(id, element, starttime) {
+	if (document.body.classList.contains("waiting")) {
+		alert("Already converting a score");
+		return;
+	}
+
+	let form = document.querySelector('#form-' + id);
+	if (!form) {
+		console.log("Error: Form not found for #form-" + id);
+		return;
+	}
+	let formdata = new FormData(form);
+	let dataelement = document.querySelector("#inputdata-" + id);
+	let data = dataelement.innerText;
+	formdata.append("inputdata", data);
+	// let blob = new Blob([data], { type: "text/plain"});
+	var outputformat = "mp3";
+	var inputdata = "";
+	formdata.set("outputformat", "mp3");
+	for (let pair of formdata.entries()) {
+  		console.log(pair[0] + ': ' + pair[1]);
+		if (pair[0] === "outputformat") {
+			outputformat = pair[1];
+		}
+		if (pair[0] === "inputdata") {
+			inputdata = pair[1];
+		}
+	}
+	// force output to be MP3
+	outputformat = "mp3";
+
+	// Play MP3 file that was already downloaded.
+	if ((outputformat === "mp3") && (inputdata !== "") && (inputdata !== null) && (inputdata === AUDIOratioscore)) {
+		console.log("MP3 file already downloaded");
+		console.log("GOING TO PLAY YYY", id);
+		PlayAudioFile(id, element, starttime);
+		return;
+	}
+	console.log("NEED TO DOWNLOAD", id);
+
+	document.body.classList.add("waiting");
+	let request = new XMLHttpRequest();
+	request.open("POST", "https://data.ratioscore.humdrum.org");
+	request.responseType = "blob";
+	request.onload = function () {
+		console.log("FINISHED DOWNLOADING", id);
+		document.body.classList.remove("waiting");
+		let myblob = this.response;
+		let url = window.URL.createObjectURL(myblob);
+		console.log("STORING AUDIO in AUDIOurl", url);
+		AUDIOratioscore = inputdata;
+		AUDIOurl = url;
+		console.log("GOING TO PLAY ZZZ", id);
+		PlayAudioFile(id, element, starttime);
+	};
+	request.send(formdata);
+}
+
+
+</script>
+
+

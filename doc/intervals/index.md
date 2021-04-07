@@ -5,8 +5,39 @@ layout: default
 vim: ts=8:ft=html
 ---
 
+{% include_relative listeners.html %}
+
+{% include_relative scripts-local.html %}
+
 This page gives examples of various intervals sorted from smallest to 
 largest.
+
+{% include_relative reference-pitch.html %}
+{% include_relative instrument.html %}
+{% include_relative ratioscore-display.html %}
+
+
+
+
+
+{% include intervalscore.html
+	title="Schisma"
+	id="schisma"
+	ratio="32805/32768"
+	cents="1.95"
+%}
+{% include ratioscore.html id="schisma" %}
+
+
+
+{% include intervalscore.html
+	title="Diaschisma"
+	id="diaschisma"
+	ratio="2048/2025"
+	cents="19.55"
+%}
+{% include ratioscore.html id="diaschisma" %}
+
 
 
 {% include intervalscore.html
@@ -26,6 +57,16 @@ largest.
 	cents="23.46"
 %}
 {% include ratioscore.html id="pythagorean-comma" %}
+
+
+
+{% include intervalscore.html
+	title="Diesis"
+	id="diesis"
+	ratio="128/125"
+	cents="41.06"
+%}
+{% include ratioscore.html id="diesis" %}
 
 
 
