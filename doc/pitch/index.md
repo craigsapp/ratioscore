@@ -5,17 +5,18 @@ layout: default
 vim: ts=8:ft=html
 ---
 
-Notes are created in a Ratioscore by adding fractions in `**ratio` spines (columns) to 
-a <a href="/doc/timeline">timeline</a>.  The fractions are used to calculate the pitch
-of the note by multiplying the frequency of the reference pitch.  For example of the
-reference pitch is A4 (=440Hz), then the fraction `3/2` will generate the frequency
-660 Hz.
+Notes are created in a Ratioscore by adding fractions in `**ratio`
+spines (columns) to a <a href="/doc/timeline">timeline</a>.  The
+fractions are used to calculate the pitch of the note by multiplying
+the frequency of the reference pitch.  For example of the reference
+pitch is A4 (=440Hz), then the fraction `3/2` will generate the
+frequency 660 Hz.
 
 
 <h2> Reference pitch </h2>
 
-The reference pitch is specified in the form   `*ref:A4`, where `A4` is the A above
-middle C.  Here is an example:
+The reference pitch is specified in the form   `*ref:A4`, where
+`A4` is the A above middle C.  Here is an example:
 
 
 {% include ratioscore.html id="reference-example" %}
@@ -37,6 +38,9 @@ middle C.  Here is an example:
 0.25	.	.	0
 *-	*-	*-	*-
 </script>
+
+C4 (middle C) will be used as the reference pitch if none is given
+for any ratio column.
 
 
 <h2> Harmonics </h2>
