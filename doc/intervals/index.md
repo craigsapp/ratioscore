@@ -149,6 +149,13 @@ largest.
 {% include ratioscore.html id="just-major-third" %}
 
 
+{% include intervalscore.html
+	title="Equal-tempered major third"
+	id="et-major-third"
+	cents="400.00"
+%}
+{% include ratioscore.html id="et-major-third" %}
+
 
 {% include intervalscore.html
 	title="Just perfect fourth"
@@ -157,6 +164,15 @@ largest.
 	cents="498.05"
 %}
 {% include ratioscore.html id="just-perfect-fourth" %}
+
+
+
+{% include intervalscore.html
+	title="Equal-tempered perfect fifth"
+	id="et-perfect-fifth"
+	cents="700.00"
+%}
+{% include ratioscore.html id="et-perfect-fifth" %}
 
 
 
