@@ -11,10 +11,10 @@
 //
 // **time	**ratio	**ratio	**mdyn
 // *	*ref:C4	*ref:G3	*
-// 0	1	1	20g
+// 0	1	1	20S
 // 1.5	2	2	30
 // 1.64	3	0	.
-// 2.6	3/2g	5/4+c100	50
+// 2.6	3/2g	5/4+100c	50
 // 3.1	.	3/2	50
 // 4.2	6/5G	.	.
 // *-	*-	*-	*-
@@ -27,8 +27,8 @@
 // See
 //     https://github.com/craigsapp/humlib/blob/master/src/HumInstrument.cpp
 // for a list of known instrument labels.
-// H = start of glissando
-// h = end of glissando
+// H = start of glissando (slide)
+// h = end of glissando (slide)
 //
 
 #include "humlib.h"
@@ -41,6 +41,8 @@ using namespace std;
 using namespace smf;
 using namespace hum;
 
+#define GLISS_START "H"
+#define GLISS_END "h"
 
 // function declarations:
 string  getOutputFilename (const string& filename);
@@ -51,7 +53,7 @@ double  getMidiNoteNumber (string refpitch);
 int     getEndTime        (HTp stok);
 void    addTempoMessages  (MidiFile& outfile, HTp sstart);
 void    addGlissando      (MidiFile& outfile, int track, HTp current, double spitch, double reference, int channel);
-double  getPitchInfo      (HTp token, double reference);
+double  getPitchAsMidi    (HTp token, double reference);
 double  getPitchBend      (double pitch, int channel);
 double  getPitchBend      (double pitch, double spitch, int channel);
 HTp     getNextPitchToken (HTp token);
@@ -64,6 +66,9 @@ void    prepareTimelineDtime(vector<double>& timeline, HTp sstart, int lines);
 void    prepareTimelineTime(vector<double>& timeline, HTp sstart, int lines);
 double  getTimeNumber     (HTp token);
 void    addSecondsSpine   (ostream& out, HumdrumFile& infile);
+double  getReferencePitchAsMidi(const string& token);
+double  getMaxGlissRange  (HTp pstart);
+double  getGlissWidth     (vector<double>& gliss);
 
 
 // variables:
@@ -87,6 +92,7 @@ int         m_lastDuration = 1000;   // duration of last event in score (if not 
 int         m_velocity = 64;         // default attack velocity of notes
 double      m_maxtime = 0.0;         // maximum time of output MIDI file
 vector<double> m_timeline;           // used with --max-time option.
+bool        m_debugQ = false;        // used with --debug option
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -97,17 +103,26 @@ int main(int argc, char** argv) {
 	options.define("r|raw=b",    "output raw MIDI data to stdout.");
 	options.define("x|max-time=d:0.0", "maximum duration of output MIDI file in seconds");
 	options.define("s|seconds=b", "add time in seconds spine (resolving tempo changes)");
+	options.define("debug=b", "display debugging information");
 	options.process(argc, argv);
 	m_maxtime = options.getDouble("max-time");
+	m_debugQ = options.getBoolean("debug");
 
 	HumdrumFile infile;
 	MidiFile outfile;
+	Tool_filter filter;
 
 	m_pbrange.resize(16);
 	fill(m_pbrange.begin(), m_pbrange.end(), 2.0);
 
 	if (options.getArgCount() == 0) {
 		infile.read(cin);
+		if (infile.hasGlobalFilters()) {
+			filter.run(infile);
+			if (filter.hasHumdrumText()) {
+				infile.readString(filter.getHumdrumText());
+			}
+		}
 		if (options.getBoolean("seconds")) {
 			addSecondsSpine(cout, infile);
 			return 0;
@@ -132,6 +147,12 @@ int main(int argc, char** argv) {
 		}
 	} else if (options.getArgCount() == 1) {
 		infile.read(options.getArg(1));
+		if (infile.hasGlobalFilters()) {
+			filter.run(infile);
+			if (filter.hasHumdrumText()) {
+				infile.readString(filter.getHumdrumText());
+			}
+		}
 		if (options.getBoolean("seconds")) {
 			addSecondsSpine(cout, infile);
 			return 0;
@@ -162,6 +183,12 @@ int main(int argc, char** argv) {
 	} else {
 		for (int i=0; i<options.getArgCount(); i++) {
 			infile.read(options.getArg(i+1));
+			if (infile.hasGlobalFilters()) {
+				filter.run(infile);
+				if (filter.hasHumdrumText()) {
+					infile.readString(filter.getHumdrumText());
+				}
+			}
 			bool status = convertFile(outfile, infile);
 			if (!status) {
 				cerr << "Problem converting score " << options.getArg(i+1) << "." << endl;
@@ -439,10 +466,6 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile) {
 	HTp current = pstart;
 	HumRegex hre;
-	double rcents;
-	string refpitch;
-	string refcents;
-	string direction;
 	int channel = track - 1;
 	if (channel >= 9) {
 		// avoid the drum channel
@@ -457,6 +480,8 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 	if (dstart != NULL) {
 		hasDyn = true;
 	}
+	bool hasBend = false;
+	bool wroteBend = false;
 
 	while (current) {
 		if (m_maxtime > 0.0) {
@@ -503,6 +528,8 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 				}
 				int starttime = m_timemap[current->getLineIndex()];
 				outfile.setPitchBendRange(track, starttime, channel, range);
+				hasBend = true;
+				wroteBend = true;
 				m_pbrange.at(channel) = range;
 			} else if (hre.search(current, "^\\*gliss[:=]?(\\d+)$")) {
 				int value = hre.getMatchInt(1);
@@ -523,23 +550,18 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 					int starttime = m_timemap[current->getLineIndex()];
 					outfile.addController(track, starttime, channel, 10, pan);
 				}
-			} else if (hre.search(current, "^\\*ref[:=]?([A-G][#-b]?\\d+)([+-]c?\\d+\\.?\\d*)?")) {
-				refpitch = hre.getMatch(1);
-				reference = getMidiNoteNumber(refpitch);
-				refcents  = hre.getMatch(2);
-				if (!refcents.empty()) {
-					if (hre.search(refcents, "([+-])(\\d+\\.?\\d*)c")) {
-						direction = hre.getMatch(1);
-						rcents = hre.getMatchDouble(2);
-						if (direction == "-") {
-							reference -= rcents / 100.0;
-						} else {
-							reference += rcents / 100.0;
-						}
-					}
-				}
+			} else if (hre.search(current, "^\\*ref[:=]?[A-G][#-b]?\\d+")) {
+				reference = getReferencePitchAsMidi(*current);
 			}
 		} else if (current->isData()) {
+			if (!wroteBend) {
+				double glissRange = getMaxGlissRange(pstart);
+				// force writing of pitch bend depth (in case the synthesizer
+				// channel is set to a non-default value).
+				m_pbrange.at(channel) = glissRange;
+				outfile.setPitchBendRange(track, 0, channel, m_pbrange.at(channel));
+				wroteBend = true;
+			}
 			if (current->isNull()) {
 				current = current->getNextToken();
 				continue;
@@ -550,7 +572,7 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 				continue;
 			}
 
-			double pitch = getPitchInfo(current, reference);
+			double pitch = getPitchAsMidi(current, reference);
 			double pbend = getPitchBend(pitch, channel);
 
 			int starttime = m_timemap[current->getLineIndex()];
@@ -576,13 +598,48 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 				outfile.addPitchBend(track, ptime, channel, pbend);
 			}
 
-			if (current->find('H') != string::npos) {
+			if (current->find(GLISS_START) != string::npos) {
 				addGlissando(outfile, track, current, pitch, reference, channel);
 			}
 		}
 		current = current->getNextToken();
 		continue;
 	}
+}
+
+
+
+//////////////////////////////
+//
+// getReferencePitchAsMidi --
+//
+
+double getReferencePitchAsMidi(const string& token) {
+	HumRegex hre;
+	double reference = 60.0;  // default reference
+	if (hre.search(token, "^\\*ref[:=]?([A-G][#-b]?\\d+)([+-]\\d+\\.?\\d*c)?")) {
+		string refpitch = hre.getMatch(1);
+		reference = getMidiNoteNumber(refpitch);
+		string refcents = hre.getMatch(2);
+		if (!refcents.empty()) {
+			if (hre.search(refcents, "([+-])(\\d+\\.?\\d*)c")) {
+				string direction = hre.getMatch(1);
+				double rcents = hre.getMatchDouble(2);
+				if (direction == "-") {
+					reference -= rcents / 100.0;
+				} else {
+					reference += rcents / 100.0;
+				}
+			}
+		}
+		if (reference <= 0) {
+			reference = 60.0;
+		}
+		if (reference > 127.0) {
+			reference = 60.0;
+		}
+	}
+	return reference;
 }
 
 
@@ -653,16 +710,49 @@ double getPitchBend(double pitch, double spitch, int channel) {
 
 //////////////////////////////
 //
-// getPitchInfo -- Convert ratio token into floating-point MIDI note number.
+// getPitchAsMidi -- Convert ratio token into floating-point MIDI note number.
+//      reference: MIDI note number (with possible fractional value if not equaltemperament).
+//
+//      pitches can be in these formats:
+//      intervals:
+//          5        == a rational number value with no denominator (a harmonic)
+//          5/4      == a rational number
+//          (5/4)^3  == a rational number with exponentiation
+//          235.35c  == a cent interval above the reference pitch
+//         +235.35c  == a cent interval above the reference pitch
+//         -235.35c  == a cent interval above the reference pitch
+//       frequencies:
+//           440.23z == 440.23 Hertz
 //
 
-double getPitchInfo(HTp token, double reference) {
+double getPitchAsMidi(HTp token, double reference) {
 	int top;
 	int bot;
 	HumNum value;
 	HumRegex hre;
 	double pcents;
 	string botstring;
+
+	// remove non-pitch information from token:
+	string cleaned = *token;
+	hre.replaceDestructive(cleaned, "", "[Hh_]", "g");
+
+	// Check if only a cent interval:
+	if (hre.search(cleaned, "^([+-]?\\d+\\.?\\d*)c$")) {
+		double cents = hre.getMatchDouble(1);
+		return cents/100.0 + reference;
+	}
+
+	// Check if only a frequency:
+	if (hre.search(cleaned, "^([+]?\\d+\\.?\\d*)z$")) {
+		double frequency = hre.getMatchDouble(1);
+		if (frequency <= 0.0) {
+			return 0.0;
+		}
+		double midi = 12.0 * log2(frequency / 440.0) + 69.0;
+		return midi;
+	}
+
 
 	if (!hre.search(token, "(\\d+)(?:/(\\d+))?")) {
 		cerr << "Problem with ratio: " << token << endl;
@@ -732,8 +822,8 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 	}
 	int humtrack = starttok->getTrack();
 
-	double npitch = getPitchInfo(nexttok, reference);
-	double sspitch = getPitchInfo(starttok, reference);
+	double npitch = getPitchAsMidi(nexttok, reference);
+	double sspitch = getPitchAsMidi(starttok, reference);
 	double starttime = m_timemap[starttok->getLineIndex()];
 	double endtime = m_timemap[nexttok->getLineIndex()];
 
@@ -754,7 +844,9 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 		y = m * x + b;
 		double pbend = getPitchBend(y, spitch, channel);
 		if (fabs(pbend) > 1.0) {
-			cerr << "Warning: Pitch bend exceeds maximum (increase pitch bend range)" << endl;
+			cerr << "Warning: Pitch bend " << pbend << " exceeds maximum";
+			cerr << " (increase pitch bend range)" << endl;
+			cerr << "Pitch bend depth is currently set to " << m_pbrange[channel] << endl;
 			return;
 		}
 		outfile.addPitchBend(track, x, channel, pbend);
@@ -766,7 +858,7 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 	//	outfile.addPitchBend(track, x2-1, channel, pbend);
 	//}
 
-	if (nexttok->find('h') == string::npos) {
+	if (nexttok->find(GLISS_END) == string::npos) {
 		addGlissando(outfile, track, nexttok, spitch, reference, channel);
 	}
 }
@@ -1143,6 +1235,131 @@ void addSecondsSpine(ostream& out, HumdrumFile& infile) {
 		}
 		out << "\t" << infile[i] << endl;
 	}
+}
+
+
+
+//////////////////////////////
+//
+// getMaxGlissRange -- if there are any glissandos in the part, then
+//     measure the maximum depth needed for it.  This will be used
+//     to automatically adjust the pitch bend depth factor if a
+//     manual bend depth was not given.
+//
+
+double getMaxGlissRange(HTp pstart) {
+	vector<vector<double>> glisses;
+	glisses.reserve(1000);
+
+	HTp current = pstart->getNextToken();
+	double reference = 60.0;
+	bool ingliss = false;
+	HumRegex hre;
+	while (current) {
+		if (current->isInterpretation()) {
+			if (hre.search(current, "^\\*ref[:=]?[A-G][#-b]?\\d+")) {
+				reference = getReferencePitchAsMidi(*current);
+			}
+		}
+		if (!current->isData()) {
+			current = current->getNextToken();
+			continue;
+		}
+
+		if (current->find(GLISS_END) != string::npos) {
+			if (ingliss && !glisses.empty()) {
+				double pitch = getPitchAsMidi(current, reference);
+				if (pitch > 0.0) {
+					glisses.back().push_back(pitch);
+				}
+			}
+			ingliss = false;
+		}
+		if (current->find(GLISS_START) != string::npos) {
+				//start of glissando
+			glisses.resize(glisses.size()+1);
+			ingliss = true;
+			double pitch = getPitchAsMidi(current, reference);
+			if (pitch > 0.0) {
+				glisses.back().push_back(pitch);
+			}
+		}
+		if (!ingliss) {
+			current = current->getNextToken();
+			continue;
+		}
+		double pitch = getPitchAsMidi(current, reference);
+		if (pitch > 0.0) {
+			glisses.back().push_back(pitch);
+		}
+		current = current->getNextToken();
+		continue;
+	}
+
+	int glisscount = glisses.size();
+	double maxwidth = 0.0;
+	for (int i=0; i<glisscount; i++) {
+		double width = getGlissWidth(glisses[i]);
+		if (width > maxwidth) {
+			maxwidth = width;
+		}
+	}
+	double output = 2.0 * maxwidth + 1.0;
+	if (output < 2.0) {
+		output = 2.0;
+	}
+	if ((output > 2.0) && (output < 23.0)) {
+		// add extra safety buffer
+		output += 1.0;
+	}
+	if (output > 24.0) {
+		output = 24.0;
+	}
+	if (m_debugQ) {
+		int track = pstart->getTrack();
+		cerr << "Glissando list for track " << track << ":" << endl;
+		for (int i=0; i<(int)glisses.size(); i++) {
+			cerr << "\t";
+			for (int j=0; j<(int)glisses[i].size(); j++) {
+				cerr << glisses[i][j] << " ";
+			}
+		}
+		cerr << endl;
+		cerr << "GLISSANDO DEPTH FOR TRACK " << track << ": " << output << endl;
+	}
+
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// getGlissWidth -- return the maximum absolute distance from the first
+//     note in the gliss to any following note in the gliss.
+//
+
+double getGlissWidth(vector<double>& gliss) {
+	if (gliss.empty()) {
+		return 0.0;
+	}
+	if (gliss.size() == 1) {
+		return 0.0;
+	}
+	if (gliss[0] <= 0.0) {
+		return 0.0;
+	}
+	double maxdiff = 0.0;
+	for (int i=1; i<(int)gliss.size(); i++) {
+		if (gliss[i] <= 0.0) {
+			continue;
+		}
+		double diff = fabs(gliss[i] - gliss[0]);
+		if (diff > maxdiff) {
+			maxdiff = diff;
+		}
+	}
+	return maxdiff;
 }
 
 
