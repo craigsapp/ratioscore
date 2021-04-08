@@ -1,5 +1,5 @@
 ---
-title: Ratioscore Renderer
+title: Ratioscore
 permalink: /index.html
 vim: ts=3
 ---

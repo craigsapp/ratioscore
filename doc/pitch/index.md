@@ -115,17 +115,60 @@ various named ratios.
 
 <h2> Cents </h2>
 
+Cents can be used instead of or in addition to fractions.  A floating-point
+number followed by the letter `c` will be interpreted as cents, and
+cents will be above (or below) the reference pitch.
 
+Here is an example of playing an Equal-tempered C major scale at the same
+time as C major in Just intonation (listen to the beating when the
+two notes are less in tune):
 
-
-
-
-
-
+{% include ratioscore.html id="cents-example" %}
+<script type="application/x-ratioscore" id="cents-example">
+**dtime	**ratio	**ratio
+*	*Iclars	*Iclars
+*	*ref:C4	*ref:C4
+1	0c	1
+1	200c	9/8
+1	400c	5/4
+1	500c	4/3
+1	700c	3/2
+1	900c	5/3
+1	1100c	15/8
+2	1200c	2
+*-	*-	*-
+</script>
 
 
 <h2> Frequency </h2>
 
+Specific frequencies can be specified by appending a floating point
+number with the letter `z` (for "Hz"). If only frequencies are given
+for pitches, then the reference pitch is not necessary. 
+Here is a C major scale in equal temperament using frequencies and
+cents for comparison:
 
+{% include ratioscore.html id="freq-example" %}
+<script type="application/x-ratioscore" id="freq-example">
+**dtime	**ratio	**ratio
+*	*Iclars	*Iorgan
+*MM180	*	*ref:C4
+1	261.63z	.
+1	0	0c
+1	293.66z	0
+1	0	200c
+1	329.63z	0
+1	0	400c
+1	349.23z	0
+1	0	500c
+1	392.00z	0
+1	0	700c
+1	440.00z	0
+1	0	900c
+1	493.88z	0
+1	0	1100c
+2	523.25z	0
+*-	*-	*-
+</script>
 
 
