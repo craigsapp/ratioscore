@@ -754,7 +754,6 @@ int getAttackVelocity(HTp rtoken, int basevel, int velstep) {
 	} else if (output > 127) {
 		output = 127;
 	}
-cerr << "\tOUTOUT " << output << endl;
 	return output;
 }
 
