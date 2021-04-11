@@ -6,7 +6,7 @@ vim: ts=8:ft=html
 ---
 
 Basic manipulations of Ratioscores can be embedded as filtering commands
-within the score.  Filters are give on lines starting with `!!!filter:`
+within the score.  Filters are given on lines starting with `!!!filter:`
 and then the actual filter.
 
 
