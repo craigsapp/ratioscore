@@ -57,7 +57,7 @@ double  getPitchAsMidi    (HTp token, double reference);
 double  getPitchBend      (double pitch, int channel);
 double  getPitchBend      (double pitch, double spitch, int channel);
 HTp     getNextPitchToken (HTp token);
-int     getVelocity       (HTp rtoken);
+int     getAttackVelocity (HTp rtoken, int baseline, int step);
 void    prepareTimeline   (HumdrumFile& infile);
 void    getTimeData       (HTp sstart, vector<double>& numbers,
                            vector<double>& tempo, int lines);
@@ -69,6 +69,8 @@ void    addSecondsSpine   (ostream& out, HumdrumFile& infile);
 double  getReferencePitchAsMidi(const string& token);
 double  getMaxGlissRange  (HTp pstart);
 double  getGlissWidth     (vector<double>& gliss);
+void    fillCurrentTempo  (HumdrumFile& infile, HTp timespine);
+HTp     getVelToken       (HTp current);
 
 
 // variables:
@@ -93,6 +95,7 @@ int         m_velocity = 64;         // default attack velocity of notes
 double      m_maxtime = 0.0;         // maximum time of output MIDI file
 vector<double> m_timeline;           // used with --max-time option.
 bool        m_debugQ = false;        // used with --debug option
+vector<double> m_currTempo;          // used for grate calculations
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -292,6 +295,8 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	outfile.setTicksPerQuarterNote(1000);  // using millisecond ticks
 	outfile.addTempo(0, 0, 60.0);
 
+	fillCurrentTempo(infile, timespine);
+
 	for (int i=0; i<(int)m_partStarts.size(); i++) {
 		generateTrack(outfile, i+1, m_partStarts[i], m_dynStarts[i], infile);
 	}
@@ -301,6 +306,37 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	outfile.markSequence();
 	outfile.sortTracks();
 	return true;
+}
+
+
+
+//////////////////////////////
+//
+// fillCurrentTempo -- Record the active tempo at each line in the
+//    score.  This is used for the *grate: (gliss update rate) value.
+//    The default is *grate:50 (50 millisecond updates), but *grate:20
+//    would be 20 millisecond updates.
+//
+
+void fillCurrentTempo(HumdrumFile& infile, HTp timespine) {
+	m_currTempo.resize(infile.getLineCount());
+	fill(m_currTempo.begin(), m_currTempo.end(), 60.0);
+	HTp current = timespine->getNextToken();
+	HumRegex hre;
+	double tempo = 60.0;
+	while (current) {
+		if (hre.search(current, "^\\*MM(\\d+\\.\\d*)")) {
+			tempo = hre.getMatchDouble(1);
+		} else if (hre.search(current, "^\\*MM(\\d*\\.\\d+)")) {
+			tempo = hre.getMatchDouble(1);
+		}
+		if (tempo <= 0.0) {
+			tempo = 60.0;
+		}
+		int lindex = current->getLineIndex();
+		m_currTempo.at(lindex) = tempo;
+		current = current->getNextToken();
+	}
 }
 
 
@@ -473,7 +509,8 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 	}
 	double lastattack = 0.0;
 
-	int velocity = m_velocity;
+	int velstep = 10;
+	int baseattackvel = m_velocity;
 	double reference;
 	HumInstrument instrument;
 	bool hasDyn = false;
@@ -531,12 +568,21 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 				hasBend = true;
 				wroteBend = true;
 				m_pbrange.at(channel) = range;
-			} else if (hre.search(current, "^\\*gliss[:=]?(\\d+)$")) {
+			} else if (hre.search(current, "^\\*grate[:=]?(\\d+)$")) {
 				int value = hre.getMatchInt(1);
 				if (value > 0) {
 					int track = current->getTrack();
 					m_glissTime[track] = value;
 				}
+			} else if (hre.search(current, "^\\*vel[:=]?(\\d+)$")) {
+				int value = hre.getMatchInt(1);
+				if ((value > 0) && (value <128)) {
+					baseattackvel = value;
+				}
+			} else if (hre.search(current, "^\\*vstep[:=]?(\\d+)$")) {
+				// attack velocity increment for v/V encodings.
+				int value = hre.getMatchInt(1);
+				velstep = value;
 			} else if (hre.search(current, "^\\*pan[:=]?(-?\\d*\\.\\d*)$")) {
 				string match = hre.getMatch(1);
 				if (!match.empty()) {
@@ -582,14 +628,15 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 				ptime = 0;
 			}
 
-			if (hasDyn) {
-				velocity = getVelocity(current);
-			}
+			// if (hasDyn) {
+			// 	volume = getAttackVelocity(current, baseattackvel);
+			// }
+			int attack = getAttackVelocity(current, baseattackvel, velstep);
 
 			if (current->find('_') == string::npos) {
 				outfile.addPitchBend(track, ptime, channel, pbend);
-				outfile.addNoteOn(track, starttime, channel, int(pitch), velocity);
-				outfile.addNoteOff(track, endtime, channel, int(pitch), velocity);
+				outfile.addNoteOn(track, starttime, channel, int(pitch), attack);
+				outfile.addNoteOff(track, endtime, channel, int(pitch), attack);
 				lastattack = pitch;
 			} else {
 				// this is a tied note, so ignored for note attacks, but add
@@ -646,10 +693,72 @@ double getReferencePitchAsMidi(const string& token) {
 
 //////////////////////////////
 //
-// getVelocity --
+// getVelToken -- search for the next **vel spine after the current one,
+//     but before any **ratio spines.
 //
 
-int getVelocity(HTp rtoken) {
+HTp getVelToken(HTp current) {
+	if (!current) {
+		return NULL;
+	}
+	current = current->getNextFieldToken();
+	if (!current) {
+		return NULL;
+	}
+	while (current) {
+		if (current->isDataType("**ratio")) {
+			return NULL;
+		}
+		if (current->isDataType("**vel")) {
+			return current;
+		}
+		current = current->getNextFieldToken();
+	}
+	return NULL;
+}
+
+
+
+//////////////////////////////
+//
+// getAttackVelocity --
+//
+
+int getAttackVelocity(HTp rtoken, int basevel, int velstep) {
+	int output = basevel;
+	HTp veltok = getVelToken(rtoken);
+	if (veltok) {
+		if (veltok->isNull()) {
+			veltok = veltok->resolveNull();
+		}
+		if (!veltok) {
+			return output;
+		}
+		HumRegex hre;
+		if (!hre.search(veltok, "(\\d+)")) {
+			return output;
+		}
+		output = hre.getMatchInt(1);
+		return output;
+	}
+
+	for (int i=0; i<(int)rtoken->size(); i++) {
+		if (rtoken->at(i) == 'v') {
+			output -= velstep;
+		} else if (rtoken->at(i) == 'V') {
+			output += velstep;
+		}
+	}
+	if (output < 1) {
+		output = 1;
+	} else if (output > 127) {
+		output = 127;
+	}
+cerr << "\tOUTOUT " << output << endl;
+	return output;
+}
+
+/*  This code will be used for volume continuous controllers
 	HTp current = rtoken->getNextField();
 	while (current) {
 		if (current->isDataType("**ratio")) {
@@ -685,6 +794,7 @@ int getVelocity(HTp rtoken) {
 	return m_velocity;
 }
 
+*/
 
 
 //////////////////////////////
@@ -820,6 +930,13 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 	if (nexttok == NULL) {
 		return;
 	}
+
+	// Set the glissando rate based on the starting tempo of the
+	// first note in the gliss.
+	// double tempo = m_currTempo.at(starttok->getLineIndex());
+	// double gliss_factor = tempo / 60.0;
+	double gliss_factor = 1.0;
+
 	int humtrack = starttok->getTrack();
 
 	double npitch = getPitchAsMidi(nexttok, reference);
@@ -838,7 +955,7 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 
 	double m = (y2 - y1)/(x2 - x1);
 	double b = (x2*y1 - x1*y2)/(x2 - x1);
-	double x = x1 + m_glissTime.at(humtrack);
+	double x = x1 + m_glissTime.at(humtrack) * gliss_factor;
 	double y;
 	while (x < x2) {
 		y = m * x + b;
@@ -850,7 +967,7 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 			return;
 		}
 		outfile.addPitchBend(track, x, channel, pbend);
-		x += m_glissTime.at(humtrack);
+		x += m_glissTime.at(humtrack) * gliss_factor;
 	}
 	//if (nexttok->find('_') != string::npos) {
 	//	// add ending glissando on next note if it is not an attack
@@ -862,7 +979,6 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 		addGlissando(outfile, track, nexttok, spitch, reference, channel);
 	}
 }
-
 
 
 
