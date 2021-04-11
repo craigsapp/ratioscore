@@ -162,6 +162,65 @@ Removing the first spine will cause the second spine to be used as the timeline:
 
 
 
+<h2> Rearranging measures </h2>
+
+The `myank` filter can be used to mix an match measures.
 
 
+{% include ratioscore.html id="myank-example" %}
+<script type="application/x-ratioscore" id="myank-example">
+**recip	**ratio
+=0	=0
+*MM200	*ref:C3
+=1	=1
+8	11
+8	12
+8	11
+8	13
+8	11
+=2	=2
+8	10
+8	11
+8	12
+8	11
+=3	=3
+8	9
+8	8
+8	9
+=4	=4
+8	7
+8	6
+=	=
+*-	*-
+</script>
+
+
+
+{% include ratioscore.html id="myank-expand-example" %}
+<script type="application/x-ratioscore" id="myank-expand-example">
+!!!filter: myank -m 0,3,3,2,1,2,2,3,2,1,3,2,4,2,1,4,2,2,3,1,4
+**recip	**ratio
+=0	=0
+*MM200	*ref:C3
+=1	=1
+8	11
+8	12
+8	11
+8	13
+8	11
+=2	=2
+8	10
+8	11
+8	12
+8	11
+=3	=3
+8	9
+8	8
+8	9
+=4	=4
+8	7
+8	6
+=	=
+*-	*-
+</script>
 

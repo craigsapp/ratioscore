@@ -7,23 +7,23 @@ vim: ts=3
 
 {% include ratioscore.html id="example" tabsize="12" height="500px" %}
 <script type="application/x-ratioscore" id="example">
-**time	**ratio
+**dtime	**ratio
 *	*Iclars
 *	*ref:G3
-0	1
-1	3
-2	11/4
-2.25	5/2
+1	1
+0.75	3
+0.25	11/4H
+0.25	_11/4
+2	_5/2h
 2.5	0
-3	7
-3.5	4/3
-4	0
+1	7
+0.5	4/3
 *-	*-
 </script>
 
 {% include droparea/main.html %}
 
-<h2 style="padding-top:50px;"> Documentation </h2>
+<h2> Documentation </h2>
 
 {% include documentation.html %}
 
