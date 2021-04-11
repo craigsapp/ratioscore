@@ -5,7 +5,7 @@ vim: ts=3
 ---
 
 
-{% include ratioscore.html id="example" %}
+{% include ratioscore.html id="example" tabsize="12" height="500px" %}
 <script type="application/x-ratioscore" id="example">
 **time	**ratio
 *	*Iclars

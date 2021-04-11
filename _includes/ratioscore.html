@@ -1,7 +1,10 @@
 <!-- ratioscore.html
 	vim: ts=3:nowrap
 	input parameters:
-		id      = id of source
+		id      = ID of source.
+		tabsize = character width of tab characters.
+		height  = height of text box in pixels, include "px".
+		width   = height of text box, include "px".
 -->
 
 <div class="ratioscore">
@@ -14,44 +17,48 @@
 		method="post"
 		onsubmit="event.preventDefault(); saveRatioscoreRendering(event, '{{include.id}}');">
 
-	<script
-			id="inputdata-{{include.id}}"
-			style="resize:both; overflow:auto;"
-			name="inputdata"
-			spellcheck="false"
-			contenteditable="true"
-			type="text/plain"
-			class="databox visible"></script>
+	<div style="{% if include.width %}width:{{include.width}}; {% else %}width:100%; {% endif %}">
+		<script
+				id="inputdata-{{include.id}}"
+				style="width:100%; resize:both; overflow:auto; {% if include.height %}height:{{include.height}}; {% else %}height:auto; {% endif %} {% if include.tabsize %}tab-size:{{include.tabsize}}; -moz-tab-size:{{include.tabsize}};{% else %}tab-size:10; -moz-tab-size:10;{% endif %}"
+				name="inputdata"
+				spellcheck="false"
+				contenteditable="true"
+				type="text/plain"
+				class="databox visible"></script>
 
-	<table style="padding-top:0px">
-		<tr style="margin:0; padding:0;" valign="top">
-			<td>
-				<div id="audio-{{include.id}}" 
-						title="download and play"
-						style="position:relative; left:-5px; top:0px; cursor:pointer;" 
-						onclick="PlayAudioFile('{{include.id}}', this);" 
-						href="" class="play">
-					<i class="ratioscore-play-button fa fa-play fa-2x" aria-hidden="true"></i>
-				</div>
-			</td>
-			<td style="height:24px; valign=center; padding-right:0px;">
-				<input id="render-{{include.id}}"
-						style="font-size:24px; border:0; padding:5px; padding-left:8px; padding-right:8px; border-radius:3px; background-color:#aa1155; color:#ffffff"
-						type="submit"
-						name="action"
-						value="Download">
-			</td>
-			<td style="padding-top:7px;">
-				<div style="width:450px; font-size:24px;">
-					<select style="margin-top:-10px; font-size:30px;" name="outputformat">
-						<option value="mid"> MIDI </option>
-						<option value="mp3"> MP3 </option>
-						<option value="ratioscore"> Ratioscore </option>
-					</select>
-				</div>
-			</td>
-		</tr>
-	</table>
+		<table style="width=100%; padding-top:0px">
+			<tr style="width:100%; margin:0; padding:0;" valign="top">
+				<td>
+					<div id="audio-{{include.id}}" 
+							title="download and play"
+							style="position:relative; left:-5px; top:0px; cursor:pointer;" 
+							onclick="PlayAudioFile('{{include.id}}', this);" 
+							href="" class="play">
+						<i class="ratioscore-play-button fa fa-play fa-2x" aria-hidden="true"></i>
+					</div>
+				</td>
+				<td style="width:100%;">
+				</td>
+				<td style="height:24px; valign=center; padding-right:0px;">
+					<input id="render-{{include.id}}"
+							style="font-size:24px; border:0; padding:5px; padding-left:8px; padding-right:8px; border-radius:3px; background-color:#aa1155; color:#ffffff"
+							type="submit"
+							name="action"
+							value="Download">
+				</td>
+				<td style="padding-top:7px;">
+					<div style="font-size:24px;">
+						<select style="margin-top:-10px; font-size:30px;" name="outputformat">
+							<option value="mid"> MIDI </option>
+							<option value="mp3"> MP3 </option>
+							<option value="ratioscore"> Ratioscore </option>
+						</select>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
 </form>
 
 </div>

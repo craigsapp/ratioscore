@@ -169,12 +169,13 @@ quintuplet sixteenth note.
 <h2> Tempo changes </h2>
 
 All time spines can be altered by tempo changes.  This will cause
-time descriptions such as `**time`, `*dtime`, `**ms` and `**dms`
+time descriptions such as `**time`, `**dtime`, `**ms` and `**dms`
 to no longer represent physical time.
 
-Tempo changes are indicated by `*MM#`, where `#` is a floating-point number of beats
-to perform in one minute (`MM` = "Mazel's Metronome").  `*MM60` is the default
-tempo for a time spines, and is equal to one beat per second.
+Tempo changes are indicated by `*MM#`, where `#` is a floating-point
+number of beats to perform in one minute (`MM` = "Maelzel's Metronome").
+`*MM60` is the default tempo for a time spines, and is equal to one
+beat per second.
 
 {% include ratioscore.html id="tempo-example" %}
 <script type="application/x-ratioscore" id="tempo-example">

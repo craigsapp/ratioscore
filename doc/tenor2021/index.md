@@ -106,7 +106,7 @@ Listening to only the clarinet part:
 
 <img src="figure3.png">
 
-{% include ratioscore.html id="figure3" %}
+{% include ratioscore.html id="figure3" tabsize="12" %}
 <script type="application/x-ratioscore" id="figure3">
 !!!OTL: Figure 3
 **time	**ratio	**ratio	**ratio	**ratio
@@ -140,7 +140,7 @@ Listening to only the clarinet part:
 
 (Sounds the same as figure 3)
 
-{% include ratioscore.html id="figure4" %}
+{% include ratioscore.html id="figure4" tabsize="12" %}
 <script type="application/x-ratioscore" id="figure4">
 !!!OTL: Figure 4
 **time	**ratio	**ratio	**ratio	**ratio
@@ -186,6 +186,7 @@ Listening to only the clarinet part:
 8	0
 8	7
 8	4/3
+*-	*-
 </script>
 
 
