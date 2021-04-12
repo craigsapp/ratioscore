@@ -824,14 +824,16 @@ double getPitchBend(double pitch, double spitch, int channel) {
 //
 //      pitches can be in these formats:
 //      intervals:
-//          5        == a rational number value with no denominator (a harmonic)
-//          5/4      == a rational number
-//          (5/4)^3  == a rational number with exponentiation
-//          235.35c  == a cent interval above the reference pitch
-//         +235.35c  == a cent interval above the reference pitch
-//         -235.35c  == a cent interval above the reference pitch
+//          5            == a rational number value with no denominator (a harmonic)
+//          5/4          == a rational number
+//          (5/4)^3      == a rational number with exponentiation
+//          3^(5/4)      == a rational number exponent
+//          (3/2)^(5/4)  == a rational number with rational number exponent
+//          235.35c      == a cent interval above the reference pitch
+//         +235.35c      == a cent interval above the reference pitch
+//         -235.35c      == a cent interval above the reference pitch
 //       frequencies:
-//           440.23z == 440.23 Hertz
+//           440.23z     == 440.23 Hertz
 //
 
 double getPitchAsMidi(HTp token, double reference) {
@@ -842,7 +844,7 @@ double getPitchAsMidi(HTp token, double reference) {
 	double pcents;
 	string botstring;
 
-	// remove non-pitch information from token:
+	// Remove non-pitch information from token:
 	string cleaned = *token;
 	hre.replaceDestructive(cleaned, "", "[Hh_]", "g");
 
@@ -862,8 +864,45 @@ double getPitchAsMidi(HTp token, double reference) {
 		return midi;
 	}
 
+	// Reduce factorizations here.
 
-	if (!hre.search(token, "(\\d+)(?:/(\\d+))?")) {
+	// Reduce "(#/#)"
+	while (hre.search(cleaned, "\\((\\d+)[/:](\\d+)\\)")) {
+		double number1 = hre.getMatchInt(1);
+		double number2 = hre.getMatchInt(2);
+		double value = number1 / number2;
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+)/(\\d+)\\)");
+	}
+
+	// Reduce "#^#"
+	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)")) {
+		double number1 = hre.getMatchDouble(1);
+		double number2 = hre.getMatchDouble(2);
+		double value = pow(number1, number2);
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)");
+	}
+
+	if (hre.search(cleaned, "^(\\d+\\.?\\d*)$")) {
+		// floading-point ratio
+		double value = hre.getMatchDouble(1);
+		double mvalue = log2(value) * 12;
+		return reference + mvalue;
+	}
+
+	if (hre.search(cleaned, "^(\\d*\\.?\\d+)$")) {
+		// floading-point ratio
+		double value = hre.getMatchDouble(1);
+		double mvalue = log2(value) * 12;
+		return reference + mvalue;
+	}
+
+	if (!hre.search(cleaned, "(\\d+)(?:/(\\d+))?")) {
 		cerr << "Problem with ratio: " << token << endl;
 		return 0.0;
 	}
@@ -901,7 +940,7 @@ double getPitchAsMidi(HTp token, double reference) {
 	value = top;
 	value /= bot;
 
-	double cvalue = log2(value.getFloat()) * 12;
+	double mvalue = log2(value.getFloat()) * 12;
 	if (hre.search(token, "([+-])(\\d+\\.?\\d*)c")) {
 		pcents = hre.getMatchDouble(2);
 		string direction = hre.getMatch(1);
@@ -913,7 +952,7 @@ double getPitchAsMidi(HTp token, double reference) {
 	} else {
 		pcents = 0;
 	}
-	double pitch = reference + cvalue + pcents / 100.0;
+	double pitch = reference + mvalue + pcents / 100.0;
 	return pitch;
 }
 
