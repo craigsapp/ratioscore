@@ -864,7 +864,17 @@ double getPitchAsMidi(HTp token, double reference) {
 		return midi;
 	}
 
-	// Reduce factorizations here.
+	// Reduce "#*#" (considering only integers, at least for now)
+	// Maybe allow long long ints for large values
+	while (hre.search(cleaned, "(\\d+)\\*(\\d+)")) {
+		long number1 = hre.getMatchInt(1);
+		long number2 = hre.getMatchInt(2);
+		long value = number1 * number2;
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+)\\*(\\d+)");
+	}
 
 	// Reduce "(#/#)"
 	while (hre.search(cleaned, "\\((\\d+)[/:](\\d+)\\)")) {
