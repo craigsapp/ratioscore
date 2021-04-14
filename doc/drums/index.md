@@ -34,7 +34,7 @@ ranging from 35 to 81.
 =0	=0	=0	=0	=0	=0	=0
 !	!bell	!djembe	!djembe	!djembe	!dundun	!clave
 *	*vel:45	*vel:50	*vel:60	*vel:60	*vel:50	*vel:90
-*MM144	*	*	*	*	*	*
+*MM164	*	*	*	*	*	*
 *M12/8	*	*	*	*	*	*
 8	.	.	.	.	.	.
 =1	=1	=1	=1	=1	=1	=1
