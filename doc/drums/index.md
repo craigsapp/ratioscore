@@ -25,6 +25,36 @@ ranging from 35 to 81.
 *-	*-	*-
 </script>
 
+{% include ratioscore.html id="djembe-dundun-example" %}
+<script type="application/x-ratioscore" id="djembe-dundun-example">
+!!!OTL@@MKU: Dununba
+!!!OTL@EN: The dance of the strong men
+!!!filter: myank -m 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+**recip	**drum	**drum	**drum	**drum	**drum	**drum
+=0	=0	=0	=0	=0	=0	=0
+!	!bell	!djembe	!djembe	!djembe	!dundun	!clave
+*	*vel:45	*vel:50	*vel:60	*vel:60	*vel:50	*vel:90
+*MM144	*	*	*	*	*	*
+*M12/8	*	*	*	*	*	*
+8	.	.	.	.	.	.
+=1	=1	=1	=1	=1	=1	=1
+8	68V	50V	47V	.	62V	75V
+8	.	.	47	.	.	.
+8	68	50	.	50	63	75
+8	68V	50V	.	.	63V	75V
+8	.	47	.	47	.	.
+8	68	47	.	50	63	.
+8	.	50V	47V	.	.	75V
+8	68	.	47	.	63	.
+8	68	.	45	50	63	75
+8	.	50V	.	.	.	75V
+8	68	47	45	47	63	.
+8	.	47	.	50	.	.
+=	=	=	=	=	=	=
+*-	*-	*-	*-	*-	*-	*-
+!!!URL: http://africandanceblog.blogspot.com/2011/09/dununba-strong-man-dance.html
+</script>
+
 
 Unlike ratios, drum tracks can contain multiple notes at one time:
 
@@ -101,6 +131,8 @@ Here are the names of the instruments in a drum track
 </script>
 
 
+The attack velocity and volume system for ratio spines also applies to 
+drums:
 
 
 {% include ratioscore.html id="drum-vel-example" %}
@@ -109,7 +141,7 @@ Here are the names of the instruments in a drum track
 *M3/4	*vel:40
 *MM144	*vstep:60
 !! problem with starting note, so padding with a rest:
-4	0
+4	.
 =1	=1
 4	77V
 4	77
@@ -138,7 +170,7 @@ Polyrhythm example:
 **dtime	**drum	**drum
 =0	=0	=0
 *MM500	*	*
-1	0	0
+1	.	.
 =43	=43	=43
 !! 4 against 3
 1	76	77
@@ -185,10 +217,10 @@ be interleaved in any order.
 !!!filter: myank -m 0,1,2,3,2,1,3,2,2,1,3,1,1,2,3,2,3,2,2,2,1,1,1,1,3
 **dtime	**ratio	**drum	**ratio
 =0	=0	=0	=0
-*MM240	*I#14	*	*Ipiano
+*MM240	*I#14	*	*Iclars
 *	*ref:C2	*	*ref:F#1
-*	*vel:60	*vel:50	*vel:40
-1	0	0	.
+*	*vel:60	*vel:50	*vel:30
+1	.	.	.
 =1	=1	=1	=1
 1	9	77 76	.
 1	.	.	9
