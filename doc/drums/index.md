@@ -177,7 +177,7 @@ Polyrhythm example:
 </script>
 
 
-Drums and ratio tracks may occur in the same score.  They can
+Drum and ratio tracks may occur in the same score and can
 be interleaved in any order.
 
 {% include ratioscore.html id="drum-ratio-example" %}
