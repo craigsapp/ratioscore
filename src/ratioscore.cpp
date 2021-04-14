@@ -73,6 +73,8 @@ double  getGlissWidth     (vector<double>& gliss);
 void    fillCurrentTempo  (HumdrumFile& infile, HTp timespine);
 HTp     getVelToken       (HTp current);
 vector<int> getDrumsAsMidi(HTp current);
+void    getSubstitutions  (HumdrumFile& infile);
+string  applyRatioSubstitutions(const string& input);
 
 
 // variables:
@@ -102,7 +104,7 @@ double      m_maxtime = 0.0;         // maximum time of output MIDI file
 vector<double> m_timeline;           // used with --max-time option.
 bool        m_debugQ = false;        // used with --debug option
 vector<double> m_currTempo;          // used for grate calculations
-
+vector<pair<string, string>> m_ratioSubs; // used with !!!RDF**ratio:
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -276,6 +278,8 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	HTp velStart = NULL;
 	HTp volStart = NULL;
 
+	getSubstitutions(infile);
+
 	for (int i=(int)m_sstarts.size() - 1; i>=0; i--) {
 		if (*m_sstarts[i] == "**vel") {
 			velStart = m_sstarts[i];
@@ -333,7 +337,6 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 		return false;
 	}
 
-
 	outfile.addTracks(miditracks); // previously one track, which is for expression
 
 	// Set ticks-per-quarter note.  Could be adjusted if **recip timeline.
@@ -357,6 +360,30 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	outfile.markSequence();
 	outfile.sortTracks();
 	return true;
+}
+
+
+
+//////////////////////////////
+//
+// getSubstitutions --
+//
+
+void getSubstitutions(HumdrumFile& infile) {
+	m_ratioSubs.clear();
+	HumRegex hre;
+	for (int i=0; i<infile.getLineCount(); i++) {
+		if (infile[i].hasSpines()) {	
+			continue;
+		}
+		HTp token = infile.token(i, 0);
+		if (hre.search(token, "^!!!RDF\\*\\*ratio\\s*:\\s*([^\\s]+)\\s*=\\s*([^\\s]+)")) {
+			string symbol = hre.getMatch(1);
+			string replacement = hre.getMatch(2);
+			m_ratioSubs.push_back(make_pair(symbol, replacement));
+		}
+	}
+
 }
 
 
@@ -1002,7 +1029,7 @@ double getPitchAsMidi(HTp token, double reference) {
 	string botstring;
 
 	// Remove non-pitch information from token:
-	string cleaned = *token;
+	string cleaned = applyRatioSubstitutions(*token);
 	hre.replaceDestructive(cleaned, "", "[Hh_]", "g");
 
 	// Check if only a cent interval:
@@ -1021,6 +1048,17 @@ double getPitchAsMidi(HTp token, double reference) {
 		return midi;
 	}
 
+	// Reduce "#^#" (has priority over #*# and #/#)
+	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)")) {
+		double number1 = hre.getMatchDouble(1);
+		double number2 = hre.getMatchDouble(2);
+		double value = pow(number1, number2);
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\?\\d*)\\^(\\d+\\?\\d*)");
+	}
+
 	// Reduce "#*#" (considering only integers, at least for now)
 	// Maybe allow long long ints for large values
 	while (hre.search(cleaned, "(\\d+)\\*(\\d+)")) {
@@ -1033,7 +1071,7 @@ double getPitchAsMidi(HTp token, double reference) {
 		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+)\\*(\\d+)");
 	}
 
-	// Reduce "(#/#)"
+	// Reduce "(#/#)" (considering only integers)
 	while (hre.search(cleaned, "\\((\\d+)[/:](\\d+)\\)")) {
 		double number1 = hre.getMatchInt(1);
 		double number2 = hre.getMatchInt(2);
@@ -1041,18 +1079,16 @@ double getPitchAsMidi(HTp token, double reference) {
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+)/(\\d+)\\)");
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+)[/:](\\d+)\\)");
 	}
 
-	// Reduce "#^#"
-	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)")) {
-		double number1 = hre.getMatchDouble(1);
-		double number2 = hre.getMatchDouble(2);
-		double value = pow(number1, number2);
+	// Remove parentheses "(#)"
+	while (hre.search(cleaned, "\\((\\d+\\.?\\d*)\\)")) {
+		double number = hre.getMatchDouble(1);
 		stringstream sstr;
 		sstr.str("");
-		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)");
+		sstr << number;
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+\\.?\\d*)\\)");
 	}
 
 	if (hre.search(cleaned, "^(\\d+\\.?\\d*)$")) {
@@ -1068,6 +1104,67 @@ double getPitchAsMidi(HTp token, double reference) {
 		double mvalue = log2(value) * 12;
 		return reference + mvalue;
 	}
+
+	//////////////////////////////
+
+	// Reduce "#^#" (has priority over #*# and #/#)
+	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)")) {
+		double number1 = hre.getMatchDouble(1);
+		double number2 = hre.getMatchDouble(2);
+		double value = pow(number1, number2);
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)");
+	}
+
+	// Reduce "#*#" (considering only integers, at least for now)
+	// Maybe allow long long ints for large values
+	while (hre.search(cleaned, "(\\d+)\\*(\\d+)")) {
+		long number1 = hre.getMatchInt(1);
+		long number2 = hre.getMatchInt(2);
+		long value = number1 * number2;
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+)\\*(\\d+)");
+	}
+
+	// Reduce "(#/#)" (considering only integers)
+	while (hre.search(cleaned, "\\((\\d+)[/:](\\d+)\\)")) {
+		double number1 = hre.getMatchInt(1);
+		double number2 = hre.getMatchInt(2);
+		double value = number1 / number2;
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+)[/:](\\d+)\\)");
+	}
+
+	// Remove parentheses "(#)"
+	while (hre.search(cleaned, "\\((\\d+\\.?\\d*)\\)")) {
+		double number = hre.getMatchDouble(1);
+		stringstream sstr;
+		sstr.str("");
+		sstr << number;
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+\\.?\\d*)\\)");
+	}
+
+	if (hre.search(cleaned, "^(\\d+\\.?\\d*)$")) {
+		// floading-point ratio
+		double value = hre.getMatchDouble(1);
+		double mvalue = log2(value) * 12;
+		return reference + mvalue;
+	}
+
+	if (hre.search(cleaned, "^(\\d*\\.?\\d+)$")) {
+		// floading-point ratio
+		double value = hre.getMatchDouble(1);
+		double mvalue = log2(value) * 12;
+		return reference + mvalue;
+	}
+
+	//////////////////////////////
 
 	if (!hre.search(cleaned, "(\\d+)(?:/(\\d+))?")) {
 		cerr << "Problem with ratio: " << token << endl;
@@ -1121,6 +1218,27 @@ double getPitchAsMidi(HTp token, double reference) {
 	}
 	double pitch = reference + mvalue + pcents / 100.0;
 	return pitch;
+}
+
+
+
+//////////////////////////////
+//
+// applyRatioSubstitutions --
+//
+
+string applyRatioSubstitutions(const string& input) {
+	if (m_ratioSubs.empty()) {
+		return input;
+	}
+	HumRegex hre;
+	string output = input;
+	for (int i=0; i<(int)m_ratioSubs.size(); i++) {
+		string symbol = m_ratioSubs[i].first;
+		string replacement = m_ratioSubs[i].second;
+		hre.replaceDestructive(output, replacement, symbol, "g");
+	}
+	return output;
 }
 
 
