@@ -134,12 +134,12 @@ Polyrhythm example:
 
 {% include ratioscore.html id="drum-34-example" %}
 <script type="application/x-ratioscore" id="drum-34-example">
-!!!filter: myank -m 0,1,1,1,2,1,1,2,2,1,2,2,2,3
+!!!filter: myank -m 0,43,43,43,53,43,43,53,53,43,53,53,53,1
 **dtime	**drum	**drum
 =0	=0	=0
 *MM500	*	*
 1	0	0
-=1	=1	=1
+=43	=43	=43
 !! 4 against 3
 1	76	77
 1	.	.
@@ -153,7 +153,7 @@ Polyrhythm example:
 1	76	.
 1	.	.
 1	.	.
-=2	=2	=2
+=53	=53	=53
 !! 5 against 3
 1	76	77
 1	.	.
@@ -170,9 +170,57 @@ Polyrhythm example:
 1	76	.
 1	.	.
 1	.	.
-=3	=3	=3
+=1	=1	=1
 1	76	77
 =	=	=
 *-	*-	*-
 </script>
+
+
+Drums and ratio tracks may occur in the same score.  They can
+be interleaved in any order.
+
+{% include ratioscore.html id="drum-ratio-example" %}
+<script type="application/x-ratioscore" id="drum-ratio-example">
+!!!filter: myank -m 0,1,2,3,2,1,3,2,2,1,3,1,1,2,3,2,3,2,2,2,1,1,1,1,3
+**dtime	**ratio	**drum	**ratio
+=0	=0	=0	=0
+*MM240	*I#14	*	*Ipiano
+*	*ref:C2	*	*ref:F#1
+*	*vel:60	*vel:50	*vel:40
+1	0	0	.
+=1	=1	=1	=1
+1	9	77 76	.
+1	.	.	9
+1	8	.	.
+1	.	76	8
+1	.	77	.
+1	7	.	.
+1	.	76	7
+1	9	.	.
+1	.	77	9
+1	.	76	.
+1	10	.	.
+1	.	.	10
+=2	=2	=2	=2
+1	.	77	10
+1	10	.	8
+1	8	.	.
+1	.	76	9
+1	9	.	.
+1	.	77	.
+1	.	76	8
+1	8	.	.
+1	10	.	.
+1	.	76	10
+1	.	77	9
+1	9	.	8
+1	.	76	7
+1	7	.	.
+1	.	.	6
+=3	=3	=3	=3
+1	1/2	77	3
+4	0	.	.
+=	=	=	=
+*-	*-	*-	*-
 
