@@ -47,7 +47,8 @@ using namespace hum;
 // function declarations:
 string  getOutputFilename (const string& filename);
 bool    convertFile       (MidiFile& outfile, HumdrumFile& infile);
-void    generateTrack     (MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile);
+void    generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile);
+void    generateDrumTrack (MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile);
 void    buildTimemap      (HTp sstart, HumdrumFile& infile);
 double  getMidiNoteNumber (string refpitch);
 int     getEndTime        (HTp stok);
@@ -71,12 +72,17 @@ double  getMaxGlissRange  (HTp pstart);
 double  getGlissWidth     (vector<double>& gliss);
 void    fillCurrentTempo  (HumdrumFile& infile, HTp timespine);
 HTp     getVelToken       (HTp current);
+vector<int> getDrumsAsMidi(HTp current);
 
 
 // variables:
 vector<HTp> m_sstarts;               // starting tokens of spines
-vector<HTp> m_dynStarts;             // starting tokens of dynamics spines
-vector<HTp> m_partStarts;            // starting tokens of parts
+vector<HTp> m_velStarts;             // starting tokens of **vel spines
+vector<HTp> m_velStartsDrum;         // starting tokens of **vel spines for **drum.
+vector<HTp> m_volStarts;             // starting tokens of **vol spines
+vector<HTp> m_volStartsDrum;         // starting tokens of **vol spines for **drum.
+vector<HTp> m_ratioStarts;           // starting tokens of **ratio spines
+vector<HTp> m_drumStarts;            // starting tokens of **drum spines
 bool        m_hasDyn = false;        // does the score have dynamics
 bool        m_hasTime = true;        // does the score have a timeline
 int         m_timeTrack = -1;        // track number for time spine
@@ -260,25 +266,60 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 		return false;
 	}
 
-	m_partStarts.resize(0);
-	m_dynStarts.resize(0);
+	m_ratioStarts.resize(0);
+	m_drumStarts.resize(0);
+	m_velStarts.resize(0);
+	m_volStarts.resize(0);
+	m_velStartsDrum.resize(0);
+	m_volStartsDrum.resize(0);
 	m_hasDyn = false;
-	HTp dynStart = NULL;
+	HTp velStart = NULL;
+	HTp volStart = NULL;
 
 	for (int i=(int)m_sstarts.size() - 1; i>=0; i--) {
-		if (*m_sstarts[i] == "**mdyn") {
-			dynStart = m_sstarts[i];
+		if (*m_sstarts[i] == "**vel") {
+			velStart = m_sstarts[i];
 		}
+		if (*m_sstarts[i] == "**vol") {
+			volStart = m_sstarts[i];
+		}
+
 		if (*m_sstarts[i] == "**ratio") {
-			m_partStarts.push_back(m_sstarts[i]);
-			if (dynStart) {
-				m_dynStarts.push_back(dynStart);
-				dynStart = NULL;
+			m_ratioStarts.push_back(m_sstarts[i]);
+			if (velStart) {
+				m_velStarts.push_back(velStart);
+				velStart = NULL;
 				m_hasDyn = true;
 			} else {
-				m_dynStarts.push_back(NULL);
+				m_velStarts.push_back(NULL);
+			}
+			if (volStart) {
+				m_volStarts.push_back(volStart);
+				volStart = NULL;
+				m_hasDyn = true;
+			} else {
+				m_volStarts.push_back(NULL);
 			}
 		}
+
+		if (*m_sstarts[i] == "**drum") {
+			m_drumStarts.push_back(m_sstarts[i]);
+			if (velStart) {
+				m_velStartsDrum.push_back(velStart);
+				velStart = NULL;
+				m_hasDyn = true;
+			} else {
+				m_velStartsDrum.push_back(NULL);
+			}
+			if (volStart) {
+				m_volStarts.push_back(volStart);
+				volStart = NULL;
+				m_hasDyn = true;
+			} else {
+				m_volStarts.push_back(NULL);
+			}
+		}
+
 	}
 
 	buildTimemap(timespine, infile);
@@ -287,18 +328,28 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	// }
 
 	outfile.clear();
-	if (m_partStarts.empty()) {
+	int miditracks = (int)(m_ratioStarts.size() + m_drumStarts.size());
+	if (miditracks <= 0) {
 		return false;
 	}
 
-	outfile.addTracks(m_partStarts.size());
+
+	outfile.addTracks(miditracks); // previously one track, which is for expression
+
+	// Set ticks-per-quarter note.  Could be adjusted if **recip timeline.
 	outfile.setTicksPerQuarterNote(1000);  // using millisecond ticks
+
+	// Do not add this if there is a starting tempo on the timeline:
 	outfile.addTempo(0, 0, 60.0);
 
 	fillCurrentTempo(infile, timespine);
 
-	for (int i=0; i<(int)m_partStarts.size(); i++) {
-		generateTrack(outfile, i+1, m_partStarts[i], m_dynStarts[i], infile);
+	int ratiotracks = (int)m_ratioStarts.size();
+	for (int i=0; i<ratiotracks; i++) {
+		generateRatioTrack(outfile, i+1, m_ratioStarts[i], m_velStarts[i], infile);
+	}
+	for (int i=0; i<(int)m_drumStarts.size(); i++) {
+		generateDrumTrack(outfile, ratiotracks+i+1, m_drumStarts[i], m_velStartsDrum[i], infile);
 	}
 
 	addTempoMessages(outfile, timespine);
@@ -494,12 +545,12 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 
 //////////////////////////////
 //
-// generateTrack -- Convert a part spine into a MIDI track.  Each track
+// generateRatioTrack -- Convert a ratio spine into a MIDI track.  Each track
 //    should be given a unique channel.  Currently the channel is derived from
 //    the track number (avoiding the drum channel of general MIDI).
 //
 
-void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile) {
+void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile) {
 	HTp current = pstart;
 	HumRegex hre;
 	int channel = track - 1;
@@ -652,6 +703,112 @@ void generateTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Humdrum
 		current = current->getNextToken();
 		continue;
 	}
+}
+
+
+
+//////////////////////////////
+//
+// generateDrumTrack -- Convert a drum spine into a MIDI track.  Each track
+//    should be given a unique channel.  Currently the channel is derived from
+//    the track number (avoiding the drum channel of general MIDI).
+//
+
+void generateDrumTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile) {
+	HTp current = pstart;
+	HumRegex hre;
+	int channel = 9;
+	double lastattack = 0.0;
+
+	int velstep = 10;
+	int baseattackvel = m_velocity;
+	double reference;
+	bool hasDyn = false;
+	if (dstart != NULL) {
+		hasDyn = true;
+	}
+	bool hasBend = false;
+	bool wroteBend = false;
+
+	while (current) {
+		if (m_maxtime > 0.0) {
+			if (m_timeline[current->getLineIndex()] > m_maxtime) {
+				// limit the length of the output MIDI file.
+				cerr << "LIMITING MIDIFILE " << m_maxtime << " == " << m_timeline[current->getLineIndex()] << endl;
+				break;
+			}
+		}
+		if (current->isInterpretation()) {
+			if (hre.search(current, "^\\*vel[:=]?(\\d+)$")) {
+				int value = hre.getMatchInt(1);
+				if ((value > 0) && (value <128)) {
+					baseattackvel = value;
+				}
+			} else if (hre.search(current, "^\\*vstep[:=]?(\\d+)$")) {
+				// Attack velocity increment for v/V encodings.
+				int value = hre.getMatchInt(1);
+				velstep = value;
+			} else if (hre.search(current, "^\\*pan[:=]?(-?\\d*\\.\\d*)$")) {
+				// Only one pan value shared across all drum tracks.
+				string match = hre.getMatch(1);
+				if (!match.empty()) {
+					double panvalue = hre.getMatchDouble(1);
+					int pan = int(((panvalue + 1.0)/2.0) * 127);
+					if (pan < 0) {
+						pan = 0;
+					} else if (pan > 127) {
+						pan = 127;
+					}
+					int starttime = m_timemap[current->getLineIndex()];
+					outfile.addController(track, starttime, channel, 10, pan);
+				}
+			}
+		} else if (current->isData()) {
+			if (current->isNull()) {
+				current = current->getNextToken();
+				continue;
+			}
+			if (*current == "0") {
+				// ignore rest
+				current = current->getNextToken();
+				continue;
+			}
+
+			vector<int> drums = getDrumsAsMidi(current);
+			int starttime = m_timemap[current->getLineIndex()];
+
+			// if (hasDyn) {
+			// 	volume = getAttackVelocity(current, baseattackvel);
+			// }
+			// allow independent adjustment of volumes of drum notes?
+			int attack = getAttackVelocity(current, baseattackvel, velstep);
+
+			for (int j=0; j<(int)drums.size(); j++) {
+				outfile.addNoteOn(track, starttime, channel, drums.at(j), attack);
+			}
+		}
+		current = current->getNextToken();
+		continue;
+	}
+}
+
+
+
+//////////////////////////////
+//
+// getDrumsAsMidi --
+//
+
+vector<int> getDrumsAsMidi(HTp current){
+	HumRegex hre;
+	string text = *current;
+	vector<int> output;
+	while (hre.search(text, "(\\d+)")) {
+		int value = hre.getMatchInt(1);
+		output.push_back(value);
+		hre.replaceDestructive(text, "",  "\\d+");
+	}
+	return output;
 }
 
 
