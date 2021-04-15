@@ -674,7 +674,7 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 					int starttime = m_timemap[current->getLineIndex()];
 					outfile.addController(track, starttime, channel, 10, pan);
 				}
-			} else if (hre.search(current, "^\\*ref[:=]?[A-G][#-b]?\\d+")) {
+			} else if (hre.search(current, "^\\*ref[:=]?.*\\d")) {
 				reference = getReferencePitchAsMidi(*current);
 			}
 		} else if (current->isData()) {
@@ -847,8 +847,22 @@ vector<int> getDrumsAsMidi(HTp current){
 
 double getReferencePitchAsMidi(const string& token) {
 	HumRegex hre;
-	double reference = 60.0;  // default reference
-	if (hre.search(token, "^\\*ref[:=]?([A-G][#-b]?\\d+)([+-]\\d+\\.?\\d*c)?")) {
+	double reference = 60; // default reference
+
+	// Read reference as frequency:
+	if (hre.search(token, "^\\*ref[:=]?(\\d+\\.?\\d*)z")) {
+		double frequency = hre.getMatchDouble(1);
+		reference = 12.0 * log2(frequency / 440.0) + 69.0;
+	}
+	if (hre.search(token, "^\\*ref[:=]?(\\d+\\.?\\d*)$")) {
+		// Allow incorrectly labeled frequency (missing "z"):
+		double frequency = hre.getMatchDouble(1);
+		reference = 12.0 * log2(frequency / 440.0) + 69.0;
+	}
+
+	// Read reference as note name:
+	else if (hre.search(token, "^\\*ref[:=]?([A-G][#-b]?\\d+)([+-]\\d+\\.?\\d*c)?")) {
+		reference = 60.0;  // default reference
 		string refpitch = hre.getMatch(1);
 		reference = getMidiNoteNumber(refpitch);
 		string refcents = hre.getMatch(2);
@@ -1696,7 +1710,7 @@ double getMaxGlissRange(HTp pstart) {
 	HumRegex hre;
 	while (current) {
 		if (current->isInterpretation()) {
-			if (hre.search(current, "^\\*ref[:=]?[A-G][#-b]?\\d+")) {
+			if (hre.search(current, "^\\*ref[:=]?.*\\d")) {
 				reference = getReferencePitchAsMidi(*current);
 			}
 		}
