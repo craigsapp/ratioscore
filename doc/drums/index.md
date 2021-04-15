@@ -19,7 +19,7 @@ ranging from 35 to 81.
 0.25	62	60
 0.25	63	61
 2	64	62
-2.5	65	63
+1.5	65	63
 1	66	64
 0.5	67	.
 *-	*-	*-
@@ -68,7 +68,7 @@ Unlike ratios, drum tracks can contain multiple notes at one time:
 0.25	62 60
 0.25	63 61
 2	64 62
-2.5	65 63
+1.5	65 63
 1	66 64
 0.5	67
 *-	*-

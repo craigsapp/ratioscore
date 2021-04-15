@@ -14,7 +14,7 @@ larger than that will not be rendered correctly.
 <script type="application/x-ratioscore" id="glissando-example">
 **dtime	**ratio
 *	*Iclars
-*	*ref:C2
+*	*ref:C4
 2	3/2H
 1	4/3
 2	3/2h
@@ -29,7 +29,7 @@ from reattacking at that note.
 <script type="application/x-ratioscore" id="sustain-example">
 **dtime	**ratio
 *	*Iclars
-*	*ref:C2
+*	*ref:C4
 2	3/2H
 1	_4/3
 2	_3/2h
