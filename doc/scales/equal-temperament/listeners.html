@@ -1,0 +1,60 @@
+
+<script>
+// vim: ts=3
+
+document.addEventListener("DOMContentLoaded", function () {
+	let cgi = getCGIparameters();
+
+	let octave = document.querySelector("#octave");
+	if (!octave) {
+		console.log("Error: #octave not found");
+		return;
+	}
+	if (cgi.o) {
+		octave.value = cgi.o;
+	}
+
+	let divisions = document.querySelector("#divisions");
+	if (!divisions) {
+		console.log("Error: #divisions not found");
+		return;
+	}
+	if (cgi.d) {
+		divisions.value = cgi.d;
+	}
+
+	let tempo = document.querySelector("#tempo");
+	if (tempo) {
+		tempo.addEventListener("keyup", calculateEQscore);
+	}
+	if (cgi.t) {
+		tempo.value = cgi.t;
+	}
+
+	let reference = document.querySelector("#reference");
+	if (reference) {
+		reference.addEventListener("keyup", calculateEQscore);
+	}
+	if (cgi.r) {
+		reference.value = cgi.r;
+	}
+
+	let instrument = document.querySelector("#instrument");
+	if (instrument) {
+		instrument.addEventListener("keyup", calculateEQscore);
+	}
+	if (cgi.i) {
+		instrument.value = cgi.i;
+	}
+
+	octave.addEventListener("keyup", calculateEQscore);
+	divisions.addEventListener("keyup", calculateEQscore);
+
+	calculateEQscore();
+});
+
+
+</script>
+
+
+
