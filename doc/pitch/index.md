@@ -122,7 +122,7 @@ Here is an example of exponentiation to generate 12-TET:
 {% include ratioscore.html id="tet12-example" %}
 <script type="application/x-ratioscore" id="tet12-example">
 **dtime	**ratio
-*	*Iorgan
+*	*Iclars
 *MM240	*ref:F#3
 1	2^(0/12)
 1	2^(1/12)
