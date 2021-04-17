@@ -6,7 +6,7 @@ vim: ts=8:ft=html
 ---
 
 One or more `**drum` spines in a Ratioscore will be converted into
-drum tracks.  Drum notes are General MIDI key numbers for drum,
+drum tracks.  Drum notes are General MIDI key numbers 
 ranging from 35 to 81.
 
 {% include ratioscore.html id="drum-example" %}
@@ -23,6 +23,24 @@ ranging from 35 to 81.
 1	66	64
 0.5	67	.
 *-	*-	*-
+</script>
+
+Unlike ratios, drum tracks can contain multiple notes at one time:
+
+{% include ratioscore.html id="drum-combined-example" %}
+<script type="application/x-ratioscore" id="drum-combined-example">
+**dtime	**drum
+*MM120	*
+*	*
+1	60
+0.75	61
+0.25	62 60
+0.25	63 61
+2	64 62
+1.5	65 63
+1	66 64
+0.5	67
+*-	*-
 </script>
 
 {% include ratioscore.html id="djembe-dundun-example" %}
@@ -55,24 +73,6 @@ ranging from 35 to 81.
 !!!URL: http://africandanceblog.blogspot.com/2011/09/dununba-strong-man-dance.html
 </script>
 
-
-Unlike ratios, drum tracks can contain multiple notes at one time:
-
-{% include ratioscore.html id="drum-combined-example" %}
-<script type="application/x-ratioscore" id="drum-combined-example">
-**dtime	**drum
-*MM120	*
-*	*
-1	60
-0.75	61
-0.25	62 60
-0.25	63 61
-2	64 62
-1.5	65 63
-1	66 64
-0.5	67
-*-	*-
-</script>
 
 Here are the names of the instruments in a drum track
 
