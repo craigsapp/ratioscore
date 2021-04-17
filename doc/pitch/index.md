@@ -40,14 +40,14 @@ The reference pitch is specified in the form   `*ref:A4`, where
 </script>
 
 C4 (middle C) will be used as the reference pitch if none is given
-for any ratio column.
+in a ratio column.
 
 
 <h2> Harmonics </h2>
 
-As illustrated in the above example, integer values are harmonics, with `1` being the 
-fundamental of the reference pitch, `2` being an octave higher, and so on.  Rests are
-indicated by `0`.
+As illustrated in the above example, integer values are harmonics,
+with `1` being the fundamental of the reference pitch, `2` being
+an octave higher, and so on.  Rests are indicated by `0`.
 
 
 {% include ratioscore.html id="harmonics-example" %}
@@ -81,8 +81,7 @@ indicated by `0`.
 
 <h2> Ratios </h2>
 
-To get pitches between harmonics, ratios can be used:
-
+To get intervals between harmonics, ratios can be used:
 
 
 {% include ratioscore.html id="ratios-example" %}
@@ -116,16 +115,43 @@ To get pitches between harmonics, ratios can be used:
 See the <a href="/doc/intervals">interval dictionary</a> for a list of
 various named ratios.
 
+<h2> Exponents </h2>
+
+Here is an example of exponentiation to generate 12-TET:
+
+{% include ratioscore.html id="tet12-example" %}
+<script type="application/x-ratioscore" id="tet12-example">
+**dtime	**ratio
+*	*Iorgan
+*MM240	*ref:F#3
+1	2^(0/12)
+1	2^(1/12)
+1	2^(2/12)
+1	2^(3/12)
+1	2^(4/12)
+1	2^(5/12)
+1	2^(6/12)
+1	2^(7/12)
+1	2^(8/12)
+1	2^(9/12)
+1	2^(10/12)
+1	2^(11/12)
+1	2^(12/12)
+*-	*-
+</script>
+
+See the <a href="/doc/scales/equal-temperament">Equal-temperament calculator</a> page.
+
 
 <h2> Cents </h2>
 
-Cents can be used instead of or in addition to fractions.  A floating-point
-number followed by the letter `c` will be interpreted as cents, and
-cents will be above (or below) the reference pitch.
+Cents can be used instead of or in addition to fractions.  A
+floating-point number followed by the letter `c` will be interpreted
+as cents, and cents will be above (or below) the reference pitch.
 
-Here is an example of playing an Equal-tempered C major scale at the same
-time as C major in Just intonation (listen to the beating when the
-two notes are less in tune):
+Here is an example of playing an Equal-tempered C major scale at
+the same time as C major in Just intonation (listen to the beating
+when the two notes are less in tune):
 
 {% include ratioscore.html id="cents-example" %}
 <script type="application/x-ratioscore" id="cents-example">
@@ -146,7 +172,7 @@ two notes are less in tune):
 
 <h2> Frequency </h2>
 
-Specific frequencies can be specified by appending a floating point
+Specific frequencies can be used by appending a floating point
 number with the letter `z` (for "Hz"). If only frequencies are given
 for pitches, then the reference pitch is not necessary. 
 Here is a C major scale in equal temperament using frequencies and
