@@ -182,7 +182,7 @@ cents for comparison:
 <script type="application/x-ratioscore" id="freq-example">
 **dtime	**ratio	**ratio
 *	*Iclars	*Iorgan
-*MM180	*	*ref:C4
+*MM180	*	*ref:261.63z
 1	261.63z	.
 1	0	0c
 1	293.66z	0
