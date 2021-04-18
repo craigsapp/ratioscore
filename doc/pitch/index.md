@@ -19,23 +19,20 @@ The reference pitch is specified in the form   `*ref:A4`, where
 `A4` is the A above middle C.  Here is an example:
 
 
-{% include ratioscore.html id="reference-example" %}
-<script type="application/x-ratioscore" id="reference-example">
+{% include ratioscore.html id="reference" %}
+<script type="application/x-ratioscore" id="reference">
 **dtime	**ratio	**ratio	**ratio
 *MM240	*Iclars	*Iclars	*Iclars
 *	*ref:C2	*ref:E3	*ref:G4
 1	1	.	.
-1	.	1	.
-1	.	.	1
-1	2	.	.
-1	.	2	.
-1	.	.	2
+1	0	1	.
+1	.	0	1
+1	2	.	0
+1	0	2	.
+1	.	0	2
 1	3	.	.
-1	.	3	.
-1	.	.	3
-1	0	.	.
-1	.	0	.
-1	.	.	0
+1	0	3	.
+1	.	0	3
 *-	*-	*-	*-
 </script>
 
@@ -47,21 +44,17 @@ interval should should have the letter "c" following it:
 {% include ratioscore.html id="cent-reference" tabsize="12" %}
 <script type="application/x-ratioscore" id="cent-reference">
 **dtime	**ratio	**ratio	**ratio
-*MM120	*Iclars	*I#66	*Ivioln
-*	*ref:C2	*ref:C2-50c	*ref:C2+155.5c
-*	*vel:60	*vel:50	*vel:100
+*MM240	*I#71	*I#70	*I#69
+*	*ref:C2	*ref:C2-25c	*ref:C2+25.5c
 1	1	.	.
 1	.	1	.
-1	.	.	1
-1	2	.	.
+1	0	0	1
+1	2	.	0
 1	.	2	.
-1	.	.	2
-1	3	.	.
+1	0	0	2
+1	3	.	0
 1	.	3	.
-1	.	.	3
-1	0	.	.
-1	.	0	.
-1	.	.	0
+1	0	0	3
 *-	*-	*-	*-
 </script>
 
@@ -116,8 +109,8 @@ with `1` being the fundamental of the reference pitch, `2` being
 an octave higher, and so on.  Rests are indicated by `0`.
 
 
-{% include ratioscore.html id="harmonics-example" %}
-<script type="application/x-ratioscore" id="harmonics-example">
+{% include ratioscore.html id="harmonics" %}
+<script type="application/x-ratioscore" id="harmonics">
 **dtime	**ratio
 *	*Iclars
 *MM400	*ref:C2
@@ -147,7 +140,11 @@ an octave higher, and so on.  Rests are indicated by `0`.
 
 <h2> Ratios </h2>
 
-To get intervals between harmonics, ratios can be used:
+To get intervals between harmonics, ratios can be used, such as `3/2` for a perfect fifth.  In the 
+following example, `5/1` is the 5th harmonic of the reference pitch (two octaves and a major third),
+`5/2` is an octave lower (major tenth), `5/3` is a major 6th above the reference, `5/4` is a major
+third, and `5/5` is the reference pitch. Also: `5/10` is an octave lower than the reference,
+`5/8` is down a minor 6th, and `5/6` is down a minor third.
 
 
 {% include ratioscore.html id="daipieynch" %}
@@ -159,6 +156,7 @@ To get intervals between harmonics, ratios can be used:
 =0	=0	=0	=0
 *MM320	*I#71	*I#71	*I#15
 *	*ref:C4	*ref:C4	*ref:C2
+*	*vel:40	*vel:40	*vel:40
 =1	=1	=1	=1
 1	.	.	5/5
 1	.	.	5/2
@@ -236,8 +234,8 @@ various named ratios.
 
 Here is an example of exponentiation to generate 12-TET:
 
-{% include ratioscore.html id="tet12-example" %}
-<script type="application/x-ratioscore" id="tet12-example">
+{% include ratioscore.html id="tet12" %}
+<script type="application/x-ratioscore" id="tet12">
 **dtime	**ratio
 *	*Iclars
 *MM240	*ref:F#3
@@ -270,8 +268,8 @@ Here is an example of playing an Equal-tempered C major scale at
 the same time as C major in Just intonation (listen to the beating
 when the two notes are less in tune):
 
-{% include ratioscore.html id="cents-example" %}
-<script type="application/x-ratioscore" id="cents-example">
+{% include ratioscore.html id="cents" %}
+<script type="application/x-ratioscore" id="cents">
 **dtime	**ratio	**ratio
 *	*Iclars	*Iclars
 *	*ref:C4	*ref:C4
@@ -295,8 +293,8 @@ for pitches, then the reference pitch is not necessary.
 Here is a C major scale in equal temperament using frequencies and
 cents for comparison:
 
-{% include ratioscore.html id="freq-example" %}
-<script type="application/x-ratioscore" id="freq-example">
+{% include ratioscore.html id="freq" %}
+<script type="application/x-ratioscore" id="freq">
 **dtime	**ratio	**ratio
 *	*Iclars	*Iorgan
 *MM180	*	*ref:261.63z

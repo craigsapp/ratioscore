@@ -8,8 +8,8 @@ vim: ts=8:ft=html
 Each `**ratio` spine can be positioned in the stereo field with
 panning instructions.  Stereo left is -1.0 and right is 1.0.
 
-{% include ratioscore.html id="glissando-example" %}
-<script type="application/x-ratioscore" id="glissando-example">
+{% include ratioscore.html id="glissando" %}
+<script type="application/x-ratioscore" id="glissando">
 **dtime	**ratio	**ratio	**ratio	**ratio	**ratio
 *	*Ifagot	*Iclars	*Icor	*I#24	*I#14
 *	*ref:C2	*ref:C3	*ref:C3	*ref:C5	*ref:C3

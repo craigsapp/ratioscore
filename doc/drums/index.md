@@ -9,8 +9,8 @@ One or more `**drum` spines in a Ratioscore will be converted into
 drum tracks.  Drum notes are General MIDI key numbers 
 ranging from 35 to 81.
 
-{% include ratioscore.html id="drum-example" %}
-<script type="application/x-ratioscore" id="drum-example">
+{% include ratioscore.html id="drum" %}
+<script type="application/x-ratioscore" id="drum">
 **dtime	**drum	**drum
 *MM120	*	*
 *	*	*
@@ -27,8 +27,8 @@ ranging from 35 to 81.
 
 Unlike ratios, drum tracks can contain multiple notes at one time:
 
-{% include ratioscore.html id="drum-combined-example" %}
-<script type="application/x-ratioscore" id="drum-combined-example">
+{% include ratioscore.html id="drum-combined" %}
+<script type="application/x-ratioscore" id="drum-combined">
 **dtime	**drum
 *MM120	*
 *	*
@@ -43,8 +43,8 @@ Unlike ratios, drum tracks can contain multiple notes at one time:
 *-	*-
 </script>
 
-{% include ratioscore.html id="djembe-dundun-example" %}
-<script type="application/x-ratioscore" id="djembe-dundun-example">
+{% include ratioscore.html id="dununba" %}
+<script type="application/x-ratioscore" id="dununba">
 !!!OTL@@MKU: Dununba
 !!!OTL@EN: The dance of the strong men
 !!!filter: myank -m 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
@@ -76,8 +76,8 @@ Unlike ratios, drum tracks can contain multiple notes at one time:
 
 Here are the names of the instruments in a drum track
 
-{% include ratioscore.html id="drum-list-example" %}
-<script type="application/x-ratioscore" id="drum-list-example">
+{% include ratioscore.html id="drum-list" %}
+<script type="application/x-ratioscore" id="drum-list">
 !!!OTL: General MIDI Drum List
 **dtime	**drum	**name
 1	35	acoustic bass drum
@@ -135,8 +135,8 @@ The attack velocity and volume system for ratio spines also applies to
 drums:
 
 
-{% include ratioscore.html id="drum-vel-example" %}
-<script type="application/x-ratioscore" id="drum-vel-example">
+{% include ratioscore.html id="drum-vel" %}
+<script type="application/x-ratioscore" id="drum-vel">
 **recip	**drum
 *M3/4	*vel:40
 *MM144	*vstep:60
@@ -164,8 +164,8 @@ drums:
 
 Polyrhythm example:
 
-{% include ratioscore.html id="drum-34-example" %}
-<script type="application/x-ratioscore" id="drum-34-example">
+{% include ratioscore.html id="drum-34" %}
+<script type="application/x-ratioscore" id="drum-34">
 !!!filter: myank -m 0,43,43,43,53,43,43,53,53,43,53,53,53,1
 **dtime	**drum	**drum
 =0	=0	=0
@@ -212,8 +212,8 @@ Polyrhythm example:
 Drum and ratio tracks may occur in the same score and can
 be interleaved in any order.
 
-{% include ratioscore.html id="drum-ratio-example" %}
-<script type="application/x-ratioscore" id="drum-ratio-example">
+{% include ratioscore.html id="drum-ratio" %}
+<script type="application/x-ratioscore" id="drum-ratio">
 !!!filter: myank -m 0,1,2,3,2,1,3,2,2,1,3,1,1,2,3,2,3,2,2,2,1,1,1,1,3
 **dtime	**ratio	**drum	**ratio
 =0	=0	=0	=0

@@ -9,8 +9,8 @@ Here are examples of using symbols to give names to ratios.
 Substitutions will be applied before interpreting the note, and
 substitutions will be applied in the order they occur in the file.
 
-{% include ratioscore.html id="rdf-example" %}
-<script type="application/x-ratioscore" id="rdf-example">
+{% include ratioscore.html id="rdf" %}
+<script type="application/x-ratioscore" id="rdf">
 !!!OTL: Just major scale
 **recip	**ratio
 *MM144	*I#75
@@ -39,8 +39,8 @@ mathematical operations with symbols to behave as expected, such as `do*2`.
 
 
 
-{% include ratioscore.html id="slendro-example" %}
-<script type="application/x-ratioscore" id="slendro-example">
+{% include ratioscore.html id="slendro" %}
+<script type="application/x-ratioscore" id="slendro">
 !!!OTL: Gamelan
 **recip	**ratio
 *MM144	*I#14

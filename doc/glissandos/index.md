@@ -10,8 +10,8 @@ glissando, and an `h` on the ending note.  The maximum gliss interval
 is one octave above/below the starting note of the glissando.  Glissandos
 larger than that will not be rendered correctly.
 
-{% include ratioscore.html id="glissando-example" %}
-<script type="application/x-ratioscore" id="glissando-example">
+{% include ratioscore.html id="glissando" %}
+<script type="application/x-ratioscore" id="glissando">
 **dtime	**ratio
 *	*Iclars
 *	*ref:C4
@@ -25,8 +25,8 @@ larger than that will not be rendered correctly.
 Adding an underscore to a note will prevent a glissando
 from reattacking at that note.
 
-{% include ratioscore.html id="sustain-example" %}
-<script type="application/x-ratioscore" id="sustain-example">
+{% include ratioscore.html id="sustain" %}
+<script type="application/x-ratioscore" id="sustain">
 **dtime	**ratio
 *	*Iclars
 *	*ref:C4
@@ -57,8 +57,8 @@ for the glissando once every quarter second.  Then the rate is set
 to 1/5 and 1/10 of a second respectivly for the last two glissandos.
 
 
-{% include ratioscore.html id="grate-example" %}
-<script type="application/x-ratioscore" id="grate-example">
+{% include ratioscore.html id="grate" %}
+<script type="application/x-ratioscore" id="grate">
 **dtime	**ratio
 *	*Iclars
 *	*ref:C4

@@ -38,9 +38,10 @@ function saveRatioscoreRendering(event, id) {
 		}
 	}
 
+	/*
 	// Copy URL to Ratioscore:
 	if (outputformat === "link") {
-		let url = getUrl();
+		let url = GetUrl();
 		url += "#" + id;
 		CopyToClipboard(url);
 		alert("Copied URL " + url);
@@ -49,12 +50,13 @@ function saveRatioscoreRendering(event, id) {
 
 	// Copy autoplay URL to Ratioscore:
 	if (outputformat === "autoplay") {
-		let url = getUrl();
+		let url = GetUrl();
 		url += "?autoplay=" + id;
 		CopyToClipboard(url);
 		alert("Copied URL " + url);
 		return;
 	}
+	*/
 
 	// Save text-based Ratioscore (input data from script box):
 	if (outputformat === "ratioscore") {
@@ -125,17 +127,6 @@ function saveRatioscoreRendering(event, id) {
 }
 
 
-
-//////////////////////////////
-//
-// getUrl --
-//
-
-function getUrl(id) {
-	let url = window.location.href.replace(/\?.*/, "");
-	url = url.replace(/#.*/, "");
-	return url;
-}
 
 
 </script>

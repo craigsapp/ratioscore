@@ -16,8 +16,8 @@ The `extract` filter can be used to pull out specific spines (columns) of data, 
 rearrange them before converting to MIDI/MP3s.  Here is an example where
 only the first or second voice in the score are selected for performance:
 
-{% include ratioscore.html id="full-example" %}
-<script type="application/x-ratioscore" id="full-example">
+{% include ratioscore.html id="full" %}
+<script type="application/x-ratioscore" id="full">
 **dtime	**ratio	**ratio
 *MM300	*I#14	*I#24
 *	*ref:C3	*ref:C2
@@ -44,8 +44,8 @@ only the first or second voice in the score are selected for performance:
 The line `!!!filter: extract -s 1,2` keeps the first two spines and removes
 the third one when converting to MIDI/MP3:
 
-{% include ratioscore.html id="first-part-example" %}
-<script type="application/x-ratioscore" id="first-part-example">
+{% include ratioscore.html id="first-part" %}
+<script type="application/x-ratioscore" id="first-part">
 !!!filter: extract -s 1,2
 **dtime	**ratio	**ratio
 *MM300	*I#14	*I#24
@@ -74,8 +74,8 @@ the third one when converting to MIDI/MP3:
 And the line `!!!filter: extract -s 1,3` keeps the first and last spines and removes
 the middle one:
 
-{% include ratioscore.html id="second-part-example" %}
-<script type="application/x-ratioscore" id="second-part-example">
+{% include ratioscore.html id="second-part" %}
+<script type="application/x-ratioscore" id="second-part">
 !!!filter: extract -s 1,3
 **dtime	**ratio	**ratio
 *MM300	*I#14	*I#24
@@ -105,8 +105,8 @@ It is possible to include multiple alternate timelines in a score, and
 then user the `extract` filter to choose one of them.  The following 
 example contains two timelines, with the first one chosen by default:
 
-{% include ratioscore.html id="first-timeline-example" %}
-<script type="application/x-ratioscore" id="first-timeline-example">
+{% include ratioscore.html id="first-timeline" %}
+<script type="application/x-ratioscore" id="first-timeline">
 **dtime	**dtime	**ratio
 *MM100	*MM300	*I#24
 *	*	*ref:C2
@@ -134,8 +134,8 @@ example contains two timelines, with the first one chosen by default:
 Removing the first spine will cause the second spine to be used as the timeline:
 
 
-{% include ratioscore.html id="second-timeline-example" %}
-<script type="application/x-ratioscore" id="second-timeline-example">
+{% include ratioscore.html id="second-timeline" %}
+<script type="application/x-ratioscore" id="second-timeline">
 !!!filter: extract -s 2-$
 **dtime	**dtime	**ratio
 *MM100	*MM300	*I#24
@@ -167,8 +167,8 @@ Removing the first spine will cause the second spine to be used as the timeline:
 The `myank` filter can be used to mix an match measures.
 
 
-{% include ratioscore.html id="myank-example" %}
-<script type="application/x-ratioscore" id="myank-example">
+{% include ratioscore.html id="myank" %}
+<script type="application/x-ratioscore" id="myank">
 **recip	**ratio
 =0	=0
 *MM200	*ref:C3
@@ -196,8 +196,8 @@ The `myank` filter can be used to mix an match measures.
 
 
 
-{% include ratioscore.html id="myank-expand-example" %}
-<script type="application/x-ratioscore" id="myank-expand-example">
+{% include ratioscore.html id="myank-expand" %}
+<script type="application/x-ratioscore" id="myank-expand">
 !!!filter: myank -m 0,3,3,2,1,2,2,3,2,1,3,2,4,2,1,4,2,2,3,1,4
 **recip	**ratio
 =0	=0

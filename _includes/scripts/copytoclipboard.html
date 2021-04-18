@@ -1,7 +1,6 @@
 
-
 <script>
-// vim ts=3
+// vim: ts=3
 
 //////////////////////////////
 //
@@ -19,6 +18,99 @@ function CopyToClipboard(string) {
 };
 
 
+
+//////////////////////////////
+//
+// CopyLinkToClipboard --
+//
+
+function CopyLinkToClipboard(id) {
+	let url = GetUrl();
+	url += "#" + id;
+	CopyToClipboard(url);
+	let alertcounter = parseInt(localStorage.alertcounter || 0);
+	alertcounter++;
+	localStorage.alertcounter = alertcounter;
+	if (alertcounter < 11) {
+		alert("Copied URL " + url);
+	}
+}
+
+
+
+//////////////////////////////
+//
+// CopyAutoplayLinkToClipboard --
+//
+
+function CopyAutoplayLinkToClipboard(id) {
+	let url = GetUrl();
+	url += "?autoplay=" + id;
+	CopyToClipboard(url);
+	let alertcounter = parseInt(localStorage.alertcounter || 0);
+	alertcounter++;
+	localStorage.alertcounter = alertcounter;
+	if (alertcounter < 11) {
+		alert("Copied URL " + url);
+	}
+}
+
+
+
+//////////////////////////////
+//
+// GetUrl --
+//
+
+function GetUrl(id) {
+	let url = window.location.href.replace(/\?.*/, "");
+	url = url.replace(/#.*/, "");
+	return url;
+}
+
+
+
+//////////////////////////////
+//
+// CopyScoreToClipboard --
+//
+
+function CopyScoreToClipboard(id) {
+	let element = document.querySelector("#inputdata-" + id);
+	if (!element) {
+		CopyToClipboard("");
+		return;
+	}
+	let contents = element.textContent;
+	console.log("TEXT CONTENT", contents);
+	CopyToClipboard(contents);
+	let alertcounter = parseInt(localStorage.alertcounter || 0);
+	alertcounter++;
+	localStorage.alertcounter = alertcounter;
+	if (alertcounter < 11) {
+		alert("Copied score to clipboard");
+	}
+}
+
+
+
+//////////////////////////////
+//
+// PasteScoreFromClipboard --
+//
+
+function PasteScoreFromClipboard(id) {
+	let element = document.querySelector("#inputdata-" + id);
+	if (!element) {
+		return;
+	}
+
+	navigator.clipboard.readText().then(text => element.textContent = text);
+}
+
+
+
 </script>
+
 
 

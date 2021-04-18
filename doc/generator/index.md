@@ -20,7 +20,7 @@ This page can be used to create a Ratioscore template:
 		<option value="ms">    absolute time (milliseconds) </option>
 		<option value="recip"> musical rhythms              </option>
 	</select>
-</nobr><nobr>Time value/increment: <input id="timeval" value="1"></nobr><nobr>Tempo: <input id="tempo" value="120"></nobr><nobr>Ratio spines: <select id="spines">
+</nobr><nobr>Time increment: <input id="timeval" value="1"></nobr><nobr>Tempo: <input id="tempo" value="120"></nobr><nobr>Ratio spines: <select id="spines">
 	<option value="1">1</option>
 	<option value="2">2</option>
 	<option value="3">3</option>
@@ -43,8 +43,32 @@ This page can be used to create a Ratioscore template:
 	<option value="20">20</option>
 </select></nobr><nobr>Data lines: <input id="lines" value="10"></nobr><nobr>Reference pitch: <input id="reference" value="C4"></nobr><nobr>Instrument: {% include_relative instrument-select.html %}</nobr>
 
-<span class="link" onclick="copyUrl(); alert('Link copied to clipboard');">copy link</span>
+<span class="link" onclick="copyUrl(); alert('Link copied to clipboard');">copy page link with settings</span>
 {% include ratioscore.html id="generated" tabsize="15" %}
 <script type="application/x-ratioscore" id="generated">
 </script>
+
+
+
+<h2> Editing Ratioscores in a spreadsheet </h2>
+
+It may be convenient to edit a Ratioscore in a spreadsheet program such as 
+<a target="_blank" href="https://sheets.google.com">Google Sheets</a>.  To do so, copy
+the text from a Ratioscore box and then paste into a blank spreadsheet.  When pasting into
+Google Sheets from MacOS, use command-shift-V rather than command-v.  This will paste the
+text as a TSV table rather than pasting all text into a single cell.
+
+Here is an example view after pasting a Ratioscore into Google Sheets:
+
+<a target="_blank" href="spreadsheet.jpg"><img src="spreadsheet.jpg" style="display:block; margin-left:auto; margin-right:auto; width:50%;"></a>
+
+The Ratioscore can then be edited in the spreadsheet and then copied
+back into a Ratioscore box on this website to create a MIDI or MP3 file
+for the score.
+
+
+
+
+
+
 

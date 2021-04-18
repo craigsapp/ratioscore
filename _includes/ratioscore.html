@@ -41,23 +41,42 @@
 				</td>
 				<td style="width:100%;">
 				</td>
-				<td style="height:24px; valign=center; padding-right:0px;">
+				<td style="padding-top:10.5px; height:24px; valign=center; padding-right:0px;">
 					<input id="render-{{include.id}}"
 							style="font-size:24px; border:0; padding:5px; padding-left:8px; padding-right:8px; border-radius:3px; background-color:#aa1155; color:#ffffff"
 							type="submit"
 							name="action"
 							value="Download">
 				</td>
-				<td style="padding-top:7px;">
+				<td style="padding-top:17px;">
 					<div style="font-size:24px;">
-						<select style="margin-top:-10px; font-size:30px;" name="outputformat">
+						<select style="display:-webkit-inline-block; margin-top:-10px; font-size:30px;" name="outputformat">
 							<option value="mid"> MIDI </option>
 							<option value="mp3"> MP3 </option>
 							<option value="ratioscore"> Ratioscore </option>
-							<option value="link"> Copy link </option>
-							<option value="autoplay"> Copy autoplay link </option>
 						</select>
 					</div>
+				</td>
+				<td width="80px;">
+					<nobr>
+					<span title="Copy above Ratioscore to system clipboard" onclick="CopyScoreToClipboard('{{include.id}}');" class="button fa-stack fa-1x">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-copy fa-stack-1x fa-inverse"></i>
+					</span>
+					<span title="Paste from system clipboard" onclick="PasteScoreFromClipboard('{{include.id}}');" class="button fa-stack fa-1x">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-paste fa-stack-1x fa-inverse"></i>
+					</span>
+					<span title="Copy link to above Ratioscore" onclick="CopyLinkToClipboard('{{include.id}}');" class="button fa-stack fa-1x">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-link fa-stack-1x fa-inverse"></i>
+					</span>
+					<span title="Copy autoplay link to above Ratioscore" onclick="CopyAutoplayLinkToClipboard('{{include.id}}');" class="button fa-stack fa-1x">
+						<i class="fa fa-square fa-stack-2x"></i>
+						<i class="fa fa-link fa-inverse chain"></i>
+						<i class="fa fa-bolt lightening" style="color:#fcc637cc"></i>
+					</span>
+					</nobr>
 				</td>
 			</tr>
 		</table>

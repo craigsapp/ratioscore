@@ -207,9 +207,10 @@ function generateScore () {
 
 	let reference = "*ref:" + DEFAULTS["reference"];
 	let rtext = getParameterValue("reference");
-	matches = rtext.match(/^([A-G][0-9])/);
+	matches = rtext.match(/^([a-gA-G][#]?[0-9])/);
 	if (matches) {
-		reference = "*ref:" + matches[1];
+		let value = capitalize(matches[1]);
+		reference = "*ref:" + value;
 	}
 
 	let instrument = getParameterValue("instrument");
@@ -288,6 +289,18 @@ function generateScore () {
 	outelem2.textContent = output;
 }
 
+
+
+//////////////////// 
+//
+// capitalize --
+//
+
+function capitalize(input) {
+	let first = input.charAt(0).toUpperCase();
+	let last  = input.slice(1);
+	return first + last;
+}
 
 
 </script>

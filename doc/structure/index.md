@@ -14,8 +14,8 @@ and start with three exclamations, then a reference key followed by a colon
 and then the reference value.   Here is an example, where the title of the
 score is "My Score":
 
-{% include ratioscore.html id="title-example" %}
-<script type="application/x-ratioscore" id="title-example">
+{% include ratioscore.html id="title" %}
+<script type="application/x-ratioscore" id="title">
 !!!OTL: My Score
 **dtime	**ratio
 *	*Iclars
@@ -54,8 +54,8 @@ at the begnning of the line. <i>Local comments</i> are comments
 that apply to specific spines (columns) of data.  Here is an example of
 various global and local comments sprinkled around a score:
 
-{% include ratioscore.html id="comment-example" %}
-<script type="application/x-ratioscore" id="comment-example">
+{% include ratioscore.html id="comment" %}
+<script type="application/x-ratioscore" id="comment">
 !!!OTL: My Score
 !! comment
 **dtime	**ratio
@@ -81,8 +81,8 @@ line where a spine does not include a comment.
 Barlines and time signatures can be added to scores:
 
 
-{% include ratioscore.html id="barline-example" %}
-<script type="application/x-ratioscore" id="barline-example">
+{% include ratioscore.html id="barline" %}
+<script type="application/x-ratioscore" id="barline">
 **recip	**ratio
 *M6/8	*I#68
 *	*ref:C2

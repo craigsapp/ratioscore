@@ -26,8 +26,8 @@ line.  Time values need to be sorted from low to high in the score.
 Here is an example of playing a new note once every quarter second,
 and then once every half second, then once every second:
 
-{% include ratioscore.html id="time-example" %}
-<script type="application/x-ratioscore" id="time-example">
+{% include ratioscore.html id="time" %}
+<script type="application/x-ratioscore" id="time">
 **time	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
@@ -57,8 +57,8 @@ The `**dtime` spine gives the time in seconds to wait until playint
 the next line of the score.  Here is an example that produces the
 same rhythms as the previous example using `**time`:
 
-{% include ratioscore.html id="dtime-example" %}
-<script type="application/x-ratioscore" id="dtime-example">
+{% include ratioscore.html id="dtime" %}
+<script type="application/x-ratioscore" id="dtime">
 **dtime	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
@@ -84,8 +84,8 @@ same rhythms as the previous example using `**time`:
 The `**ms` spine is similar to `**time`, but the units are milliseconds
 (1000 millseconds equals one second).
 
-{% include ratioscore.html id="ms-example" %}
-<script type="application/x-ratioscore" id="ms-example">
+{% include ratioscore.html id="ms" %}
+<script type="application/x-ratioscore" id="ms">
 **ms	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
@@ -112,8 +112,8 @@ The `**ms` spine is similar to `**time`, but the units are milliseconds
 The `**dms` spine is similar to `**dtime`, but the units are delta
 milliseconds.
 
-{% include ratioscore.html id="dms-example" %}
-<script type="application/x-ratioscore" id="dms-example">
+{% include ratioscore.html id="dms" %}
+<script type="application/x-ratioscore" id="dms">
 **ms	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
@@ -144,8 +144,8 @@ One or more augmentation dots can be added after the number, such
 as `2.` for a dotted half note, or `20..` four a doubly-dotted
 quintuplet sixteenth note.
 
-{% include ratioscore.html id="recip-example" %}
-<script type="application/x-ratioscore" id="recip-example">
+{% include ratioscore.html id="recip" %}
+<script type="application/x-ratioscore" id="recip">
 **ms	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
@@ -177,8 +177,8 @@ number of beats to perform in one minute (`MM` = "Maelzel's Metronome").
 `*MM60` is the default tempo for a time spines, and is equal to one
 beat per second.
 
-{% include ratioscore.html id="tempo-example" %}
-<script type="application/x-ratioscore" id="tempo-example">
+{% include ratioscore.html id="tempo" %}
+<script type="application/x-ratioscore" id="tempo">
 **recip	**ratio	**ratio
 *	*Iorgan	*Iclars
 *	*ref:C3	*ref:C4
@@ -226,8 +226,8 @@ beat per second.
 The `**time`, `**dtime`, `**ms`, and `**dms` timelines can use rational numbers in 
 addition to floating point numbers.
 
-{% include ratioscore.html id="fraction-example" %}
-<script type="application/x-ratioscore" id="fraction-example">
+{% include ratioscore.html id="fraction" %}
+<script type="application/x-ratioscore" id="fraction">
 **dtime	**ratio
 *	*Iflt
 *	*ref:A3
@@ -252,8 +252,8 @@ addition to floating point numbers.
 For fractions that are larger than one, the integer part can be split from
 the fractional part:
 
-{% include ratioscore.html id="compound-example" %}
-<script type="application/x-ratioscore" id="compound-example">
+{% include ratioscore.html id="compound" %}
+<script type="application/x-ratioscore" id="compound">
 **time	**ratio
 *	*Iflt
 *	*ref:A3
@@ -280,8 +280,8 @@ instead of a slash.  For example, `4` and `4%1` both represent a quarter note, w
 denominator of the reciprocal fraction being 1 by default.  Triplet whole notes
 are `3%2` (i.e., 3/2 = 1.5 triplet whole notes create a regular whole note).
 
-{% include ratioscore.html id="recip-fraction-example" %}
-<script type="application/x-ratioscore" id="recip-fraction-example">
+{% include ratioscore.html id="recip-fraction" %}
+<script type="application/x-ratioscore" id="recip-fraction">
 **recip	**ratio
 *	*Iclars
 *MM120	*ref:C3
@@ -309,8 +309,8 @@ Barlines are indicated by placing an equals sign (`=`) in each column of the
 score.  An optional measure number can follow the equals sign.  The divisions
 of the score into measures does not have to be equal or metrical.
 
-{% include ratioscore.html id="barlines-example" %}
-<script type="application/x-ratioscore" id="barlines-example">
+{% include ratioscore.html id="barlines" %}
+<script type="application/x-ratioscore" id="barlines">
 **dtime	**ratio
 *	*Iflt
 *	*ref:A3
@@ -341,8 +341,8 @@ Multiple timelines can be present in the Ratioscore, but only the leftmost one
 will be used to perform the **ratio spines.
 
 
-{% include ratioscore.html id="multiple-example" %}
-<script type="application/x-ratioscore" id="multiple-example">
+{% include ratioscore.html id="multiple" %}
+<script type="application/x-ratioscore" id="multiple">
 **recip	**recip	**ratio
 *	*	*Iflt
 *	*	*ref:A3
@@ -365,8 +365,8 @@ will be used to perform the **ratio spines.
 In this case only the first `**dtime` spine will be used (constant 16th note
 rhythm).  To use the second timeline, add a filter line to the score:
 
-{% include ratioscore.html id="filter-example" %}
-<script type="application/x-ratioscore" id="filter-example">
+{% include ratioscore.html id="filter" %}
+<script type="application/x-ratioscore" id="filter">
 !!!filter: extract -s 2-$
 **recip	**recip	**ratio
 *	*	*Iflt
