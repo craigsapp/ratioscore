@@ -22,25 +22,91 @@ The reference pitch is specified in the form   `*ref:A4`, where
 {% include ratioscore.html id="reference-example" %}
 <script type="application/x-ratioscore" id="reference-example">
 **dtime	**ratio	**ratio	**ratio
-*	*Iclars	*Iclars	*Iclars
+*MM240	*Iclars	*Iclars	*Iclars
 *	*ref:C2	*ref:E3	*ref:G4
-0.25	1	.	.
-0.25	.	1	.
-0.25	.	.	1
-0.25	2	.	.
-0.25	.	2	.
-0.25	.	.	2
-0.25	3	.	.
-0.25	.	3	.
-0.25	.	.	3
-0.25	0	.	.
-0.25	.	0	.
-0.25	.	.	0
+1	1	.	.
+1	.	1	.
+1	.	.	1
+1	2	.	.
+1	.	2	.
+1	.	.	2
+1	3	.	.
+1	.	3	.
+1	.	.	3
+1	0	.	.
+1	.	0	.
+1	.	.	0
 *-	*-	*-	*-
 </script>
 
 C4 (middle C) will be used as the reference pitch if none is given
-in a ratio column.
+in a ratio column.  The reference pitch can be tuned off of EQ/A440
+by adding/subtracting a cent interval from the note name.  The cent
+interval should should have the letter "c" following it:
+
+{% include ratioscore.html id="cent-reference" tabsize="12" %}
+<script type="application/x-ratioscore" id="cent-reference">
+**dtime	**ratio	**ratio	**ratio
+*MM120	*Iclars	*I#66	*Ivioln
+*	*ref:C2	*ref:C2-50c	*ref:C2+155.5c
+*	*vel:60	*vel:50	*vel:100
+1	1	.	.
+1	.	1	.
+1	.	.	1
+1	2	.	.
+1	.	2	.
+1	.	.	2
+1	3	.	.
+1	.	3	.
+1	.	.	3
+1	0	.	.
+1	.	0	.
+1	.	.	0
+*-	*-	*-	*-
+</script>
+
+Frequencies in Hertz can be used as a reference if the frequency has the letter "z" after it:
+
+{% include ratioscore.html id="frequency-reference" tabsize="12" %}
+<script type="application/x-ratioscore" id="frequency-reference">
+**dtime	**ratio	**ratio	**ratio
+*MM300	*Iclars	*Iclars	*Iclars
+*	*ref:100z	*ref:200z	*ref:300z
+1	1	.	.
+1	0	1	.
+1	.	0	1
+1	2	.	0
+1	0	2	.
+1	.	0	2
+1	3	.	0
+1	0	3	.
+1	.	0	3
+*-	*-	*-	*-
+</script>
+
+
+The reference pitch may also change after the start of the score:
+
+{% include ratioscore.html id="changing-reference" tabsize="12" %}
+<script type="application/x-ratioscore" id="changing-reference">
+**dtime	**ratio	**ratio	**ratio
+*	*Iclars	*Iclars	*Iclars
+*	*ref:100z	*ref:200z	*ref:300z
+1	1	.	.
+1	0	1	.
+1	.	0	1
+*	*ref:C2	*ref:C2-50c	*ref:C2+155.5c
+1	2	.	0
+1	0	2	.
+1	.	0	2
+*	*ref:C2	*ref:E3	*ref:G4
+1	3	.	0
+1	0	3	.
+1	.	0	3
+*-	*-	*-	*-
+</script>
+
+
 
 
 <h2> Harmonics </h2>
