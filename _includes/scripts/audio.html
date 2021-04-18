@@ -33,6 +33,11 @@ var AUDIOratioscore = null;
 //
 
 function PlayAudioFile(id, element, starttime) {
+console.log("ID", id, "ELEMENT", element);
+	let elementid = "audio-" + id;
+	if (element) {
+		elementid = element.id;
+	}
 	// The JRPID is not the same as the currently playing file
 	// (or there is no file playing).  So start the new one.
 	if (!AUDIO) {
@@ -86,7 +91,7 @@ function PlayAudioFile(id, element, starttime) {
 		AUDIO.removeAttribute('controls');
       AUDIO.pause();
 
-      AUDIOid = element.id;
+      AUDIOid = elementid;
 		var source = AUDIO.querySelector("source");
 		// Can't have seekable dynamic content in audio element:
 		//source += '<source src="/data?a=mp3&id=' + id + '" ';

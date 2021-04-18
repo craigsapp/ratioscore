@@ -1,0 +1,37 @@
+
+<script>
+// vim: ts=3
+//
+// Description: This event handler moves to a particular Ratioscore if there is an
+//     anchor tag in the URL.  The anchor should be an ID of a Ratioscore on the page.
+//     If so, then the page will scroll to that Ratioscore when the page is loaded.
+//
+// Example
+//    https://ratioscore.humdrum.org#example
+// 
+
+document.addEventListener("DOMContentLoaded", function () {
+	let cgi = GetCgiParameters();
+	if (cgi.autoplay) {
+		// don't do anything if autoplay CGI parameter is given.
+		return;
+	}
+
+	let hash = document.location.hash.replace(/^#/, "");
+	if (!hash) {
+		return;
+	}
+
+	// var element = document.querySelector("a[name=" + hash + "]");
+	var element = document.querySelector("#inputdata-" + hash);
+	if (!element) {
+		return;
+	}
+	element.scrollIntoView();
+});
+
+
+</script>
+
+
+

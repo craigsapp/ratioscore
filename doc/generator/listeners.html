@@ -1,0 +1,39 @@
+
+<script>
+// vim: ts=3
+
+let DEFAULTS = {
+	"timeline"   : "dtime",
+	"timeval"    : "1",
+	"tempo"      : "60",
+	"spines"     : "1",
+	"lines"      : "10",
+	"reference"  : "C4",
+	"instrument" : "71"
+};
+
+let SETTINGS = {};
+
+document.addEventListener("DOMContentLoaded", function () {
+	loadDefaultSettings();
+	loadCgiSettings();
+
+	let inputs = document.querySelectorAll("input");
+	for (let i=0; i<inputs.length; i++) {
+		inputs[i].addEventListener("keyup", generateScore);
+	}
+
+	let selects = document.querySelectorAll("select");
+	for (let i=0; i<selects.length; i++) {
+		selects[i].addEventListener("change", generateScore);
+	}
+
+	updateInputsFromSettings();
+	generateScore();
+});
+
+
+</script>
+
+
+

@@ -84,32 +84,83 @@ an octave higher, and so on.  Rests are indicated by `0`.
 To get intervals between harmonics, ratios can be used:
 
 
-{% include ratioscore.html id="ratios-example" %}
-<script type="application/x-ratioscore" id="ratios-example">
-**dtime	**ratio	**ratio	**ratio	**ratio
-*	*Iorgan	*Iclars	*Ikoto	*Iflt
-*MM300	*ref:C2	*ref:C3	*ref:C4	*ref:C5
-1	1	2/2	3/3	5/5
-1	2	3/2	4/3	6/5
-1	3	4/2	5/3	7/5
-1	4	5/2	6/3	8/5
-1	5	6/2	7/3	9/5
-1	6	7/2	8/3	10/5
-1	7	8/2	9/3	11/5
-1	8	9/2	10/3	12/5
-1	9	10/2	11/3	13/5
-1	10	11/2	12/3	14/5
-1	11	12/2	13/3	15/5
-1	12	13/2	14/3	16/5
-1	13	14/2	15/3	17/5
-1	14	15/2	16/3	18/5
-1	15	16/2	17/3	19/5
-1	16	17/2	18/3	20/5
-1	17	18/2	19/3	21/5
-1	18	19/2	20/3	22/5
-1	19	20/2	21/3	23/5
-4	20	21/2	22/3	24/5
-*-	*-	*-	*-	*-
+{% include ratioscore.html id="daipieynch" %}
+<script type="application/x-ratioscore" id="daipieynch">
+!!!OTL: Daipieynch
+!!!COM: Sapp, Craig Stuart
+!!!ODT: 2021/04/15
+**dtime	**ratio	**ratio	**ratio
+=0	=0	=0	=0
+*MM320	*I#71	*I#71	*I#15
+*	*ref:C4	*ref:C4	*ref:C2
+=1	=1	=1	=1
+1	.	.	5/5
+1	.	.	5/2
+1	5/1	.	.
+1	.	5/5	.
+1	5/2	.	5/1
+1	.	5/2	.
+1	5/3	.	.
+1	.	.	5/4
+1	5/4	.	.
+1	.	5/1	.
+1	.	.	.
+1	.	.	.
+1	.	.	.
+1	.	5/3	.
+=2	=2	=2	=2
+1	.	.	.
+1	.	5/2	.
+1	.	5/5	5/4
+1	.	.	.
+1	.	.	.
+1	5/1	.	5/3
+1	.	.	.
+1	.	5/3	5/2
+1	5/5	.	5/2
+1	.	5/1	.
+1	.	.	.
+1	.	.	5/5
+1	5/2	.	.
+1	.	5/1	5/3
+1	.	.	.
+1	5/1	.	5/3
+1	.	.	.
+1	5/4	.	.
+1	.	5/1	.
+1	.	.	.
+1	.	.	5/1
+=3	=3	=3	=3
+1	.	5/3	5/3
+1	5/1	.	.
+1	.	.	.
+1	5/5	5/1	5/3
+1	.	5/2	.
+1	5/3	.	5/8
+1	5/2	.	.
+1	.	5/1	5/2
+1	.	.	.
+1	.	5/4	5/4
+=4	=4	=4	=4
+1	.	.	.
+1	5/4	.	.
+1	.	.	5/1
+1	.	.	.
+1	5/5	5/5	5/5
+1	.	5/3	5/2
+=5	=5	=5	=5
+1	5/5	.	5/2
+1	.	5/1	.
+1	.	.	.
+1	.	.	5/5
+1	5/2	.	.
+1	.	5/4	5/3
+1	.	.	.
+=6	=6	=6	=6
+4	5/6	5/8	5/10
+==	==	==	==
+*-	*-	*-	*-
+!!!filter: myank -m 0,1,1,2,3,4,2,3,1,2,3,2,1,4,4,5,4,3,3,2,1,2,3,4,5,4,5,6
 </script>
 
 See the <a href="/doc/intervals">interval dictionary</a> for a list of

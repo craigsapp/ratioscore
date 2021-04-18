@@ -1,9 +1,16 @@
 
 <script>
 // vim: ts=3:nowrap
+//
+// outputformat:
+//     "mid"        == MIDI file
+//     "mp3"        == MP3 file
+//     "ratioscore" == MP3 file
+//     "link"       == copy link to ratioscore
+//     "autoplay"   == copy autoplay link to ratioscore
+// 
 
 function saveRatioscoreRendering(event, id) {
-console.log("SAVE RATIO SCORE RENDERING ===============", id);
 	if (document.body.classList.contains("waiting")) {
 		alert("Already converting a score");
 		return;
@@ -29,6 +36,24 @@ console.log("SAVE RATIO SCORE RENDERING ===============", id);
 		if (pair[0] === "inputdata") {
 			inputdata = pair[1];
 		}
+	}
+
+	// Copy URL to Ratioscore:
+	if (outputformat === "link") {
+		let url = getUrl();
+		url += "#" + id;
+		CopyToClipboard(url);
+		alert("Copied URL " + url);
+		return;
+	}
+
+	// Copy autoplay URL to Ratioscore:
+	if (outputformat === "autoplay") {
+		let url = getUrl();
+		url += "?autoplay=" + id;
+		CopyToClipboard(url);
+		alert("Copied URL " + url);
+		return;
 	}
 
 	// Save text-based Ratioscore (input data from script box):
@@ -97,6 +122,19 @@ console.log("SAVE RATIO SCORE RENDERING ===============", id);
 
 	};
 	request.send(formdata);
+}
+
+
+
+//////////////////////////////
+//
+// getUrl --
+//
+
+function getUrl(id) {
+	let url = window.location.href.replace(/\?.*/, "");
+	url = url.replace(/#.*/, "");
+	return url;
 }
 
 

@@ -1,0 +1,24 @@
+
+
+<script>
+// vim ts=3
+
+//////////////////////////////
+//
+// CopyToClipboard --
+//
+
+function CopyToClipboard(string) {
+	// console.log("Copying", string, "to clipboard");
+	var element = document.createElement("textarea");
+	element.value = string;
+	document.body.appendChild(element);
+	element.select();
+	document.execCommand("copy");
+	document.body.removeChild(element);
+};
+
+
+</script>
+
+

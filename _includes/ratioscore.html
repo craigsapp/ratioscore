@@ -7,6 +7,7 @@
 		width   = height of text box, include "px".
 -->
 
+<a name="{{include.id}}"></a>
 <div class="ratioscore">
 
 <form
@@ -53,6 +54,8 @@
 							<option value="mid"> MIDI </option>
 							<option value="mp3"> MP3 </option>
 							<option value="ratioscore"> Ratioscore </option>
+							<option value="link"> Copy link </option>
+							<option value="autoplay"> Copy autoplay link </option>
 						</select>
 					</div>
 				</td>
@@ -83,8 +86,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	enableTab("inputdata-{{include.id}}");
 });
-
-
 
 
 </script>

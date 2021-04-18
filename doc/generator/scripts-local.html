@@ -1,0 +1,293 @@
+
+
+<script>
+// vim: ts=3
+
+
+//////////////////////////////
+//
+// loadDefaultSettings --
+//
+
+function loadDefaultSettings() {
+	SETTINGS = JSON.parse(JSON.stringify(DEFAULTS));
+}
+
+
+
+//////////////////////////////
+//
+// getParameterList --
+//
+
+function getParameterList() {
+	let output = Object.getOwnPropertyNames(DEFAULTS);
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// getParameterValue --
+//
+
+function getParameterValue(parameter) {
+	return SETTINGS[parameter];
+}
+
+
+
+//////////////////////////////
+//
+// makeUrl --
+//
+
+function makeUrl() {
+	let url = window.location.href.replace(/\?.*/, "");
+	let plist = getParameterList();
+	let uparams = [];
+	for (let i=0; i<plist.length; i++) {
+		let value = getParameterValue(plist[i]);
+		uparams.push(plist[i] + "=" + encodeURIComponent(value));
+	}
+
+	url += "?";
+	for (let i=0; i<uparams.length; i++) {
+		url += uparams[i];
+		if (i < uparams.length - 1) {
+			url += "&";
+		}
+	}
+
+	return url;
+}
+
+
+
+//////////////////////////////
+//
+// copyUrl --
+//
+
+function copyUrl() {
+	let url = makeUrl();
+	CopyToClipboard(url);
+}
+
+
+
+//////////////////////////////
+//
+// loadCgiSettings --
+//
+
+function loadCgiSettings() {
+	let plist = getParameterList();
+	let cgi = GetCgiParameters();
+	for (let i=0; i<plist.length; i++) {
+		if (typeof cgi[plist[i]] === "undefined") {
+			continue;
+		}
+		SETTINGS[plist[i]] = cgi[plist[i]];
+	}
+}
+
+
+
+//////////////////////////////
+//
+// updateInputsFromSettings --
+//
+
+function updateInputsFromSettings() {
+	let inputs = document.querySelectorAll("input");
+	for (let i=0; i<inputs.length; i++) {
+		let id = inputs[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			inputs[i].value = SETTINGS[id];
+		}
+	}
+
+	let selects = document.querySelectorAll("select");
+	for (let i=0; i<selects.length; i++) {
+		let id = selects[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			setSelectedIndex(selects[i], SETTINGS[id]);
+		}
+	}
+}
+
+
+
+////////////////////
+//
+// setSelectedIndex --
+//
+
+function setSelectedIndex(select, value) {
+	for (let i=0; i<select.options.length; i++) {
+		if (select.options[i].value == value) {
+			select.options[i].selected = true;
+			return;
+		}
+	}
+}
+
+
+
+//////////////////////////////
+//
+// updateSettingsFromInput --
+//
+
+function updateSettingsFromInput() {
+	let inputs = document.querySelectorAll("input");
+	for (let i=0; i<inputs.length; i++) {
+		let id = inputs[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			SETTINGS[id] = inputs[i].value;
+		}
+	}
+
+	let selects = document.querySelectorAll("select");
+	for (let i=0; i<selects.length; i++) {
+		let id = selects[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			SETTINGS[id] = selects[i].value;
+		}
+	}
+}
+
+
+
+//////////////////////////////
+//
+// generateScore -- Prepare a score based on input parameters.
+//
+
+function generateScore () {
+	updateSettingsFromInput();
+
+	let timetype = getParameterValue("timeline");
+	let timeline = "**" + timetype;
+	let timeval  = getParameterValue("timeval");
+	if (timetype !== "recip") {
+		if (timeval.match(/^\s*\d/)) {
+			timeval = parseFloat(timeval);
+		} else {
+			timeval = 1;
+		}
+	}
+	let timeinc  = timeval;
+
+	let lines = getParameterValue("lines");
+	if (lines.match(/^\s*\d/)) {
+		lines = parseInt(lines);
+	} else {
+		lines = 1;
+	}
+
+	let spines = getParameterValue("spines");
+	if (spines.match(/^\s*\d/)) {
+		spines = parseInt(spines);
+	} else {
+		spines = 1;
+	}
+
+	let tempo = "*";
+	let ttext = getParameterValue("tempo");
+	matches = ttext.match(/([1-9][0-9]+\.?[0-9]*)/);
+	if (matches) {
+		let tvalue = parseFloat(matches[1]);
+		if ((tvalue != 60) && (tvalue >= 10)) {
+			tempo = "*MM" + tvalue;
+		}
+	}
+
+	let reference = "*ref:" + DEFAULTS["reference"];
+	let rtext = getParameterValue("reference");
+	matches = rtext.match(/^([A-G][0-9])/);
+	if (matches) {
+		reference = "*ref:" + matches[1];
+	}
+
+	let instrument = getParameterValue("instrument");
+	if (instrument.match(/^\d/)) {
+		instrument = "*I#" + instrument;
+	} else {
+		instrument = "*I" + instrument;
+	}
+
+	let outelem1 = document.querySelector("#generated");
+	let outelem2 = document.querySelector("#inputdata-generated");
+	if (!outelem1) {
+		console.log("Error: No script area 1");
+		return;
+	}
+	if (!outelem2) {
+		console.log("Error: No script area 2");
+		return;
+	}
+
+	//////////////////////////////////////////////////////////////////////////
+
+	let output = "";
+
+
+	// print exclusive interpretation line
+	output += timeline;
+	for (let i=0; i<spines; i++) {
+		output += "\t**ratio";
+	}
+	output += "\n";
+
+
+	// print instrument/tempo line
+	output += tempo;
+	for (let i=0; i<spines; i++) {
+		output += "\t" + instrument;
+	}
+	output += "\n";
+	
+
+	// print reference line
+	output += "*";
+	for (let i=0; i<spines; i++) {
+		output += "\t" + reference;
+	}
+	output += "\n";
+
+
+	// print data lines
+	for (let i=0; i<lines; i++) {
+		output += timeval;
+		for (let j=0; j<spines; j++) {
+			output += "\t.";
+		}
+		output += "\n";
+		if (timetype === "time") {
+			timeval += timeinc;
+		} else if (timetype === "ms") {
+			timeval += timeinc;
+		}
+	}
+
+
+	// print terminator line
+	output += "*-";
+	for (let i=0; i<spines; i++) {
+		output += "\t*-";
+	}
+	output += "\n";
+
+	// print URL to create this score template:
+	// output += "!!!URL: " + makeUrl() + "\n";
+
+	outelem1.textContent = output;
+	outelem2.textContent = output;
+}
+
+
+
+</script>

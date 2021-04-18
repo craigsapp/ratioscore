@@ -1,0 +1,64 @@
+
+<script>
+// vim: ts=3
+//
+// Description: This event handler controls automatic playback of Ratioscores on
+//     a page.  If the CGI parameter "autoplay" is given in the URL, then a Ratioscore
+//     will be played.  If the value of the autoplay parameter is a Ratioscore ID, then
+//     that particular Ratioscore will be played; otherwise, the first Ratioscore
+//     on the page will be played.
+//
+// Example to play the ratioscore on the homepage:
+//    https://ratioscore.humdrum.org?autoplay
+//
+// The ID of the homepage Ratioscore box is "example", so this is equivalent:
+//    https://ratioscore.humdrum.org?autoplay=example
+// 
+
+document.addEventListener("DOMContentLoaded", function () {
+	let cgi = GetCgiParameters();
+	if (!cgi.autoplay) {
+		return;
+	}
+	var element = document.querySelector("#" + cgi.autoplay);
+	if (element) {
+
+		// Move the page to view the Ratioscore:
+		let scrollto = document.querySelector("a[name=" + cgi.autoplay + "]");
+		if (scrollto) {
+			scrollto.scrollIntoView();
+		}
+
+		// Then play the score:
+		PlayAudioFile(cgi.autoplay);
+		return;
+	}
+
+	// element does not exist, so try playing the first
+	// ratioscore on the page if the value of autoplay is "true".
+	if (typeof cgi.autoplay === "undefined") {
+		return;
+	}
+	var testelement = document.querySelector("[id^='audio-']");
+	if (!testelement) {
+		console.log("NO RATIOSCORE ELEMENT");
+		return;
+	}
+	let tid = testelement.id;
+	let matches = tid.match(/^audio-(.*)/);
+	if (!matches) {
+		return;
+	}
+	let id = matches[1];
+	let newscrollto = document.querySelector("a[name=" + cgi.autoplay + "]");
+	if (newscrollto) {
+		newscrollto.scrollIntoView();
+	}
+	PlayAudioFile(id);
+});
+
+
+</script>
+
+
+
