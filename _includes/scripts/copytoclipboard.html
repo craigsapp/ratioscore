@@ -108,6 +108,37 @@ function PasteScoreFromClipboard(id) {
 }
 
 
+//////////////////////////////
+//
+// ClearEditorContents --  If the editor is already empty, then restore
+//    the previously cleared contents.
+//
+
+CLEARED_EDITOR_CONTENTS = {};
+function ClearEditorContents(id) {
+	let selector;
+	if (id.match(/inputdata-/)) {
+		selector = "#" + id;
+	} else {
+		selector = "#inputdata-" + id;
+	}
+	let element = document.querySelector(selector);
+	if (!element) {
+		return;
+	}
+	let currentContents = element.textContent;
+	if (currentContents.match(/^\s*$/)) {
+		if (!CLEARED_EDITOR_CONTENTS[id].match(/^\s*$/)) {
+			element.textContent = CLEARED_EDITOR_CONTENTS[id];
+			CLEARED_EDITOR_CONTENTS[id] = "";
+		} 
+	} else {
+		CLEARED_EDITOR_CONTENTS[id] = element.textContent;
+		element.textContent = "";
+	}
+}
+
+
 </script>
 
 

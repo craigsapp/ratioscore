@@ -63,6 +63,10 @@
 				</td>
 				<td width="80px;">
 					<nobr>
+					<span onclick="event.preventDefault(); ClearEditorContents('{{include.id}}');" title="Clear editor contents" class="button fa-stack fa-1x">
+						<i class="fa fa-square hovering fa-stack-2x"></i>
+						<i class="fa fa-eraser fa-stack-1x fa-inverse"></i>
+					</span>
 					<span onclick="event.preventDefault(); saveRatioscoreRendering(event, '{{include.id}}', 'mp3');" title="Download MP3" class="button fa-stack fa-1x">
 						<i class="fa fa-square hovering fa-stack-2x"></i>
 						<i class="fa fa-download fa-stack-1x chain-volume fa-inverse"></i>
