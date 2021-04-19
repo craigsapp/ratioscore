@@ -13,7 +13,6 @@ vim: ts=8:ft=html
 **dtime	**ratio
 *MM144	*Iclars
 *	*ref:C3
-1	.
 1	2^(0/53)
 1	2^(1/53)
 1	2^(2/53)
@@ -80,7 +79,6 @@ Just intonation variant:
 **dtime	**ratio
 *MM144	*Iclars
 *	*ref:C3
-1	.
 1	1
 1	81/80
 1	128/125
@@ -137,3 +135,6 @@ Just intonation variant:
 2	2
 *-	*-
 </script>
+
+
+
