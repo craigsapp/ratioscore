@@ -39,9 +39,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		reference.value = cgi.r;
 	}
 
-	let instrument = document.querySelector("#instrument");
+	let instrument = document.querySelector("select#instrument");
 	if (instrument) {
-		instrument.addEventListener("keyup", calculateEQscore);
+		instrument.addEventListener("change", calculateEQscore);
 	}
 	if (cgi.i) {
 		instrument.value = cgi.i;

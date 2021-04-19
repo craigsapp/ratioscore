@@ -214,11 +214,13 @@ function calculateEQscore () {
 		return;
 	}
 	
-	let output = "!!!octave: " + onum + "\n";
-	if (top > 0) {
-		output = "!!!octave: " + top + "/" + bot + "\n";
-   }
-	output += "!!!divisions: " + dnum + "\n";
+	// let output = "!!!octave: " + onum + "\n";
+	// if (top > 0) {
+	// 	output = "!!!octave: " + top + "/" + bot + "\n";
+   // }
+	// output += "!!!divisions: " + dnum + "\n";
+
+	let output = "";
 	output += "**dtime\t**ratio\t**cents\n";
 	output += tempo + "\t*I" + instrument + "\t*I" + instrument + "\n";
 	output += "*\t*ref:" + reference + "\t*ref:" + reference + "\n";
