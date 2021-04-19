@@ -15,7 +15,6 @@ substitutions will be applied in the order they occur in the file.
 **recip	**ratio
 *MM144	*I#75
 *	*ref:C4
-16	.
 4	do
 4	re
 4	mi

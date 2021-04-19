@@ -362,8 +362,9 @@ will be used to perform the **ratio spines.
 *-	*-	*-
 </script>
 
-In this case only the first `**dtime` spine will be used (constant 16th note
-rhythm).  To use the second timeline, add a filter line to the score:
+In this case only the first `**dtime` spine will be used (constant
+16th note rhythm).  To use the second timeline, add a filter line
+to the score:
 
 {% include ratioscore.html id="filter" %}
 <script type="application/x-ratioscore" id="filter">
@@ -387,10 +388,11 @@ rhythm).  To use the second timeline, add a filter line to the score:
 *-	*-	*-
 </script>
 
-The filter line can be placed anywhere in the score (top, bottom, middle).   The extract
-filter pulls out the spcified spines, which are from the second spine to the
-end of the line in this case, removing the first `**recip` spine.  This will
-perform the score using a repeated 8-16-16 rhythm instead of the constant 16th notes.
+The filter line can be placed anywhere in the score (top, bottom,
+middle).   The extract filter pulls out the spcified spines, which
+are from the second spine to the end of the line in this case,
+removing the first `**recip` spine.  This will perform the score
+using a repeated 8-16-16 rhythm instead of the constant 16th notes.
 
 
 

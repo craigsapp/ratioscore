@@ -12,8 +12,19 @@ vim: ts=8:ft=html
 This page gives examples of various intervals sorted from smallest to 
 largest.
 
+<table>
+<tr>
+<td>
 {% include_relative reference-pitch.html %}
+</td>
+<td style="padding-left:30px" >
 {% include_relative instrument.html %}
+</td>
+<td style="padding-left:30px" >
+{% include_relative tempo.html %}
+</td>
+</tr>
+</table>
 {% include_relative ratioscore-display.html %}
 
 
@@ -77,6 +88,15 @@ largest.
 	cents="48.77"
 %}
 {% include ratioscore.html id="septimal-quarter-tone" %}
+
+
+
+{% include intervalscore.html
+	title="Equal-tempered  quarter tone"
+	id="eq-quarter-tone"
+	cents="50.00"
+%}
+{% include ratioscore.html id="eq-quarter-tone" %}
 
 
 

@@ -120,6 +120,32 @@ function changeInstrument(event) {
 
 
 
+//////////////////////////////
+//
+// changeTempo --
+//
+
+function changeTempo(event) {
+	var tempo = event.target.value;
+console.log("TEMPO", tempo);
+	if (tempo.match(/^\s*[1-9][0-9]/)) {
+		tempo = parseFloat(tempo);
+	} else {
+		tempo = 60;
+	}
+	if (tempo > 5000) {
+		tempo = 60;
+	}
+	var databoxes = document.querySelectorAll("script.databox");
+	for (let i=0; i<databoxes.length; i++) {
+		let text = databoxes[i].textContent;
+		text = text.replace(/\*MM[^\t\n\r]*/gs, "*MM" + tempo);
+		databoxes[i].textContent = text;
+	}
+}
+
+
+
 </script>
 
 

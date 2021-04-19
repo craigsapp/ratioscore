@@ -54,7 +54,6 @@ Unlike ratios, drum tracks can contain multiple notes at one time:
 *	*vel:45	*vel:50	*vel:60	*vel:60	*vel:50	*vel:90
 *MM164	*	*	*	*	*	*
 *M12/8	*	*	*	*	*	*
-8	.	.	.	.	.	.
 =1	=1	=1	=1	=1	=1	=1
 8	68V	50V	47V	.	62V	75V
 8	.	.	47	.	.	.
@@ -140,8 +139,6 @@ drums:
 **recip	**drum
 *M3/4	*vel:40
 *MM144	*vstep:60
-!! problem with starting note, so padding with a rest:
-4	.
 =1	=1
 4	77V
 4	77
@@ -170,7 +167,6 @@ Polyrhythm example:
 **dtime	**drum	**drum
 =0	=0	=0
 *MM500	*	*
-1	.	.
 =43	=43	=43
 !! 4 against 3
 1	76	77
@@ -220,7 +216,6 @@ be interleaved in any order.
 *MM240	*I#14	*	*Iclars
 *	*ref:C2	*	*ref:F#1
 *	*vel:60	*vel:50	*vel:30
-1	.	.	.
 =1	=1	=1	=1
 1	9	77 76	.
 1	.	.	9

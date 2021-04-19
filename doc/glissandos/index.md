@@ -62,7 +62,6 @@ to 1/5 and 1/10 of a second respectivly for the last two glissandos.
 **dtime	**ratio
 *	*Iclars
 *	*ref:C4
-1	0
 1	1H
 1	_2h
 1	0
@@ -81,7 +80,6 @@ to 1/5 and 1/10 of a second respectivly for the last two glissandos.
 *	*grate:100
 1	1H
 1	_2h
-1	0
 *-	*-
 </script>
 
