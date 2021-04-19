@@ -105,6 +105,7 @@ vector<double> m_timeline;           // used with --max-time option.
 bool        m_debugQ = false;        // used with --debug option
 vector<double> m_currTempo;          // used for grate calculations
 vector<pair<string, string>> m_ratioSubs; // used with !!!RDF**ratio:
+int         m_pad = 0;
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -114,10 +115,12 @@ int main(int argc, char** argv) {
 	options.define("r|raw=b",    "output raw MIDI data to stdout.");
 	options.define("x|max-time=d:0.0", "maximum duration of output MIDI file in seconds");
 	options.define("s|seconds=b", "add time in seconds spine (resolving tempo changes)");
+	options.define("p|pad=i:0",   "padding time in ms to start of MIDI data");
 	options.define("debug=b", "display debugging information");
 	options.process(argc, argv);
 	m_maxtime = options.getDouble("max-time");
 	m_debugQ = options.getBoolean("debug");
+	m_pad = options.getInteger("pad");
 
 	HumdrumFile infile;
 	MidiFile outfile;
@@ -434,7 +437,7 @@ void addTempoMessages(MidiFile& outfile, HTp sstart) {
 		}
 		if (hre.search(current, "^\\*MM(\\d+\\.?\\d*)$")) {
 			double tempo = hre.getMatchDouble(1);
-			int starttime = m_timemap[current->getLineIndex()];
+			int starttime = m_timemap[current->getLineIndex()] + m_pad;
 			if (m_first_tempo_time >= 0) {
 				if (starttime < m_first_tempo_time) {
 					m_first_tempo_time = starttime;
@@ -610,7 +613,7 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 			if (hre.search(current, "^\\*I[a-z]{3,6}$")) {
 				// Process an instrument name
 				int inst = instrument.getGM(*current);
-				int starttime = m_timemap[current->getLineIndex()];
+				int starttime = m_timemap[current->getLineIndex()] + m_pad;
 				outfile.addTimbre(track, starttime, channel, inst);
 			} else if (hre.search(current, "^\\*I#(\\d{1,3})")) {
 				// Process an instrument number
@@ -618,14 +621,14 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 				if (inst > 127) {
 					inst = 127;
 				}
-				int starttime = m_timemap[current->getLineIndex()];
+				int starttime = m_timemap[current->getLineIndex()] + m_pad;
 				outfile.addTimbre(track, starttime, channel, inst);
 			} else if (hre.search(current, "^\\*MM(\\d+\\.?\\d*)$")) {
 				// Process a tempo change.  It should not be
 				// here, but rather in the **time spine, but
 				// process these anyway.
 				double tempo = hre.getMatchDouble(1);
-				int starttime = m_timemap[current->getLineIndex()];
+				int starttime = m_timemap[current->getLineIndex()] + m_pad;
 				if (m_first_tempo_time >= 0) {
 					if (starttime < m_first_tempo_time) {
 						m_first_tempo_time = starttime;
@@ -641,7 +644,7 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 				if (range <= 1.0) {
 					range = 2.0;
 				}
-				int starttime = m_timemap[current->getLineIndex()];
+				int starttime = m_timemap[current->getLineIndex()] + m_pad;
 				outfile.setPitchBendRange(track, starttime, channel, range);
 				hasBend = true;
 				wroteBend = true;
@@ -671,7 +674,7 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 					} else if (pan > 127) {
 						pan = 127;
 					}
-					int starttime = m_timemap[current->getLineIndex()];
+					int starttime = m_timemap[current->getLineIndex()] + m_pad;
 					outfile.addController(track, starttime, channel, 10, pan);
 				}
 			} else if (hre.search(current, "^\\*ref[:=]?.*\\d")) {
@@ -699,7 +702,7 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 			double pitch = getPitchAsMidi(current, reference);
 			double pbend = getPitchBend(pitch, channel);
 
-			int starttime = m_timemap[current->getLineIndex()];
+			int starttime = m_timemap[current->getLineIndex()] + m_pad;
 			int endtime = getEndTime(current) - 1;
 			int ptime = starttime - m_pbadjust;
 			if (ptime < 0) {
@@ -786,7 +789,7 @@ void generateDrumTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hum
 					} else if (pan > 127) {
 						pan = 127;
 					}
-					int starttime = m_timemap[current->getLineIndex()];
+					int starttime = m_timemap[current->getLineIndex()] + m_pad;
 					outfile.addController(track, starttime, channel, 10, pan);
 				}
 			}
@@ -802,7 +805,7 @@ void generateDrumTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hum
 			}
 
 			vector<int> drums = getDrumsAsMidi(current);
-			int starttime = m_timemap[current->getLineIndex()];
+			int starttime = m_timemap[current->getLineIndex()] + m_pad;
 
 			// if (hasDyn) {
 			// 	volume = getAttackVelocity(current, baseattackvel);
@@ -1278,7 +1281,7 @@ void addGlissando(MidiFile& outfile, int track, HTp starttok, double spitch, dou
 
 	double npitch = getPitchAsMidi(nexttok, reference);
 	double sspitch = getPitchAsMidi(starttok, reference);
-	double starttime = m_timemap[starttok->getLineIndex()];
+	double starttime = m_timemap[starttok->getLineIndex()] + m_pad;
 	double endtime = m_timemap[nexttok->getLineIndex()];
 
 	double x1 = starttime;
