@@ -19,15 +19,6 @@
 		onsubmit="event.preventDefault(); saveRatioscoreRendering(event, '{{include.id}}');">
 
 	<div style="{% if include.width %}width:{{include.width}}; {% else %}width:100%; {% endif %}">
-		<script
-				id="inputdata-{{include.id}}"
-				style="width:100%; resize:both; overflow:auto; {% if include.height %}height:{{include.height}}; {% else %}height:auto; {% endif %} {% if include.tabsize %}tab-size:{{include.tabsize}}; -moz-tab-size:{{include.tabsize}};{% else %}tab-size:10; -moz-tab-size:10;{% endif %}"
-				name="inputdata"
-				spellcheck="false"
-				oncopy="CopyScoreToClipboard(event.target.id);"
-				contenteditable="true"
-				type="text/plain"
-				class="databox visible"></script>
 
 		<table style="width=100%; padding-top:0px">
 			<tr style="width:100%; margin:0; padding:0;" valign="top">
@@ -103,6 +94,16 @@
 				</td>
 			</tr>
 		</table>
+
+		<script
+				id="inputdata-{{include.id}}"
+				style="width:100%; resize:both; overflow:auto; {% if include.height %}height:{{include.height}}; {% else %}height:auto; {% endif %} {% if include.tabsize %}tab-size:{{include.tabsize}}; -moz-tab-size:{{include.tabsize}};{% else %}tab-size:10; -moz-tab-size:10;{% endif %}"
+				name="inputdata"
+				spellcheck="false"
+				oncopy="CopyScoreToClipboard(event.target.id);"
+				contenteditable="true"
+				type="text/plain"
+				class="databox visible"></script>
 	</div>
 </form>
 
