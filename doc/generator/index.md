@@ -52,11 +52,15 @@ This page can be used to create a Ratioscore template:
 
 <h2> Editing Ratioscores in a spreadsheet </h2>
 
-It may be convenient to edit a Ratioscore in a spreadsheet program such as 
-<a target="_blank" href="https://sheets.google.com">Google Sheets</a>.  To do so, copy
-the text from a Ratioscore box and then paste into a blank spreadsheet.  When pasting into
-Google Sheets from MacOS, use command-shift-V rather than command-v.  This will paste the
-text as a TSV table rather than pasting all text into a single cell.
+It may be convenient to edit a Ratioscore in a spreadsheet program
+such as <a target="_blank" href="https://sheets.google.com">Google
+Sheets</a>.  To do so, copy the text from a Ratioscore box and then
+paste into a spreadsheet.  A score can be copied from an edit box by
+either clicking on the copy button underneath a Ratioscore editor, or
+by the standard method for the computer's OS (such as clicking in the edit
+box and then typing control|command-a to select all of the text, then 
+control|command-c to copy the text, and then control|command-v after clicking 
+in a cell on the spreadsheet.
 
 Here is an example view after pasting a Ratioscore into Google Sheets:
 
@@ -66,7 +70,9 @@ The Ratioscore can then be edited in the spreadsheet and then copied
 back into a Ratioscore box on this website to create a MIDI or MP3 file
 for the score.
 
-
+Note that barlines (cells starting with `=`) are difficult to work with
+in a spreadsheet.  you can add a single quote before the `=` sign to make
+it display properly in a spreadsheet.
 
 
 

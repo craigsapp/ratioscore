@@ -76,7 +76,13 @@ function GetUrl(id) {
 //
 
 function CopyScoreToClipboard(id) {
-	let element = document.querySelector("#inputdata-" + id);
+	let selector;
+	if (id.match(/inputdata-/)) {
+		selector = "#" + id;
+	} else {
+		selector = "#inputdata-" + id;
+	}
+	let element = document.querySelector(selector);
 	if (!element) {
 		CopyToClipboard("");
 		return;
@@ -107,7 +113,6 @@ function PasteScoreFromClipboard(id) {
 
 	navigator.clipboard.readText().then(text => element.textContent = text);
 }
-
 
 
 </script>
