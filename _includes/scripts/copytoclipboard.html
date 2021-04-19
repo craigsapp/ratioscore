@@ -88,14 +88,7 @@ function CopyScoreToClipboard(id) {
 		return;
 	}
 	let contents = element.textContent;
-	console.log("TEXT CONTENT", contents);
 	CopyToClipboard(contents);
-	let alertcounter = parseInt(localStorage.alertcounter || 0);
-	alertcounter++;
-	localStorage.alertcounter = alertcounter;
-	if (alertcounter < 11) {
-		alert("Copied score to clipboard");
-	}
 }
 
 
