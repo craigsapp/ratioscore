@@ -10,7 +10,7 @@
 //     "autoplay"   == copy autoplay link to ratioscore
 // 
 
-function saveRatioscoreRendering(event, id) {
+function saveRatioscoreRendering(event, id, format) {
 	if (document.body.classList.contains("waiting")) {
 		alert("Already converting a score");
 		return;
@@ -37,26 +37,9 @@ function saveRatioscoreRendering(event, id) {
 			inputdata = pair[1];
 		}
 	}
-
-	/*
-	// Copy URL to Ratioscore:
-	if (outputformat === "link") {
-		let url = GetUrl();
-		url += "#" + id;
-		CopyToClipboard(url);
-		alert("Copied URL " + url);
-		return;
+	if (format) {
+		outputformat = format;
 	}
-
-	// Copy autoplay URL to Ratioscore:
-	if (outputformat === "autoplay") {
-		let url = GetUrl();
-		url += "?autoplay=" + id;
-		CopyToClipboard(url);
-		alert("Copied URL " + url);
-		return;
-	}
-	*/
 
 	// Save text-based Ratioscore (input data from script box):
 	if (outputformat === "ratioscore") {
