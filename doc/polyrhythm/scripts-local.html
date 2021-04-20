@@ -154,7 +154,6 @@ function generateScore() {
 		editor2.textContent = "";
 		return;
 	}
-	console.log("PARTS", parts);
 
 	let tempo = SETTINGS.tempo;
 
@@ -267,9 +266,9 @@ function generateScore() {
 	output += printMyank(repeats, parts);
 
 	// print URL to create this polyrhythm score:
-	let url = makeURL();
+	let url = makeUrl();
 	if (url !== "") {
-		output += "!!!URL: " + makeUrl() + "\n";
+		output += "!!!URL: " + url + "\n";
 	}
 
 	editor.textContent = output;
