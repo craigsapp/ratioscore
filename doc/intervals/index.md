@@ -6,7 +6,7 @@ vim: ts=8:ft=html
 ---
 
 {% include_relative listeners.html %}
-
+{% include_relative styles-local.html %}
 {% include_relative scripts-local.html %}
 
 This page gives examples of various intervals sorted from smallest to 
@@ -15,19 +15,23 @@ largest.
 <table>
 <tr>
 <td>
+<nobr>
 {% include_relative reference-pitch.html %}
+</nobr>
 </td>
 <td style="padding-left:30px" >
+<nobr>
 {% include_relative instrument.html %}
+</nobr>
 </td>
 <td style="padding-left:30px" >
+<nobr>
 {% include_relative tempo.html %}
+</nobr>
 </td>
 </tr>
 </table>
 {% include_relative ratioscore-display.html %}
-
-
 
 
 
@@ -37,7 +41,7 @@ largest.
 	ratio="32805/32768"
 	cents="1.95"
 %}
-{% include ratioscore.html id="schisma" %}
+{% include ratioscore.html id="schisma" erase="false" %}
 
 
 
@@ -47,7 +51,7 @@ largest.
 	ratio="2048/2025"
 	cents="19.55"
 %}
-{% include ratioscore.html id="diaschisma" %}
+{% include ratioscore.html id="diaschisma" erase="false" %}
 
 
 
@@ -57,7 +61,7 @@ largest.
 	ratio="81/80"
 	cents="21.51"
 %}
-{% include ratioscore.html id="syntonic-comma" %}
+{% include ratioscore.html id="syntonic-comma" erase="false" %}
 
 
 
@@ -67,7 +71,7 @@ largest.
 	ratio="531441/524288"
 	cents="23.46"
 %}
-{% include ratioscore.html id="pythagorean-comma" %}
+{% include ratioscore.html id="pythagorean-comma" erase="false" %}
 
 
 
@@ -77,7 +81,7 @@ largest.
 	ratio="128/125"
 	cents="41.06"
 %}
-{% include ratioscore.html id="diesis" %}
+{% include ratioscore.html id="diesis" erase="false" %}
 
 
 
@@ -87,7 +91,7 @@ largest.
 	ratio="36/35"
 	cents="48.77"
 %}
-{% include ratioscore.html id="septimal-quarter-tone" %}
+{% include ratioscore.html id="septimal-quarter-tone" erase="false" %}
 
 
 
@@ -96,7 +100,7 @@ largest.
 	id="eq-quarter-tone"
 	cents="50.00"
 %}
-{% include ratioscore.html id="eq-quarter-tone" %}
+{% include ratioscore.html id="eq-quarter-tone" erase="false" %}
 
 
 
@@ -106,7 +110,7 @@ largest.
 	ratio="256/243"
 	cents="90.22"
 %}
-{% include ratioscore.html id="pythagorean-minor-second" %}
+{% include ratioscore.html id="pythagorean-minor-second" erase="false" %}
 
 
 
@@ -116,7 +120,7 @@ largest.
 	ratio="9/8"
 	cents="203.91"
 %}
-{% include ratioscore.html id="pythagorean-major-second" %}
+{% include ratioscore.html id="pythagorean-major-second" erase="false" %}
 
 
 
@@ -126,7 +130,7 @@ largest.
 	ratio="8/7"
 	cents="231.17"
 %}
-{% include ratioscore.html id="supermajor-second" %}
+{% include ratioscore.html id="supermajor-second" erase="false" %}
 
 
 
@@ -136,7 +140,7 @@ largest.
 	ratio="7/6"
 	cents="266.87"
 %}
-{% include ratioscore.html id="septimal-minor-third" %}
+{% include ratioscore.html id="septimal-minor-third" erase="false" %}
 
 
 
@@ -146,7 +150,7 @@ largest.
 	ratio="32/27"
 	cents="294.14"
 %}
-{% include ratioscore.html id="pythagorean-minor-third" %}
+{% include ratioscore.html id="pythagorean-minor-third" erase="false" %}
 
 
 
@@ -156,7 +160,7 @@ largest.
 	ratio="6/5"
 	cents="315.64"
 %}
-{% include ratioscore.html id="just-minor-third" %}
+{% include ratioscore.html id="just-minor-third" erase="false" %}
 
 
 
@@ -166,7 +170,7 @@ largest.
 	ratio="5/4"
 	cents="386.31"
 %}
-{% include ratioscore.html id="just-major-third" %}
+{% include ratioscore.html id="just-major-third" erase="false" %}
 
 
 {% include intervalscore.html
@@ -174,7 +178,7 @@ largest.
 	id="et-major-third"
 	cents="400.00"
 %}
-{% include ratioscore.html id="et-major-third" %}
+{% include ratioscore.html id="et-major-third" erase="false" %}
 
 
 {% include intervalscore.html
@@ -183,7 +187,7 @@ largest.
 	ratio="4/3"
 	cents="498.05"
 %}
-{% include ratioscore.html id="just-perfect-fourth" %}
+{% include ratioscore.html id="just-perfect-fourth" erase="false" %}
 
 
 
@@ -192,7 +196,7 @@ largest.
 	id="et-perfect-fifth"
 	cents="700.00"
 %}
-{% include ratioscore.html id="et-perfect-fifth" %}
+{% include ratioscore.html id="et-perfect-fifth" erase="false" %}
 
 
 
@@ -202,7 +206,7 @@ largest.
 	ratio="3/2"
 	cents="701.96"
 %}
-{% include ratioscore.html id="just-perfect-fifth" %}
+{% include ratioscore.html id="just-perfect-fifth" erase="false" %}
 
 
 
@@ -212,7 +216,7 @@ largest.
 	ratio="2/1"
 	cents="1200.00"
 %}
-{% include ratioscore.html id="perfect-octave" %}
+{% include ratioscore.html id="perfect-octave" erase="false" %}
 
 
 
