@@ -19,13 +19,14 @@ function loadDefaultSettings() {
 //
 
 function loadCgiSettings() {
-	let plist = getParameterList();
+	let plist = getParameterList(DEFAULTS);
 	let cgi = GetCgiParameters();
 	for (let i=0; i<plist.length; i++) {
+		let key = plist[i];
 		if (typeof cgi[plist[i]] === "undefined") {
 			continue;
 		}
-		SETTINGS[plist[i]] = cgi[plist[i]];
+		SETTINGS[key] = cgi[key];
 	}
 }
 
@@ -74,18 +75,6 @@ function setSelectedIndex(select, value) {
 
 //////////////////////////////
 //
-// getParameterList --
-//
-
-function getParameterList() {
-	let output = Object.getOwnPropertyNames(DEFAULTS);
-	return output;
-}
-
-
-
-//////////////////////////////
-//
 // getParameterValue --
 //
 
@@ -97,40 +86,46 @@ function getParameterValue(parameter) {
 
 //////////////////////////////
 //
-// makeUrl --
+// getParameterList --
 //
 
-function makeUrl() {
-	let url = window.location.href.replace(/\?.*/, "");
-	let plist = getParameterList();
-	let uparams = [];
-	for (let i=0; i<plist.length; i++) {
-		let value = getParameterValue(plist[i]);
-		uparams.push(plist[i] + "=" + encodeURIComponent(value));
+function getParameterList(obj) {
+	if (!obj) {
+		return [];
 	}
-
-	url += "?";
-	for (let i=0; i<uparams.length; i++) {
-		url += uparams[i];
-		if (i < uparams.length - 1) {
-			url += "&";
-		}
-	}
-
-	return url;
+	let output = Object.getOwnPropertyNames(obj);
+	return output;
 }
 
 
 
-//////////////////// 
+//////////////////////////////
 //
-// capitalize --
+// makeUrl --
 //
 
-function capitalize(input) {
-	let first = input.charAt(0).toUpperCase();
-	let last  = input.slice(1);
-	return first + last;
+function makeUrl() {
+	let params = getParameterList(DEFAULTS);
+	let outlist = [];
+	// Store any parameters in SETTINGS that are not the same as DEFAULTS:
+	for (let i=0; i<params.length; i++) {
+		let key = params[i];
+		if (DEFAULTS[key] == SETTINGS[key]) {
+			continue;
+		}
+		let value = SETTINGS[key];
+		let entry = key + "=" + encodeURIComponent(value);
+		outlist.push(entry);
+	}
+
+	let url = window.location.href.replace(/\?.*/, "");
+	if (outlist.length > 0) {
+		url += "?" + outlist[0];
+	}
+	for (let i=1; i<outlist.length; i++) {
+		url += "&" + outlist[i];
+	}
+	return url;
 }
 
 
@@ -267,6 +262,9 @@ function generateScore() {
 
 	let repeats = SETTINGS.repeats;
 	output += printMyank(repeats, parts);
+
+	// print URL to create this polyrhythm score:
+	output += "!!!URL: " + makeUrl() + "\n";
 
 	editor.textContent = output;
 	editor2.textContent = output;
