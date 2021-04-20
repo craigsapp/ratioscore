@@ -186,6 +186,8 @@ function generateScore() {
 		if (!tempoprinted) {
 			output += "*MM" + tempo;
 			tempoprinted = 1;
+		} else {
+			output += "*";
 		}
 		for (let i=0; i<parts.length; i++) {
 			if (parts[i].drum) {
@@ -203,6 +205,8 @@ function generateScore() {
 		if (!tempoprinted) {
 			output += "*MM" + tempo;
 			tempoprinted = 1;
+		} else {
+			output += "*";
 		}
 		for (let i=0; i<parts.length; i++) {
 			if (parts[i].drum) {
