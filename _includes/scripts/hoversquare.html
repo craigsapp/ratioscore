@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			if (!hovering) {
 				return;
 			}
-console.log("HOVERING ON = ", hovering);
 			hovering.classList.add("button-highlight");
 		});
 		elements[i].addEventListener("mouseleave", function (event) {
@@ -19,7 +18,6 @@ console.log("HOVERING ON = ", hovering);
 			if (!hovering) {
 				return;
 			}
-console.log("HOVERING OFF = ", hovering);
 			hovering.classList.remove("button-highlight");
 		});
 	}
@@ -37,7 +35,6 @@ function getHovering(element) {
 		if (element.nodeName === "BODY") {
 			return false;
 		}
-console.log("ELEMENT", element.nodeName, element.classList);
 		if (element.classList.contains("button")) {
 			return element.firstElementChild;
 		}

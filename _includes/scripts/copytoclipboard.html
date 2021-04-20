@@ -4,7 +4,7 @@
 
 //////////////////////////////
 //
-// CopyToClipboard --
+// CopyToClipboard -- 
 //
 
 function CopyToClipboard(string) {
@@ -87,8 +87,29 @@ function CopyScoreToClipboard(id) {
 		CopyToClipboard("");
 		return;
 	}
-	let contents = element.textContent;
+	let selection = GetSelectionText();
+	let contents = selection;
+	if (!contents) {
+		contents = element.textContent;
+	}
 	CopyToClipboard(contents);
+}
+
+
+
+//////////////////////////////
+//
+// GetSelectionText --
+//
+
+function GetSelectionText() {
+	var text = "";
+	if (window.getSelection) {
+		text = window.getSelection().toString();
+	} else if (document.selection && document.selection.type != "Control") {
+		text = document.selection.createRange().text;
+	}
+	return text;
 }
 
 
@@ -111,7 +132,8 @@ function PasteScoreFromClipboard(id) {
 //////////////////////////////
 //
 // ClearEditorContents --  If the editor is already empty, then restore
-//    the previously cleared contents.
+//    the previously cleared contents.  Copy the selected text, or if no
+//    text is selected, then copy all of the text.  
 //
 
 CLEARED_EDITOR_CONTENTS = {};
