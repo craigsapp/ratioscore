@@ -1,0 +1,369 @@
+
+<script>
+// vim: ts=3:ft=javascript
+
+//////////////////////////////
+//
+// loadDefaultSettings --
+//
+
+function loadDefaultSettings() {
+	SETTINGS = JSON.parse(JSON.stringify(DEFAULTS));
+}
+
+
+
+//////////////////////////////
+//
+// loadCgiSettings --
+//
+
+function loadCgiSettings() {
+	let plist = getParameterList();
+	let cgi = GetCgiParameters();
+	for (let i=0; i<plist.length; i++) {
+		if (typeof cgi[plist[i]] === "undefined") {
+			continue;
+		}
+		SETTINGS[plist[i]] = cgi[plist[i]];
+	}
+}
+
+
+
+//////////////////////////////
+//
+// updateInputsFromSettings --
+//
+
+function updateInputsFromSettings() {
+	let inputs = document.querySelectorAll("input");
+	for (let i=0; i<inputs.length; i++) {
+		let id = inputs[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			inputs[i].value = SETTINGS[id];
+		}
+	}
+
+	let selects = document.querySelectorAll("select");
+	for (let i=0; i<selects.length; i++) {
+		let id = selects[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			setSelectedIndex(selects[i], SETTINGS[id]);
+		}
+	}
+}
+
+
+
+////////////////////
+//
+// setSelectedIndex --
+//
+
+function setSelectedIndex(select, value) {
+	for (let i=0; i<select.options.length; i++) {
+		if (select.options[i].value == value) {
+			select.options[i].selected = true;
+			return;
+		}
+	}
+}
+
+
+
+//////////////////////////////
+//
+// getParameterList --
+//
+
+function getParameterList() {
+	let output = Object.getOwnPropertyNames(DEFAULTS);
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// getParameterValue --
+//
+
+function getParameterValue(parameter) {
+	return SETTINGS[parameter];
+}
+
+
+
+//////////////////////////////
+//
+// makeUrl --
+//
+
+function makeUrl() {
+	let url = window.location.href.replace(/\?.*/, "");
+	let plist = getParameterList();
+	let uparams = [];
+	for (let i=0; i<plist.length; i++) {
+		let value = getParameterValue(plist[i]);
+		uparams.push(plist[i] + "=" + encodeURIComponent(value));
+	}
+
+	url += "?";
+	for (let i=0; i<uparams.length; i++) {
+		url += uparams[i];
+		if (i < uparams.length - 1) {
+			url += "&";
+		}
+	}
+
+	return url;
+}
+
+
+
+//////////////////// 
+//
+// capitalize --
+//
+
+function capitalize(input) {
+	let first = input.charAt(0).toUpperCase();
+	let last  = input.slice(1);
+	return first + last;
+}
+
+
+
+//////////////////////////////
+//
+// generateScore --
+//
+
+function generateScore() {
+	updateSettingsFromInput();
+	let editor = document.querySelector("script#inputdata-polyrhythm");
+	let editor2 = document.querySelector("script#polyrhythm");
+	if (!editor) {
+		return;
+	}
+	if (!editor2) {
+		return;
+	}
+	let parts = getParts();
+	if (parts.length == 0) {
+		editor.textContent = "";
+		editor2.textContent = "";
+		return;
+	}
+	console.log("PARTS", parts);
+
+	let tempo = SETTINGS.tempo;
+
+	let output = "";
+	let drumcount = 0;
+	let ratiocount = 0;
+	let tempoprinted = 0;
+
+	// Print exclusive interpretation line:
+	output += "**dtime";
+	for (let i=0; i<parts.length; i++) {
+		output += "\t";
+		if (parts[i].drum) {
+			output += "**drum";
+			drumcount++;
+		} else {
+			ratiocount++;
+			output += "**ratio";
+		}
+	}
+	output += "\n";
+
+	output += printMeasure(0, parts);
+
+	// Print instrument info:
+	if (ratiocount > 0) {
+		if (!tempoprinted) {
+			output += "*MM" + tempo;
+			tempoprinted = 1;
+		}
+		for (let i=0; i<parts.length; i++) {
+			if (parts[i].drum) {
+				output += "\t*";
+			} else {
+				output += "\t*I#" + parts[i].instrument;
+			}
+		}
+		output += "\n";
+	}
+
+
+	// Print reference pitch info:
+	if (ratiocount > 0) {
+		if (!tempoprinted) {
+			output += "*MM" + tempo;
+			tempoprinted = 1;
+		}
+		for (let i=0; i<parts.length; i++) {
+			if (parts[i].drum) {
+				output += "\t*";
+			} else {
+				output += "\t*ref:" + parts[i].ref;
+			}
+		}
+		output += "\n";
+	}
+
+
+	// Print tempo if it is missing:
+	if (!tempoprinted) {
+		tempoprinted = 1;
+		output += "*MM" + tempo;
+		for (let i=0; i<parts.length; i++) {
+			output += "\t*";
+		}
+		output += "\n";
+	}
+
+	output += printMeasure(1, parts);
+
+	// Print data lines:
+	let linecount = 1;
+	for (let i=0; i<parts.length; i++) {
+		linecount *= parts[i].cycles;
+	}
+	linecount++;
+
+
+	for (let i=0; i<linecount; i++) {
+		if (i == linecount - 1) {
+			output += printMeasure(2, parts);
+		}
+		output += "1";
+		for (let j=0; j<parts.length; j++) {
+			output += "\t";
+			if ((i % parts[j].cycles) == 0) {
+				output += parts[j].pitch;
+			} else {
+				output += ".";
+			}
+		}
+		output += "\n";
+	}
+
+	output += printMeasure("=", parts);
+
+
+	// Print termination line:
+	output += "*-";
+	for (let i=0; i<parts.length; i++) {
+		output += "\t*-";
+	}
+	output += "\n";
+
+	let repeats = SETTINGS.repeats;
+	output += printMyank(repeats, parts);
+
+	editor.textContent = output;
+	editor2.textContent = output;
+}
+
+
+//////////////////////////////
+//
+// printMyank --
+//
+
+function printMyank(repeats, parts) {
+	let output = "";
+	output += "!!!filter: myank -m 0";
+	for (let i=0; i<repeats; i++) {
+		output += ",1";
+	}
+	output += ",2";
+	output += "\n";
+	return output;
+}
+
+
+//////////////////////////////
+//
+// printMeasure --
+//
+
+function printMeasure(tag, parts) {
+	let output = "";
+	output += "=" + tag;
+	for (let i=0; i<parts.length; i++) {
+		output += "\t";
+		output += "=" + tag;
+	}
+	output += "\n";
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// getParts --
+//
+
+function getParts() {
+	let output = [];
+	let maxcount = 5;
+	for (let i=0; i<maxcount; i++) {
+		let cycles = SETTINGS["cycle-" + (i+1)];
+		if (cycles <= 0) {
+			continue;
+		}
+		let entry = {};
+		entry.number = i+1;
+		entry.cycles = parseInt(cycles);
+		entry.drum = 0;
+		let instrument = SETTINGS["timbre-" + (i+1)];
+		if (instrument < 0) {
+			entry.drum = 1;
+			entry.pitch = -instrument;
+			entry.instrument = -1;
+		} else {
+			entry.drum = 0;
+			entry.pitch = SETTINGS["pitch-" + (i+1)];
+			entry.instrument = instrument;
+			entry.ref = SETTINGS["ref-" + (i+1)];
+		}
+		output.push(entry);
+	}
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// updateSettingsFromInput --
+//
+
+function updateSettingsFromInput() {
+	let inputs = document.querySelectorAll("input");
+	for (let i=0; i<inputs.length; i++) {
+		let id = inputs[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			SETTINGS[id] = inputs[i].value;
+		}
+	}
+
+	let selects = document.querySelectorAll("select");
+	for (let i=0; i<selects.length; i++) {
+		let id = selects[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			SETTINGS[id] = selects[i].value;
+		}
+	}
+}
+
+
+</script>
+
+
+
