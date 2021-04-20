@@ -117,6 +117,9 @@ function makeUrl() {
 		let entry = key + "=" + encodeURIComponent(value);
 		outlist.push(entry);
 	}
+	if (outlist.length == 0) {
+		return "";
+	}
 
 	let url = window.location.href.replace(/\?.*/, "");
 	if (outlist.length > 0) {
@@ -264,7 +267,10 @@ function generateScore() {
 	output += printMyank(repeats, parts);
 
 	// print URL to create this polyrhythm score:
-	output += "!!!URL: " + makeUrl() + "\n";
+	let url = makeURL();
+	if (url !== "") {
+		output += "!!!URL: " + makeUrl() + "\n";
+	}
 
 	editor.textContent = output;
 	editor2.textContent = output;
