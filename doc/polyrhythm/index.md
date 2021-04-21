@@ -101,7 +101,7 @@ vim: ts=3:ft=html
 <nobr><label for="tempo">Tempo: </label><input id="tempo" size="3" value="60"></nobr> <nobr><label for="repeats">Cycle repetitions: </label><input id="repeats" size="3" value="10"></nobr>
 
 
-{% include ratioscore.html id="polyrhythm" height="600px" %}
+{% include ratioscore.html id="polyrhythm" height="600px" erase="false" %}
 <script type="application/x-ratioscore" id="polyrhythm">
 </script>
 

@@ -231,7 +231,16 @@ function generateScore() {
 	// Print data lines:
 	let linecount = 1;
 	for (let i=0; i<parts.length; i++) {
-		linecount *= parts[i].cycles;
+		let found = 0;
+		for (let j=i+1; j<parts.length; j++) {
+			if (parts[i].cycles == parts[j].cycles) {
+				found = 1;
+				break;
+			}
+		}
+		if (!found) {
+			linecount *= parts[i].cycles;
+		}
 	}
 	linecount++;
 
@@ -284,9 +293,7 @@ function generateScore() {
 function printMyank(repeats, parts) {
 	let output = "";
 	output += "!!!filter: myank -m 0";
-	for (let i=0; i<repeats; i++) {
-		output += ",1";
-	}
+	output += ",1*" + repeats;
 	output += ",2";
 	output += "\n";
 	return output;

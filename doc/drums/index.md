@@ -47,7 +47,7 @@ Unlike ratios, drum tracks can contain multiple notes at one time:
 <script type="application/x-ratioscore" id="dununba">
 !!!OTL@@MKU: Dununba
 !!!OTL@EN: The dance of the strong men
-!!!filter: myank -m 0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1
+!!!filter: myank -m 0,1*24
 **recip	**drum	**drum	**drum	**drum	**drum	**drum
 =0	=0	=0	=0	=0	=0	=0
 !	!bell	!djembe	!djembe	!djembe	!dundun	!clave
@@ -204,6 +204,7 @@ Polyrhythm example:
 *-	*-	*-
 </script>
 
+See the <a href="/doc/polyrhythm">Polyrhythm generator</a> page.
 
 Drum and ratio tracks may occur in the same score and can
 be interleaved in any order.
