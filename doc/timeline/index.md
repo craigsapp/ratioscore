@@ -16,6 +16,7 @@ score, with possibilities being:
 | `**ms`         | Absolute time in milliseconds seconds.       |
 | `**dms`        | Delta time in milliseconds seconds.          |
 | `**recip`      | Musical time in divisions of a whole note.   |
+| *none*         | No timeline: treat each data line as 1 second long.   |
 
 
 
@@ -146,7 +147,7 @@ quintuplet sixteenth note.
 
 {% include ratioscore.html id="recip" %}
 <script type="application/x-ratioscore" id="recip">
-**ms	**ratio	**ratio	**ratio
+**recip	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
 16	1	.	.
@@ -164,6 +165,33 @@ quintuplet sixteenth note.
 *-	*-	*-	*-
 </script>
 
+<h2> Implicit timeline </h2>
+
+If there is no timeline in the score, then an implicit `**dtime` is used, with each
+data line in the score played for one second (plus any tempo changes).  Tempo changes
+can be given in any `**ratio` or `**drum` spine.
+
+{% include ratioscore.html id="implicit" %}
+<script type="application/x-ratioscore" id="implicit">
+**ratio	**ratio	**ratio
+*Ikoto	*Ikoto	*Ikoto
+*ref:C3	*ref:C4	*ref:C5
+*MM240	*	*
+1	.	.
+.	1	.
+.	.	1
+2	.	.
+.	2	.
+.	.	2
+*MM150	*	*
+3	.	.
+.	3	.
+.	.	3
+0	.	.
+.	0	.
+.	.	0
+*-	*-	*-
+</script>
 
 
 <h2> Tempo changes </h2>
