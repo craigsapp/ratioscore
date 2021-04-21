@@ -221,7 +221,7 @@ function generateScore() {
 		tempoprinted = 1;
 		output += "*MM" + tempo;
 		for (let i=0; i<parts.length; i++) {
-			output += "\t*";
+			output += "\t*" + parts[i].cycles;
 		}
 		output += "\n";
 	}
@@ -333,7 +333,11 @@ function getParts() {
 		}
 		let entry = {};
 		entry.number = i+1;
-		entry.cycles = parseInt(cycles);
+		if (cycles.match(/^\s*\d/)) {
+			entry.cycles = parseInt(cycles);
+		} else {
+			entry.cycles = 1;
+		}
 		entry.drum = 0;
 		let instrument = SETTINGS["timbre-" + (i+1)];
 		if (instrument < 0) {

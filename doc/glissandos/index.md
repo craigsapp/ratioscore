@@ -84,5 +84,16 @@ to 1/5 and 1/10 of a second respectivly for the last two glissandos.
 </script>
 
 
+<h2> Other examples </h2>
+
+{% include ratioscore.html id="triad" %}
+<script type="application/x-ratioscore" id="triad">
+**dtime	**ratio	**ratio	**ratio
+*	*I#71	*I#71	*I#71
+*	*ref:C4	*ref:C4	*ref:C4
+9	1H	1H	1H
+1	3/2_h	5/4_h	2_h
+*-	*-	*-	*-
+</script>
 
 

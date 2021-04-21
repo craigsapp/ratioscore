@@ -13,7 +13,6 @@ vim: ts=8:ft=html
 **dtime	**ratio	**cents	**swara
 *MM120	*Iclars	*Iclars	*
 *	*ref:D3	*ref:D3	*
-1	.	.	.
 1	1/1	0.0c	Sa
 1	25/24	70.7c	.
 1	21/20	84.5c	.
@@ -60,7 +59,6 @@ vim: ts=8:ft=html
 **dtime	**ratio	**cents	**freq	**pitch	**swara	**name
 *	*Iclars	*Iclars	*Iclars	*	*	*
 *	*ref:C4	*ref:C4	*ref:C4	*	*	*
-1	.	.	.	.	.	.
 1	1	0c	261.6256z	C	Sa	Chandovatī
 1	256/243	90c	275.6220z	D-flat	ri1	Dayāvatī
 1	16/15	112c	279.0673z	D-flat	ri2	Ranjanī
@@ -96,7 +94,6 @@ vim: ts=8:ft=html
 **recip	**ratio
 *MM144	*I#104
 *	*ref:C4
-16	.
 4	S
 4	R1
 4	m1
@@ -137,7 +134,6 @@ vim: ts=8:ft=html
 **recip	**ratio
 *MM144	*I#104
 *	*ref:C4
-16	.
 4	S
 4	R1
 4	g1
@@ -177,7 +173,6 @@ vim: ts=8:ft=html
 **recip	**ratio
 *MM144	*I#104
 *	*ref:C4
-16	.
 4	S
 4	R1
 4	g1
@@ -219,7 +214,6 @@ vim: ts=8:ft=html
 **recip	**ratio
 *MM144	*I#104
 *	*ref:C4
-16	.
 4	S
 4	g1
 4	m1
@@ -259,7 +253,6 @@ vim: ts=8:ft=html
 **recip	**ratio
 *MM144	*I#104
 *	*ref:C4
-16	.
 4	S
 4	R2
 4	G1
@@ -302,7 +295,6 @@ vim: ts=8:ft=html
 **recip	**ratio
 *MM144	*I#104
 *	*ref:C4
-16	.
 4	S
 4	r2
 4	G1
@@ -344,7 +336,6 @@ vim: ts=8:ft=html
 **recip	**ratio
 *MM144	*I#104
 *	*ref:C4
-16	.
 4	S
 4	r1
 4	G1
@@ -386,7 +377,6 @@ vim: ts=8:ft=html
 **recip	**ratio
 *MM144	*I#104
 *	*ref:C4
-16	.
 4	S
 4	g1
 4	m1
@@ -425,7 +415,6 @@ vim: ts=8:ft=html
 **recip	**ratio
 *MM144	*I#104
 *	*ref:C4
-16	.
 4	S
 4	R2
 4	g1
@@ -467,7 +456,6 @@ vim: ts=8:ft=html
 **recip	**ratio
 *MM144	*I#104
 *	*ref:C4
-16	.
 4	S
 4	r1
 4	G1
@@ -507,7 +495,6 @@ vim: ts=8:ft=html
 **recip	**ratio
 *MM144	*I#104
 *	*ref:C4
-16	.
 4	S
 4	r1
 4	g1
