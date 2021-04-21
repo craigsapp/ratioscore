@@ -104,7 +104,6 @@ The `**ms` spine is similar to `**time`, but the units are milliseconds
 7250	.	.	0
 *-	*-	*-	*-
 </script>
-[Note: needs to be implemented]
 
 
 
@@ -115,7 +114,7 @@ milliseconds.
 
 {% include ratioscore.html id="dms" %}
 <script type="application/x-ratioscore" id="dms">
-**ms	**ratio	**ratio	**ratio
+**dms	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
 250	1	.	.
@@ -132,8 +131,6 @@ milliseconds.
 1000	.	.	0
 *-	*-	*-	*-
 </script>
-[Note: needs to be implemented]
-
 
 
 <h2> **recip </h2>

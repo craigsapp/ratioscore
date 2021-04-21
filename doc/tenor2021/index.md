@@ -5,16 +5,10 @@ layout: default
 vim: ts=8:ft=html
 ---
 
-<style>
+{% include_relative styles-local.html %}
 
-img {
-
-	width:700px;
-	background: white;
-	padding: 50px;
-}
-
-</style>
+This page gives live examples from the <a target="_blank"
+href="TENOR-2021.pdf">TENOR 2021</a> paper about Ratioscores.
 
 <h2> Figure 1 </h2>
 
@@ -138,12 +132,12 @@ Listening to only the clarinet part:
 
 <h2> Figure 4 </h2>
 
-(Sounds the same as figure 3)
+Sounds the same as figure 3 but uses delta timings rather than absoute time.
 
 {% include ratioscore.html id="figure4" tabsize="12" %}
 <script type="application/x-ratioscore" id="figure4">
 !!!OTL: Figure 4
-**time	**ratio	**ratio	**ratio	**ratio
+**dtime	**ratio	**ratio	**ratio	**ratio
 *MM120	*Ivioln	*Ivioln	*Iviola	*Icello
 *M4/4	*ref:G3+2c	*ref:D4+4c	*ref:C3	*ref:C2
 1	1	.	.	6/5
@@ -172,6 +166,10 @@ Listening to only the clarinet part:
 
 <h2> Figure 5 </h2>
 
+Time described using musical rhythms (4:quarter note, 8:eighth note,
+16:sixteenth note).  Also note the tempo change from quarter note
+at 60 bpm to 44 bpm.
+
 {% include ratioscore.html id="figure5" %}
 <script type="application/x-ratioscore" id="figure5">
 !!!OTL: Figure 5
@@ -192,6 +190,12 @@ Listening to only the clarinet part:
 
 
 <h2> Figure 6 </h2>
+
+Demonstration of glissandos.  The starting note of a glissando is
+marked with the letter `H` and the ending note with `h`.  Notes in
+the glissando will be rearticulated unless an underscore (`_`) is
+added to a note in the glissando.
+
 
 <img src="figure6.png">
 
@@ -218,5 +222,26 @@ Listening to only the clarinet part:
 13	0	0
 *-	*-	*-
 </script>
+
+
+<h2> Figure 7 </h2>
+
+{% include ratioscore.html id="figure7" %}
+<script type="application/x-ratioscore" id="figure7">
+!!!OTL: Figure 7
+**time	**ratio	**vel
+*	*Ivioln	*pp:10
+*	*ref:C3	*
+0	1	p
+1	3	<
+2	11/4	.
+2.25	5/2	.
+2.5	0	f >
+3	7	.
+3.5	4/3	.
+4	0	pp
+*-	*-	*-
+</script>
+
 
 

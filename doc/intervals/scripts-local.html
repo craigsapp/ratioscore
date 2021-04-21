@@ -110,6 +110,9 @@ function changeReferencePitch(event) {
 
 function changeInstrument(event) {
 	var instrument = event.target.value;
+	if (instrument.match(/^[0-9]/)) {
+		instrument = "#" + instrument;
+	}
 	var databoxes = document.querySelectorAll("script.databox");
 	for (let i=0; i<databoxes.length; i++) {
 		let text = databoxes[i].textContent;

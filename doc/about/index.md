@@ -100,11 +100,48 @@ The Ratioscore was first converted into MIDI and then loaded into
 Sibelius to quantize the note durations into musical rhythms.
 
 
+<h2> Conference </h2>
+
+Ratioscores will be presented at <a href="/doc/tenor2021">TENOR 2021</a>.
+
+
 <h2> Software </h2>
 
 Ratioscores on this website are converted into MIDI files with <a
 target="_blank" href="https://github.com/craigsapp/ratioscore">this
 software</a>.  After converting to MIDI, MP3s are generated for this
 website using timidity.
+
+<h2> Website </h2>
+
+This website is hosted on Github and uses Jekyll for page templating.
+<a target="_blank"
+href="https://github.com/craigsapp/ratioscore/tree/gh-pages">Here</a> are
+the source files for the website.
+
+The Ratioscore to MIDI/MP3 conversion occurs on the server side
+using this <a target="_blank"
+href="https://github.com/craigsapp/ratioscore/blob/gh-pages/_includes/cgi/ratioscore.pl">CGI
+script</a>.
+
+In the CGI script, the command `ratioscore -r` converts a Ratioscore
+into a MIDI file, with the `-r` option outputting the MIDI file to standard 
+output (so that the CGI script does not need to store any intermediate files).
+
+To convert to MIDI, the command is: `ratioscore -r -x630 | timidity - -m60000 --preserve-silence -Ow -o - | lame - -b64 -`.  This command
+first converts a Ratioscore to MID, then converts the MIDI into a
+WAVE audio file, then the WAVE file is converted into an MP3. Options:
+
+* `ratioscore -r` print MIDI file to standard output
+* `timidity -m60000` =
+* `timidity --preserve-silence` = keep starting silence in the MIDI file.
+* `timidity -Ow` = output as WAVE file.
+* `timidity -o -` = output WAVE file to standard output.
+* `lame -b64` =
+
+
+
+
+
 
 
