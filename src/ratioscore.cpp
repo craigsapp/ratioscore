@@ -50,9 +50,11 @@ bool    convertFile       (MidiFile& outfile, HumdrumFile& infile);
 void    generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile);
 void    generateDrumTrack (MidiFile& outfile, int track, HTp pstart, HTp dstart, HumdrumFile& infile);
 void    buildTimemap      (HTp sstart, HumdrumFile& infile);
+void    buildNullTimemap  (HumdrumFile& infile);
 double  getMidiNoteNumber (string refpitch);
 int     getEndTime        (HTp stok);
 void    addTempoMessages  (MidiFile& outfile, HTp sstart);
+void    addTempoMessagesNull(MidiFile& outfile, HumdrumFile& infile);
 void    addGlissando      (MidiFile& outfile, int track, HTp current, double spitch, double reference, int channel);
 double  getPitchAsMidi    (HTp token, double reference);
 double  getPitchBend      (double pitch, int channel);
@@ -65,6 +67,7 @@ void    getTimeData       (HTp sstart, vector<double>& numbers,
 void    prepareTimelineRecip(vector<double>& timeline, HTp sstart, int lines);
 void    prepareTimelineDtime(vector<double>& timeline, HTp sstart, int lines);
 void    prepareTimelineTime(vector<double>& timeline, HTp sstart, int lines);
+void    prepareTimelineNull(vector<double>& timeline, HumdrumFile& infile);
 double  getTimeNumber     (HTp token);
 void    addSecondsSpine   (ostream& out, HumdrumFile& infile);
 double  getReferencePitchAsMidi(const string& token);
@@ -75,6 +78,7 @@ HTp     getVelToken       (HTp current);
 vector<int> getDrumsAsMidi(HTp current);
 void    getSubstitutions  (HumdrumFile& infile);
 string  applyRatioSubstitutions(const string& input);
+void    fillCurrentTempoNull(HumdrumFile& infile);
 
 
 // variables:
@@ -268,7 +272,7 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	}
 	if (!m_hasTime) {
 		// need a timing spine
-		return false;
+		// return false;
 	}
 
 	m_ratioStarts.resize(0);
@@ -358,7 +362,11 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 		generateDrumTrack(outfile, ratiotracks+i+1, m_drumStarts[i], m_velStartsDrum[i], infile);
 	}
 
-	addTempoMessages(outfile, timespine);
+	if (timespine) {
+		addTempoMessages(outfile, timespine);
+	} else {
+		addTempoMessagesNull(outfile, infile);
+	}
 
 	outfile.markSequence();
 	outfile.sortTracks();
@@ -376,7 +384,7 @@ void getSubstitutions(HumdrumFile& infile) {
 	m_ratioSubs.clear();
 	HumRegex hre;
 	for (int i=0; i<infile.getLineCount(); i++) {
-		if (infile[i].hasSpines()) {	
+		if (infile[i].hasSpines()) {
 			continue;
 		}
 		HTp token = infile.token(i, 0);
@@ -390,6 +398,38 @@ void getSubstitutions(HumdrumFile& infile) {
 }
 
 
+//////////////////////////////
+//
+// fillCurrentTempoNull -- If there is no timeline, then read tempo markings
+//     from any (and all) **ratio and **drum spines instead.
+//
+
+void fillCurrentTempoNull(HumdrumFile& infile) {
+	int lines = infile.getLineCount();
+	m_currTempo.resize(lines);
+	fill(m_currTempo.begin(), m_currTempo.end(), 60.0);
+
+	HumRegex hre;
+	double tempo = 60.0;
+	for (int i=0; i<lines; i++) {
+		if (!infile[i].isInterpretation()) {
+			m_currTempo[i] = tempo;
+			continue;
+		}
+		for (int j=0; j<infile[i].getFieldCount(); j++) {
+			HTp token = infile.token(i, j);
+			if (hre.search(token, "^\\*MM(\\d+\\.?\\d*)")) {
+				tempo = hre.getMatchDouble(1);
+			}
+		}
+		if (tempo <= 0.0) {
+			tempo = 60.0;
+		}
+		m_currTempo.at(i) = tempo;
+	}
+}
+
+
 
 //////////////////////////////
 //
@@ -400,15 +440,19 @@ void getSubstitutions(HumdrumFile& infile) {
 //
 
 void fillCurrentTempo(HumdrumFile& infile, HTp timespine) {
+	if (!timespine) {
+		fillCurrentTempoNull(infile);
+		return;
+	}
 	m_currTempo.resize(infile.getLineCount());
 	fill(m_currTempo.begin(), m_currTempo.end(), 60.0);
 	HTp current = timespine->getNextToken();
 	HumRegex hre;
 	double tempo = 60.0;
 	while (current) {
-		if (hre.search(current, "^\\*MM(\\d+\\.\\d*)")) {
+		if (hre.search(current, "^\\*MM(\\d+\\.?\\d*)")) {
 			tempo = hre.getMatchDouble(1);
-		} else if (hre.search(current, "^\\*MM(\\d*\\.\\d+)")) {
+		} else if (hre.search(current, "^\\*MM(\\d*\\.?\\d+)")) {
 			tempo = hre.getMatchDouble(1);
 		}
 		if (tempo <= 0.0) {
@@ -417,6 +461,44 @@ void fillCurrentTempo(HumdrumFile& infile, HTp timespine) {
 		int lindex = current->getLineIndex();
 		m_currTempo.at(lindex) = tempo;
 		current = current->getNextToken();
+	}
+}
+
+
+
+//////////////////////////////
+//
+// addTempoMessagesNull -- Check spines for tempo changes.
+//
+
+void addTempoMessagesNull(MidiFile& outfile, HumdrumFile& infile) {
+	HumRegex hre;
+
+	int lines = infile.getLineCount();
+	for (int i=0; i<lines; i++) {
+		if (!infile[i].isInterpretation()) {
+			continue;
+		}
+		for (int j=0; j<infile[i].getFieldCount(); j++) {
+			HTp token = infile.token(i, j);
+			if (hre.search(token, "^\\*MM(\\d+\\.?\\d*)$")) {
+				double tempo = hre.getMatchDouble(1);
+				int starttime = m_timemap[i] + m_pad;
+				if (m_first_tempo_time >= 0) {
+					if (starttime < m_first_tempo_time) {
+						m_first_tempo_time = starttime;
+					}
+				} else {
+					m_first_tempo_time = starttime;
+				}
+				outfile.addTempo(0, starttime, tempo);
+			}
+		}
+	}
+
+	if (m_first_tempo_time != 0) {
+		// set the default tempo to 60 bpm:
+		outfile.addTempo(0, 0, 60.0);
 	}
 }
 
@@ -457,6 +539,83 @@ void addTempoMessages(MidiFile& outfile, HTp sstart) {
 }
 
 
+//////////////////////////////
+//
+// buildNullTimemap -- Convert an implicit time spine into
+//   millisecond values, interpolating evenly when the
+//   data contains a null.
+//
+
+void buildNullTimemap(HumdrumFile& infile) {
+
+	int lines = infile.getLineCount();
+	m_timemap.clear();
+	m_timemap.resize(lines);
+	fill(m_timemap.begin(), m_timemap.end(), -2);
+
+	vector<int*> tdata;
+	tdata.reserve(m_timemap.size());
+
+	bool dtime = true;
+	bool delta = true;
+	double lasttime = 0.0;
+
+	for (int i=0; i<lines; i++) {
+		if (!infile[i].isData()) {
+			continue;
+		}
+		int line = i;
+		tdata.push_back(&m_timemap.at(line));
+		m_timemap[line] = int(1.0 * 1000.0 + 0.5);
+		if (delta) {
+			m_lastDuration = m_timemap[line];
+			int tempval = m_timemap[line] += lasttime;
+			m_timemap[line] = lasttime;
+			lasttime = tempval;
+		}
+	}
+
+	if (tdata.empty()) {
+		// no time data
+		return;
+	}
+
+	// set initial part of score to zero:
+	for (int i=0; i<(int)m_timemap.size(); i++) {
+		if (m_timemap[i] < 0) {
+			m_timemap[i] = 0;
+		} else {
+			break;
+		}
+	}
+
+	// interpolate null tokens as evenly spaced data
+	int lastone = 0;
+	int nextone = 0;
+	int counter = 0;
+	for (int i=1; i<(int)tdata.size(); i++) {
+		if (*tdata[i] == -1) {
+			counter++;
+			if (*tdata[i-1] > -1) {
+				lastone = *tdata[i-1];
+			}
+		} else if (counter > 0) {
+			nextone = *tdata[i];
+			double increment = (nextone - lastone) / (double)(counter + 1);
+			for (int j=0; j<counter; j++) {
+				*tdata[i-counter+j] = int((lastone + increment * (j + 1)) * 1000.0 + 0.5);
+			}
+		}
+	}
+
+	// fill in timings for nondata:
+	for (int i=1; i<(int)m_timemap.size(); i++) {
+		if (m_timemap[i] < 0) {
+			m_timemap[i] = m_timemap[i-1];
+		}
+	}
+}
+
 
 //////////////////////////////
 //
@@ -465,6 +624,11 @@ void addTempoMessages(MidiFile& outfile, HTp sstart) {
 //
 
 void buildTimemap(HTp sstart, HumdrumFile& infile) {
+	if (!sstart) {
+		buildNullTimemap(infile);
+		return;
+	}
+
 	m_timemap.clear();
 	m_timemap.resize(infile.getLineCount());
 
@@ -562,7 +726,7 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 		}
 	}
 
-	// fill in timgs for nondata:
+	// fill in timings for nondata:
 	for (int i=1; i<(int)m_timemap.size(); i++) {
 		if (m_timemap[i] < 0) {
 			m_timemap[i] = m_timemap[i-1];
@@ -1449,6 +1613,9 @@ void prepareTimeline(HumdrumFile& infile) {
 	HTp timespine = NULL;
 	infile.getSpineStartList(starts);
 	for (int i=0; i<(int)starts.size(); i++) {
+		if (!starts[i]) {
+			continue;
+		}
 		if (*starts[i] == "**time") {
 			timespine = starts[i];
 			break;
@@ -1461,12 +1628,25 @@ void prepareTimeline(HumdrumFile& infile) {
 		}
 	}
 
-	if (*timespine == "**time") {
+	if (!timespine) {
+		prepareTimelineNull(m_timeline, infile);
+	} else if (*timespine == "**time") {
 		prepareTimelineTime(m_timeline, timespine, infile.getLineCount());
 	} else if (*timespine == "**dtime") {
 		prepareTimelineDtime(m_timeline, timespine, infile.getLineCount());
 	} else if (*timespine == "**recip") {
 		prepareTimelineRecip(m_timeline, timespine, infile.getLineCount());
+	} else {
+		prepareTimelineNull(m_timeline, infile);
+	}
+
+	if (m_debugQ) {
+		cerr << "CALCULATED TIMELINE (seconds):" << endl;
+		for (int i=0; i<(int)m_timeline.size(); i++) {
+			cerr << i << "\t" << m_timeline.at(i) << endl;
+		}
+		cerr << "===========================" << endl;
+		cerr << endl;
 	}
 }
 
@@ -1502,6 +1682,67 @@ void prepareTimelineTime(vector<double>& timeline, HTp sstart, int lines) {
 			m_timeline[i] = curtime;
 			lasttime = curtime;
 			lastvalue = value;
+		}
+	}
+}
+
+
+//////////////////////////////
+//
+// prepareTimelineNull -- pretend a **dtime spine with all values "1".
+//
+
+void prepareTimelineNull(vector<double>& timeline, HumdrumFile& infile) {
+	int lines = infile.getLineCount();
+	vector<double> numbers(lines);
+	vector<double> tempos(lines);
+	m_timeline.resize(lines);
+	fill(m_timeline.begin(), m_timeline.end(), -1);
+
+	HumRegex hre;
+	for (int i=0; i<lines; i++) {
+		if (infile[i].isInterpretation()) {
+			double atempo = 0.0;
+			for (int j=0; j<infile[i].getFieldCount(); j++) {
+				HTp token = infile.token(i, j);
+				if (hre.search(token, "^\\*MM(\\d+\\.?\\d*)")) {
+				}
+			}
+			if (atempo > 0.0) {
+				tempos[i] = atempo;
+			}
+		}
+		if (infile[i].isData()) {
+			numbers[i] = 1;
+		} else {
+			numbers[i] = 0;
+		}
+	}
+
+	double lastvalue = 0.0;
+	double value;
+	double lasttime = 0.0;
+	double curtime = 0.0;
+	double deltavalue;
+	double deltatime;
+	double tempo = 60;
+	double nexttempo = -1;
+	for (int i=0; i<(int)m_timeline.size(); i++) {
+		if (numbers[i] >= 0) {
+			value = numbers[i];
+			deltavalue = lastvalue;
+			deltatime = deltavalue * 60.0 / tempo;
+			curtime = lasttime + deltatime;
+			m_timeline[i] = curtime;
+			lasttime = curtime;
+			lastvalue = value;
+			if (nexttempo > 0.0) {
+				tempo = nexttempo;
+				nexttempo = -1;
+			}
+		}
+		if (tempos[i] > 0.0) {
+			nexttempo = tempos[i];
 		}
 	}
 }
