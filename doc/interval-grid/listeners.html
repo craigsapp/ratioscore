@@ -1,0 +1,45 @@
+
+<script>
+// vim: ts=3
+
+
+let DEFAULTS = {
+	"rows": 10,
+	"columns": 10,
+	"reference": "C4",
+	"instrument": 71,
+	"duration": 2,
+	"reduce": 0,
+};
+
+let SETTINGS = {};
+
+
+document.addEventListener("DOMContentLoaded", function () {
+	loadDefaultSettings();
+	loadCgiSettings();
+
+	let inputs = document.querySelectorAll("input");
+	for (let i=0; i<inputs.length; i++) {
+		if (inputs[i].type === "checkbox") {
+			inputs[i].addEventListener("click", generateGrid);
+		} else {
+			inputs[i].addEventListener("keyup", generateGrid);
+		}
+	}
+
+	let selects = document.querySelectorAll("select");
+	for (let i=0; i<selects.length; i++) {
+		selects[i].addEventListener("change", generateGrid);
+	}
+
+	updateInputsFromSettings();
+	generateGrid();
+});
+
+
+
+</script>
+
+
+

@@ -1,0 +1,325 @@
+
+<script>
+// vim: ts=3:ft=javascript
+
+{% include_relative RationalNumber-base.js %}
+{% include_relative RationalNumber-math.js %}
+
+
+
+//////////////////////////////
+//
+// loadDefaultSettings --
+//
+
+function loadDefaultSettings() {
+	SETTINGS = JSON.parse(JSON.stringify(DEFAULTS));
+}
+
+
+
+//////////////////////////////
+//
+// loadCgiSettings --
+//
+
+function loadCgiSettings() {
+	let plist = getParameterList(DEFAULTS);
+	let cgi = GetCgiParameters();
+	for (let i=0; i<plist.length; i++) {
+		let key = plist[i];
+		if (typeof cgi[plist[i]] === "undefined") {
+			continue;
+		}
+		SETTINGS[key] = cgi[key];
+	}
+}
+
+
+
+//////////////////////////////
+//
+// updateInputsFromSettings --
+//
+
+function updateInputsFromSettings() {
+	let inputs = document.querySelectorAll("input");
+	for (let i=0; i<inputs.length; i++) {
+		let id = inputs[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			inputs[i].value = SETTINGS[id];
+		}
+	}
+
+	let selects = document.querySelectorAll("select");
+	for (let i=0; i<selects.length; i++) {
+		let id = selects[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			setSelectedIndex(selects[i], SETTINGS[id]);
+		}
+	}
+}
+
+
+
+////////////////////
+//
+// setSelectedIndex --
+//
+
+function setSelectedIndex(select, value) {
+	for (let i=0; i<select.options.length; i++) {
+		if (select.options[i].value == value) {
+			select.options[i].selected = true;
+			return;
+		}
+	}
+}
+
+
+
+//////////////////////////////
+//
+// getParameterValue --
+//
+
+function getParameterValue(parameter) {
+	return SETTINGS[parameter];
+}
+
+
+
+//////////////////////////////
+//
+// getParameterList --
+//
+
+function getParameterList(obj) {
+	if (!obj) {
+		return [];
+	}
+	let output = Object.getOwnPropertyNames(obj);
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// makeUrl --
+//
+
+function makeUrl() {
+	let params = getParameterList(DEFAULTS);
+	let outlist = [];
+	// Store any parameters in SETTINGS that are not the same as DEFAULTS:
+	for (let i=0; i<params.length; i++) {
+		let key = params[i];
+		if (DEFAULTS[key] == SETTINGS[key]) {
+			continue;
+		}
+		let value = SETTINGS[key];
+		let entry = key + "=" + encodeURIComponent(value);
+		outlist.push(entry);
+	}
+	if (outlist.length == 0) {
+		return "";
+	}
+
+	let url = window.location.href.replace(/\?.*/, "");
+	if (outlist.length > 0) {
+		url += "?" + outlist[0];
+	}
+	for (let i=1; i<outlist.length; i++) {
+		url += "&" + outlist[i];
+	}
+	return url;
+}
+
+
+
+//////////////////////////////
+//
+// generateGrid --
+//
+
+function generateGrid() {
+	updateSettingsFromInput();
+	let target = document.querySelector("#grid");
+	if (!target) {
+		return;
+	}
+
+	let rows = SETTINGS.rows;
+	let columns = SETTINGS.columns;
+
+	let output = "";
+	output += "<table>";
+	for (let r=1; r<=rows; r++) {
+		output += "<tr>";
+		for (let c=1; c<=columns; c++) {
+			output += "<td onclick='playInterval(event);'>";
+			output += getInterval(c, r, SETTINGS.reduce);
+			output += "</td>";
+		}
+		output += "</tr>";
+	}
+	output += "</table>";
+
+	grid.innerHTML = output;
+}
+
+
+
+//////////////////////////////
+//
+// playInterval --
+//
+
+function playInterval(event) {
+	let target = event.target;
+	let interval = target.textContent;
+	console.log("PLAYING INTERVAL", interval);
+	let ratioscore = createRatioscore(interval);
+console.log("RATIOSCORE", ratioscore);
+	let formdata = new FormData();
+	formdata.append("inputdata", ratioscore);
+	formdata.append("outputformat", "mp3");
+
+	let request = new XMLHttpRequest();
+	request.open("POST", "https://data.ratioscore.humdrum.org");
+	request.responseType = "blob";
+	request.onload = function () {
+		console.log("RECEIVING AUDIO");
+		let myblob = this.response;
+		let audiourl = window.URL.createObjectURL(myblob);
+		console.log("AUDIOURL", audiourl);
+
+		console.log("STORING AUDIO");
+		AUDIOratioscore = ratioscore;
+		AUDIOurl = audiourl;
+		playMp3();
+
+	};
+	request.send(formdata);
+}
+
+
+
+//////////////////////////////
+//
+// createRatioscore --
+//
+
+function createRatioscore(interval) {
+	let reference = "*ref:" + SETTINGS.reference;
+	let instrument = SETTINGS.instrument;
+	if (instrument.match(/^\d/)) {
+		instrument = "*I#" + instrument;
+	} else {
+		instrument = "*I" + instrument;
+	}
+	let output = "";
+	output += "**dtime\t**ratio\t**ratio\n";
+	output += "*MM60\t" + instrument + "\t" + instrument + "\n";
+	output += "*\t" + reference + "\t" + reference + "\n";
+	output += "1\t" + interval + "\t" + 1 + "\n";
+	output += "*-\t*-\t*-\n";
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// getInterval --
+//
+
+function getInterval(top, bot, reduce) {
+	if (reduce) {
+		let value = new RationalNumber(top, bot);
+		return value.toString();
+	} else {
+		return top + "/" + bot;
+	}
+}
+
+
+
+//////////////////////////////
+//
+// updateSettingsFromInput --
+//
+
+function updateSettingsFromInput() {
+	let inputs = document.querySelectorAll("input");
+	for (let i=0; i<inputs.length; i++) {
+		let id = inputs[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			if (inputs[i].type === "checkbox") {
+				if (inputs[i].checked) {
+					SETTINGS[id] = 1;
+				} else {
+					SETTINGS[id] = 0;
+				}
+			} else {
+				SETTINGS[id] = inputs[i].value;
+			}
+		}
+	}
+
+	let selects = document.querySelectorAll("select");
+	for (let i=0; i<selects.length; i++) {
+		let id = selects[i].id;
+		if (typeof SETTINGS[id] !== "undefined") {
+			SETTINGS[id] = selects[i].value;
+		}
+	}
+}
+
+
+//////////////////////////////
+//
+// playAudioUrl --
+//
+
+function playMp3() {
+	if (!AUDIO) {
+	   AUDIO = document.getElementById('audio');
+  	}
+	if (!AUDIO) {
+		AUDIO = document.createElement("AUDIO");
+		AUDIO.id = "audio";
+		document.body.appendChild(AUDIO);
+	}
+   if (!AUDIO) {
+		console.log('Error: could not set up audio interface\n');
+		return false;
+   }
+
+	//AUDIO.setAttribute('controls', 'controls');
+	//AUDIO.style.position = 'fixed';
+	//AUDIO.style.bottom = '0';
+	//AUDIO.style.right = '0';
+	//AUDIO.style.zIndex = '1';
+	// AUDIO.onpause = function () { }
+
+	AUDIO.style.display = "none";
+
+	var source = AUDIO.querySelector("source");
+	if (!source) {
+		source = document.createElement("SOURCE");
+		AUDIO.appendChild(source);
+	}
+	source.src = AUDIOurl;
+	AUDIO.load();
+	AUDIO.currentTime = 0;
+	AUDIO.play();
+}
+
+
+
+</script>
+
+
+

@@ -77,7 +77,6 @@ function saveRatioscoreRendering(event, id, format) {
 	request.onload = function () {
 		document.body.classList.remove("waiting");
 		let myblob = this.response;
-
 		let url = window.URL.createObjectURL(myblob);
 
 		if (outputformat === "mp3") {
