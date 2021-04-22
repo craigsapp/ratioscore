@@ -9,6 +9,10 @@ vim: ts=8:ft=html
 {% include_relative listeners.html %}
 {% include_relative scripts-local.html %}
 
+<p>
+	Click on a ratio or cents value to listen to the note/interval
+</p>
+
 <nobr><label for="rows">Rows:&nbsp;</label><input id="rows" value="10" size="3"></nobr>
 <nobr><label for="columns">Columns:&nbsp;</label><input id="columns" value="10" size="3"></nobr>
 <nobr><label for="reference">Reference&nbsp;pitch:&nbsp;</label>{% include_relative reference-pitch.html %}</nobr>
