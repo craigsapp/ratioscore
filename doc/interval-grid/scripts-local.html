@@ -153,12 +153,17 @@ function generateGrid() {
 	let rows = SETTINGS.rows;
 	let columns = SETTINGS.columns;
 
+	let intervals = {};
+
 	let output = "";
 	output += "<table>";
 	for (let r=1; r<=rows; r++) {
 		output += "<tr>";
 		for (let c=1; c<=columns; c++) {
-			output += "<td onclick='playInterval(event);'>";
+			let reduced = getInterval(c, r, true);
+			intervals[reduced] = 1;
+		// 	output += "<td class='playinterval' onclick='playInterval(event);'>";
+			output += "<td class='playinterval'>";
 			output += getInterval(c, r, SETTINGS.reduce);
 			output += "</td>";
 		}
@@ -166,7 +171,170 @@ function generateGrid() {
 	}
 	output += "</table>";
 
+	output += sortedList(intervals);
+
 	grid.innerHTML = output;
+}
+
+
+
+//////////////////////////////
+//
+// sortedList --
+//
+
+function sortedList(intervals) {
+	let keys = Object.keys(intervals);
+	let newlist = {};
+	for (let i=0; i<keys.length; i++) {
+		let obj = {};
+		obj.interval = keys[i];
+		obj.cents = calculateCents(keys[i]);
+		newlist[obj.cents] = obj;
+	}
+	let centkeys = Object.keys(newlist);
+
+	centkeys.sort(function(a, b) { return b - a; });
+
+	let negative = "";
+	negative += "<table class='sortedlist'>\n";
+	negative += "<tr><th>Ratio</th><th></th><th>Cents</th></tr>\n";
+	for (let i=0; i<centkeys.length; i++) {
+		let cents = newlist[centkeys[i]].cents;
+		let interval = newlist[centkeys[i]].interval;
+		if (cents < 0.0) {
+			negative += "<tr>";
+			negative += "<td class='playinterval'>";
+			negative += interval;
+			negative += "</td>";
+			negative += "<td>&mdash;";
+			negative += "</td>";
+			negative += "<td class='playcents'>";
+			negative += cents;
+			negative += "</td>";
+			negative += "</tr>\n";
+		}
+	}
+	negative += "</table>\n";
+
+	centkeys.sort(function(a, b) { return a - b; });
+
+	let positive = "";
+	positive += "<table class='sortedlist'>\n";
+	positive += "<tr><th>Ratio</th><th></th><th>Cents</th></tr>\n";
+	for (let i=0; i<centkeys.length; i++) {
+		let cents = newlist[centkeys[i]].cents;
+		let interval = newlist[centkeys[i]].interval;
+		if (cents > 0.0) {
+			positive += "<tr>";
+			positive += "<td class='playinterval'>";
+			positive += interval;
+			positive += "</td>";
+			positive += "<td>&mdash;";
+			positive += "</td>";
+			positive += "<td class='playcents'>";
+			positive += cents;
+			positive += "</td>";
+			positive += "</tr>\n";
+		}
+	}
+	positive += "</table>\n";
+
+	let output = "";
+	output += "<table class='plusminus'>";
+	output += "<tr>";
+
+	output += "<td>";
+	output += positive;
+	output += "</td>";
+
+	output += "<td>";
+	output += "</td>";
+
+	output += "<td>";
+	output += negative;
+	output += "</td>";
+
+	output += "</tr>";
+	output += "</table>";
+
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// calculateCents --
+//
+
+function calculateCents(ratio) {
+	let matches;
+	let value = 0;
+	matches = ratio.match(/^\s*(\d+)\s*\/\s*(\d+)\s*$/);
+	if (matches) {
+		let top = parseFloat(matches[1]);
+		let bot = parseFloat(matches[2]);
+		value = top / bot;
+	} else {
+		matches = ratio.match(/^\s*(\d+)/);
+		if (matches) {
+			value = parseInt(matches[1]);
+		} else {
+			value = 0;
+		}
+	}
+	if (value <= 0.0) {
+		return "error";
+	}
+	
+	let cents = Math.log2(value) * 1200.0;
+	if (cents < 0.0) {
+		cents = -parseInt(-cents * 100.0 + 0.5) / 100.0;
+	} else {
+		cents = parseInt(cents * 100.0 + 0.5) / 100.0;
+	}
+	cents = "" + cents;
+	if (!cents.match(/\./)) {
+		cents = cents + ".00";
+	} else if (cents.match(/\.\d$/)) {
+		cents = cents + "0";
+	}
+	return cents;
+}
+
+
+
+//////////////////////////////
+//
+// playCents --
+//
+
+function playCents(event) {
+	// console.log("PLAYAING CENTS", event);
+	let cents;
+	if (typeof event === "string") {
+		cents = event;
+	} else {
+		let target = event.target;
+		cents = target.textContent;
+	}
+	let ratioscore = createRatioscoreCents(cents);
+	// console.log("RATIOSCORE", ratioscore);
+	let formdata = new FormData();
+	formdata.append("inputdata", ratioscore);
+	formdata.append("outputformat", "mp3");
+	let request = new XMLHttpRequest();
+	request.open("POST", "https://data.ratioscore.humdrum.org");
+	request.responseType = "blob";
+	request.onload = function () {
+		let myblob = this.response;
+		let audiourl = window.URL.createObjectURL(myblob);
+		AUDIOratioscore = ratioscore;
+		AUDIOurl = audiourl;
+		playMp3();
+	};
+	request.send(formdata);
 }
 
 
@@ -177,29 +345,28 @@ function generateGrid() {
 //
 
 function playInterval(event) {
-	let target = event.target;
-	let interval = target.textContent;
-	console.log("PLAYING INTERVAL", interval);
+	// console.log("PLAYING INTERVAL", event);
+	let interval;
+	if (typeof event === "string") {
+		interval = event;
+	} else {
+		let target = event.target;
+		interval = target.textContent;
+	}
 	let ratioscore = createRatioscore(interval);
-console.log("RATIOSCORE", ratioscore);
+	// console.log("RATIOSCORE", ratioscore);
 	let formdata = new FormData();
 	formdata.append("inputdata", ratioscore);
 	formdata.append("outputformat", "mp3");
-
 	let request = new XMLHttpRequest();
 	request.open("POST", "https://data.ratioscore.humdrum.org");
 	request.responseType = "blob";
 	request.onload = function () {
-		console.log("RECEIVING AUDIO");
 		let myblob = this.response;
 		let audiourl = window.URL.createObjectURL(myblob);
-		console.log("AUDIOURL", audiourl);
-
-		console.log("STORING AUDIO");
 		AUDIOratioscore = ratioscore;
 		AUDIOurl = audiourl;
 		playMp3();
-
 	};
 	request.send(formdata);
 }
@@ -219,11 +386,43 @@ function createRatioscore(interval) {
 	} else {
 		instrument = "*I" + instrument;
 	}
+	let refsound = "1";
+	if (!SETTINGS.playref) {
+		refsound = "0";
+	}
 	let output = "";
 	output += "**dtime\t**ratio\t**ratio\n";
 	output += "*MM60\t" + instrument + "\t" + instrument + "\n";
 	output += "*\t" + reference + "\t" + reference + "\n";
-	output += "1\t" + interval + "\t" + 1 + "\n";
+	output += "1\t" + interval + "\t" + refsound + "\n";
+	output += "*-\t*-\t*-\n";
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// createRatioscoreCents --
+//
+
+function createRatioscoreCents(cents) {
+	let reference = "*ref:" + SETTINGS.reference;
+	let instrument = SETTINGS.instrument;
+	if (instrument.match(/^\d/)) {
+		instrument = "*I#" + instrument;
+	} else {
+		instrument = "*I" + instrument;
+	}
+	let refsound = "1";
+	if (!SETTINGS.playref) {
+		refsound = "0";
+	}
+	let output = "";
+	output += "**dtime\t**ratio\t**ratio\n";
+	output += "*MM60\t" + instrument + "\t" + instrument + "\n";
+	output += "*\t" + reference + "\t" + reference + "\n";
+	output += "1\t" + cents + "c\t" + refsound + "\n";
 	output += "*-\t*-\t*-\n";
 	return output;
 }

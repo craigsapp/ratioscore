@@ -1,15 +1,16 @@
 
 <script>
-// vim: ts=3
+// vim: ts=3:ft=javascript
 
 
 let DEFAULTS = {
 	"rows": 10,
 	"columns": 10,
 	"reference": "C4",
+	"playref": 1,
 	"instrument": 71,
 	"duration": 2,
-	"reduce": 0,
+	"reduce": 0
 };
 
 let SETTINGS = {};
@@ -37,6 +38,45 @@ document.addEventListener("DOMContentLoaded", function () {
 	generateGrid();
 });
 
+
+//////////////////////////////
+//
+// play event delegator --
+//
+
+document.addEventListener("click", function (event) {
+	let target = event.target;
+	let interval = "XXX";
+	let cents = "XXX";
+
+	while (target) {
+		if (target.nodeName === "BODY") {
+			break;
+		}
+		if (target.nodeName !== "TD") {
+			target = target.parentNode;
+			continue;
+		}
+		if (target.classList.contains("playinterval")) {
+			interval = target.textContent;
+			break;
+		}
+		if (target.classList.contains("playcents")) {
+			cents = target.textContent;
+			break;
+		}
+		target = target.parentNode;
+	}
+
+	if (interval === cents) {
+		return;
+	}
+	if (interval !== "XXX") {
+		playInterval(interval);
+	} else {
+		playCents(cents);
+	}
+});
 
 
 </script>
