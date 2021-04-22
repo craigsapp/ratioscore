@@ -105,6 +105,46 @@ largest.
 
 
 {% include intervalscore.html
+	title="Lesser chromatic semitone"
+	id="letter-chromatic-semitone"
+	ratio="25/24"
+	cents="70.67"
+%}
+{% include ratioscore.html id="letter-chromatic-semitone" erase="false" %}
+
+
+
+{% include intervalscore.html
+	title="Septimal minor second"
+	id="septimal-minor-second"
+	ratio="21/20"
+	cents="84.47"
+%}
+{% include ratioscore.html id="septimal-minor-second" erase="false" %}
+
+
+
+{% include intervalscore.html
+	title="Greater chromatic semitone"
+	id="greater-chromatic-semitone"
+	ratio="135/128"
+	cents="92.18"
+%}
+{% include ratioscore.html id="greater-chromatic-semitone" erase="false" %}
+
+
+
+{% include intervalscore.html
+	title="Just minor second"
+	id="just-minor-second"
+	ratio="16/15"
+	cents="111.73"
+%}
+{% include ratioscore.html id="just-minor-second" erase="false" %}
+
+
+
+{% include intervalscore.html
 	title="Pythagorean minor second"
 	id="pythagorean-minor-second"
 	ratio="256/243"
@@ -173,12 +213,14 @@ largest.
 {% include ratioscore.html id="just-major-third" erase="false" %}
 
 
+
 {% include intervalscore.html
 	title="Equal-tempered major third"
 	id="et-major-third"
 	cents="400.00"
 %}
 {% include ratioscore.html id="et-major-third" erase="false" %}
+
 
 
 {% include intervalscore.html
@@ -188,6 +230,16 @@ largest.
 	cents="498.05"
 %}
 {% include ratioscore.html id="just-perfect-fourth" erase="false" %}
+
+
+
+{% include intervalscore.html
+	title="Just diminished fifth"
+	id="just-diminished-fifth"
+	ratio="45/32"
+	cents="590.22"
+%}
+{% include ratioscore.html id="just-diminished-fifth" erase="false" %}
 
 
 
@@ -207,6 +259,56 @@ largest.
 	cents="701.96"
 %}
 {% include ratioscore.html id="just-perfect-fifth" erase="false" %}
+
+
+
+{% include intervalscore.html
+	title="Just minor sixth"
+	id="just-minor-sixth"
+	ratio="8/5"
+	cents="813.69"
+%}
+{% include ratioscore.html id="just-minor-sixth" erase="false" %}
+
+
+
+{% include intervalscore.html
+	title="Just major sixth"
+	id="just-major-sixth"
+	ratio="5/3"
+	cents="884.36"
+%}
+{% include ratioscore.html id="just-major-sixth" erase="false" %}
+
+
+
+{% include intervalscore.html
+	title="7-limit minor seventh"
+	id="seven-limit-minor-seventh"
+	ratio="7/4"
+	cents="968.83"
+%}
+{% include ratioscore.html id="seven-limit-minor-seventh" erase="false" %}
+
+
+
+{% include intervalscore.html
+	title="Just minor seventh"
+	id="just-minor-seventh"
+	ratio="9/5"
+	cents="1017.60"
+%}
+{% include ratioscore.html id="just-minor-seventh" erase="false" %}
+
+
+
+{% include intervalscore.html
+	title="Just major seventh"
+	id="just-major-seventh"
+	ratio="15/8"
+	cents="1088.27"
+%}
+{% include ratioscore.html id="just-major-seventh" erase="false" %}
 
 
 
