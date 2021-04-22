@@ -6,6 +6,9 @@
 {% include_relative RationalNumber-math.js %}
 
 
+let AUDIOcache = {};
+let AUDIOsequence = [];
+let AUDIOseqname  = [];
 
 //////////////////////////////
 //
@@ -320,7 +323,15 @@ function playCents(event) {
 		cents = target.textContent;
 	}
 	let ratioscore = createRatioscoreCents(cents);
-	// console.log("RATIOSCORE", ratioscore);
+	if (AUDIOcache[ratioscore]) {
+		AUDIOsequence.push(ratioscore);
+		AUDIOseqname.push(cents + " cents");
+		AUDIOratioscore = ratioscore;
+		AUDIOurl = AUDIOcache[ratioscore];
+		playMp3();
+		return;
+	}
+
 	let formdata = new FormData();
 	formdata.append("inputdata", ratioscore);
 	formdata.append("outputformat", "mp3");
@@ -330,6 +341,9 @@ function playCents(event) {
 	request.onload = function () {
 		let myblob = this.response;
 		let audiourl = window.URL.createObjectURL(myblob);
+		AUDIOcache[ratioscore] = audiourl;
+		AUDIOsequence.push(ratioscore);
+		AUDIOseqname.push(cents + " cents");
 		AUDIOratioscore = ratioscore;
 		AUDIOurl = audiourl;
 		playMp3();
@@ -354,6 +368,15 @@ function playInterval(event) {
 		interval = target.textContent;
 	}
 	let ratioscore = createRatioscore(interval);
+	if (AUDIOcache[ratioscore]) {
+		AUDIOsequence.push(ratioscore);
+		AUDIOseqname.push(interval);
+		AUDIOratioscore = ratioscore;
+		AUDIOurl = AUDIOcache[ratioscore];
+		playMp3();
+		return;
+	}
+
 	// console.log("RATIOSCORE", ratioscore);
 	let formdata = new FormData();
 	formdata.append("inputdata", ratioscore);
@@ -364,11 +387,15 @@ function playInterval(event) {
 	request.onload = function () {
 		let myblob = this.response;
 		let audiourl = window.URL.createObjectURL(myblob);
+		AUDIOcache[ratioscore] = audiourl;
+		AUDIOsequence.push(ratioscore);
+		AUDIOseqname.push(interval);
 		AUDIOratioscore = ratioscore;
 		AUDIOurl = audiourl;
 		playMp3();
 	};
 	request.send(formdata);
+
 }
 
 
@@ -477,6 +504,42 @@ function updateSettingsFromInput() {
 }
 
 
+
+///////////////////////////////
+//
+// playMp3Url -- 
+//
+
+function playMp3Url(url) {
+	if (!AUDIO) {
+	   AUDIO = document.getElementById('audio');
+  	}
+	if (!AUDIO) {
+		AUDIO = document.createElement("AUDIO");
+		AUDIO.id = "audio";
+		document.body.appendChild(AUDIO);
+	}
+   if (!AUDIO) {
+		console.log('Error: could not set up audio interface\n');
+		return false;
+   }
+
+	AUDIO.style.display = "none";
+	var source = AUDIO.querySelector("source");
+	if (!source) {
+		source = document.createElement("SOURCE");
+		AUDIO.appendChild(source);
+	}
+
+	source.src = url;
+	AUDIO.load();
+	AUDIO.currentTime = 0;
+	AUDIO.play();
+
+}
+
+
+
 //////////////////////////////
 //
 // playAudioUrl --
@@ -504,7 +567,6 @@ function playMp3() {
 	// AUDIO.onpause = function () { }
 
 	AUDIO.style.display = "none";
-
 	var source = AUDIO.querySelector("source");
 	if (!source) {
 		source = document.createElement("SOURCE");

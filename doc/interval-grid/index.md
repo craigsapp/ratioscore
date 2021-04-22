@@ -21,3 +21,22 @@ vim: ts=8:ft=html
 <nobr><label for="playref">Play&nbsp;reference:</label><input id="playref" checked type="checkbox"></nobr>
 
 <div id="grid"></div>
+
+
+<h2> Computer keyboard performance </h2>
+
+As you press notes in the above grid or sorted list, the sounds
+will be remembered in order.  You can then press keys on the computer
+keyboard to recall them, starting with `1` for the first sound, `2`
+for the second sound, etc.  The sequence will continue for all regular
+keys on the US-layout keyboard.  Press the delete/backspace key to clear
+the mapping so that another one can be loaded.  Up to 46 different notes
+can be loaded (maybe allowing shift key in the future to allow for 92
+different notes).
+
+When pressing a key, the ratio/cents value will be displayed here below:
+
+<div style="font-size: 3em; font-weight: bold;" id="notename"></div>
+
+
+
