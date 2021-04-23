@@ -8,7 +8,8 @@ vim: ts=8:ft=html
 Glissandos are created by adding an `H` to the starting note of the
 glissando, and an `h` on the ending note.  The maximum gliss interval
 is one octave above/below the starting note of the glissando.  Glissandos
-larger than that will not be rendered correctly.
+larger than that will not be rendered correctly due to General MIDI limitations
+for pitch-bend depth.
 
 {% include ratioscore.html id="glissando" %}
 <script type="application/x-ratioscore" id="glissando">
@@ -34,6 +35,22 @@ from reattacking at that note.
 1	_4/3
 2	_3/2h
 *-	*-
+</script>
+
+The underscore character can be placed before or after the ratio, and it can
+also be used to indicate tied notes (useful for when representating standard
+music notation more closely):
+
+{% include ratioscore.html id="tied" %}
+<script type="application/x-ratioscore" id="tied">
+**dtime	**ratio	**ratio
+*	*Iclars	*Ikoto
+*	*ref:C4	*ref:C4
+1	5/4	11/5
+1	5/4_	11/5
+1	5/4_	11/5
+1	5/4_	11/5
+*-	*-	*-
 </script>
 
 
@@ -86,14 +103,64 @@ to 1/5 and 1/10 of a second respectivly for the last two glissandos.
 
 <h2> Other examples </h2>
 
+Going from a unison to a first-inversion major triad and back again:
+
 {% include ratioscore.html id="triad" %}
 <script type="application/x-ratioscore" id="triad">
 **dtime	**ratio	**ratio	**ratio
 *	*I#71	*I#71	*I#71
 *	*ref:C4	*ref:C4	*ref:C4
 9	1H	1H	1H
-1	3/2_h	5/4_h	2_h
+1	3/2_	5/4_	2_
+8	3/2_	5/4_	2_
+1	1h_	1h_	1h_
 *-	*-	*-	*-
 </script>
+
+Simulating vibrato:
+
+{% include ratioscore.html id="vibrato" %}
+<script type="application/x-ratioscore" id="vibrato">
+**dtime	**ratio
+*MM500	*I#71
+*	*ref:C2
+1	9H
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10_
+1	9_
+1	10h_
+*-	*-
+
+</script>
+
 
 

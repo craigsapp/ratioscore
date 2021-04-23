@@ -1,13 +1,13 @@
 ---
 title: "Ratioscore: interval grid"
-permalink: /doc/interval-grid/index.html
+permalink: /doc/grid/index.html
 layout: default
 vim: ts=8:ft=html
 ---
 
-{% include_relative styles-local.html %}
 {% include_relative listeners.html %}
 {% include_relative scripts-local.html %}
+{% include_relative styles-local.html %}
 
 <p>
 	Click on a ratio or cents value to listen to the note/interval.
@@ -38,5 +38,8 @@ When pressing a key, the ratio/cents value will be displayed here below:
 
 <div style="font-size: 3em; font-weight: bold;" id="notename"></div>
 
+<div style="font-size: 0.5em;" id="notemappng"></div>
+
+<textarea style="display:none; margin-top:100px; min-height:100px; min-width:300px; font-size: 0.75em !important; font: Courier; tab-size:12;" id="ratioscore"></textarea>
 
 

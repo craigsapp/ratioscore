@@ -6,10 +6,6 @@
 {% include_relative RationalNumber-math.js %}
 
 
-let AUDIOcache = {};
-let AUDIOsequence = [];
-let AUDIOseqname  = [];
-
 //////////////////////////////
 //
 // loadDefaultSettings --
@@ -166,8 +162,10 @@ function generateGrid() {
 			let reduced = getInterval(c, r, true);
 			intervals[reduced] = 1;
 			let midikey = calculateMidiKey(reduced, SETTINGS.reference);
-			if ((midikey < 110) && (midikey > 9)) {
+			if ((midikey < 100) && (midikey > 20)) {
 				output += "<td class='playinterval'>";
+			} else if ((midikey < 111) && (midikey > 9)) {
+				output += "<td class='extreme playinterval'>";
 			} else {
 				output += "<td class='invalid'>";
 			}
@@ -500,7 +498,7 @@ function playCents(event) {
 	if (AUDIOcache[ratioscore]) {
 		AUDIOsequence.push(ratioscore);
 		AUDIOseqname.push(cents + " cents");
-		AUDIOratioscore = ratioscore;
+		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = AUDIOcache[ratioscore];
 		playMp3();
 		return;
@@ -517,7 +515,7 @@ function playCents(event) {
 		AUDIOcache[ratioscore] = audiourl;
 		AUDIOsequence.push(ratioscore);
 		AUDIOseqname.push(cents + " cents");
-		AUDIOratioscore = ratioscore;
+		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = audiourl;
 		playMp3();
 	};
@@ -544,7 +542,7 @@ function playHz(event) {
 	if (AUDIOcache[ratioscore]) {
 		AUDIOsequence.push(ratioscore);
 		AUDIOseqname.push(freq + " Hz");
-		AUDIOratioscore = ratioscore;
+		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = AUDIOcache[ratioscore];
 		playMp3();
 		return;
@@ -561,7 +559,7 @@ function playHz(event) {
 		AUDIOcache[ratioscore] = audiourl;
 		AUDIOsequence.push(ratioscore);
 		AUDIOseqname.push(freq + " Hz");
-		AUDIOratioscore = ratioscore;
+		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = audiourl;
 		playMp3();
 	};
@@ -587,7 +585,7 @@ function playMidiKey(event) {
 	if (AUDIOcache[ratioscore]) {
 		AUDIOsequence.push(ratioscore);
 		AUDIOseqname.push(midikey + " MIDI");
-		AUDIOratioscore = ratioscore;
+		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = AUDIOcache[ratioscore];
 		playMp3();
 		return;
@@ -604,7 +602,7 @@ function playMidiKey(event) {
 		AUDIOcache[ratioscore] = audiourl;
 		AUDIOsequence.push(ratioscore);
 		AUDIOseqname.push(midikey + " MIDI");
-		AUDIOratioscore = ratioscore;
+		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = audiourl;
 		playMp3();
 	};
@@ -631,7 +629,7 @@ function playInterval(event) {
 	if (AUDIOcache[ratioscore]) {
 		AUDIOsequence.push(ratioscore);
 		AUDIOseqname.push(interval);
-		AUDIOratioscore = ratioscore;
+		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = AUDIOcache[ratioscore];
 		playMp3();
 		return;
@@ -650,7 +648,7 @@ function playInterval(event) {
 		AUDIOcache[ratioscore] = audiourl;
 		AUDIOsequence.push(ratioscore);
 		AUDIOseqname.push(interval);
-		AUDIOratioscore = ratioscore;
+		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = audiourl;
 		playMp3();
 	};

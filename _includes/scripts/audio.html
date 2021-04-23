@@ -22,10 +22,10 @@ audio {
 <script>
 // vim: ts=3
 
-var AUDIO = null;
-var AUDIOid = null;
-var AUDIOurl = null;
-var AUDIOratioscore = null;
+let AUDIO = null;
+let AUDIOid = null;
+let AUDIOurl = null;
+let AUDIOratioscore = null;
 
 //////////////////////////////
 //
@@ -62,14 +62,14 @@ console.log("ID", id, "ELEMENT", element);
 		// TurnOffAllNotes();
 	}
 
-	var audiobutton;
+	let audiobutton;
 
-	var inputelement = document.querySelector("#inputdata-" + id);
+	let inputelement = document.querySelector("#inputdata-" + id);
 	if (!inputelement) {
 		console.log("Cannot find input element for", id);
 		return;
 	}
-	var inputtext = inputelement.textContent;
+	let inputtext = inputelement.textContent;
 	if ((inputtext == null) || (inputtext !== AUDIOratioscore)) {
 		console.log("DOWNLOADING SCORE FOR ID", id);
 		downloadRatioscoreMp3(id, element, starttime);
@@ -92,7 +92,7 @@ console.log("ID", id, "ELEMENT", element);
       AUDIO.pause();
 
       AUDIOid = elementid;
-		var source = AUDIO.querySelector("source");
+		let source = AUDIO.querySelector("source");
 		// Can't have seekable dynamic content in audio element:
 		//source += '<source src="/data?a=mp3&id=' + id + '" ';
 		if (!source) {
@@ -114,7 +114,7 @@ console.log("ID", id, "ELEMENT", element);
 		AUDIO.play();
 
 		AUDIO.setAttribute('controls', 'controls');
-		var newelement = document.getElementById(AUDIOid);
+		let newelement = document.getElementById(AUDIOid);
 
 		AUDIO.addEventListener("ended", function() {
 			newelement.className = "play";

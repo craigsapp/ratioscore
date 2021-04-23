@@ -2,6 +2,10 @@
 <script>
 // vim: ts=3:ft=javascript
 
+let AUDIOcache       = {};
+let AUDIOsequence    = [];
+let AUDIOseqname     = [];
+let AUDIOratiolist   = [];
 
 let DEFAULTS = {
 	"rows": 10,
@@ -116,9 +120,15 @@ document.addEventListener("keydown", function (event) {
 		// Clear mapping sounds to computer keys.
 		AUDIOsequence = [];
 		AUDIOseqname = [];
+		AUDIOratiolist = [];
 		var notename = document.querySelector("#notename");
 		if (notename) {
 			notename.innerHTML = "";
+		}
+		var ratiotext = document.querySelector("#ratioscore");
+		if (ratiotext) {
+			ratiotext.innerHTML = "";
+			relement.style.display = "none";
 		}
 		event.preventDefault();
 		return;
@@ -175,10 +185,19 @@ document.addEventListener("keydown", function (event) {
 	if (AUDIOsequence[sequence[event.key]]) {
 		playMp3Url(AUDIOcache[AUDIOsequence[sequence[event.key]]]);
 		let interval = AUDIOseqname[sequence[event.key]];
+		let rscore = AUDIOratiolist[sequence[event.key]];
+
 		let nelement = document.querySelector("#notename");
 		if (nelement) {
 			nelement.innerHTML = interval;
 		}
+
+		let relement = document.querySelector("#ratioscore");
+		if (relement) {
+			relement.textContent = rscore;
+			relement.style.display = "block";
+		}
+
 		event.preventDefault();
 	}
 

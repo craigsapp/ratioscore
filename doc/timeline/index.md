@@ -344,17 +344,17 @@ of the score into measures does not have to be equal or metrical.
 2	3
 1	2
 =2	=2
-0.5	1
+0.5	3
 0.5	2
-1	1
+1	7/2
 2	2
 =3	=3
-2	1
-1	2
+2	8/5
+1	3/2
 1	1
 =4	=4
-1	2
-3	1
+3	11/10H
+1	1_h
 *-	*-
 </script>
 
