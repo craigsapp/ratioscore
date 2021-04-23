@@ -283,6 +283,90 @@ when the two notes are less in tune):
 *-	*-	*-
 </script>
 
+Here is an example of a quarter-tone chromatic scale using cents
+MIDI note number:
+
+{% include ratioscore.html id="quarter-tone-cents" %}
+<script type="application/x-ratioscore" id="quarter-tone-cents">
+**dtime	**ratio
+*MM180	*Iclars
+*	*ref:C4
+1	0c
+1	50c
+1	100c
+1	150c
+1	200c
+1	250c
+1	300c
+1	350c
+1	400c
+1	450c
+1	500c
+1	550c
+1	600c
+1	650c
+2	700c
+*-	*-
+</script>
+
+
+<h2> MIDI key number </h2>
+
+MIDI key numbers can be used in `**ratio` spines by following the MIDI key
+number by the letter `m`.  A reference pitch is not needed if MIDI
+key numbers are used, since MIDI note 69.0 is assigned to the 
+frequence 440 Hz and other integer values for MIDI notes are
+assumed to be in equal temperament.
+
+{% include ratioscore.html id="midikey" %}
+<script type="application/x-ratioscore" id="midikey">
+**dtime	**ratio	**ratio
+*	*Iclars	*Iorgan
+*MM180	*	*ref:261.63z
+1	60m	.
+1	0	0c
+1	62m	0
+1	0	200c
+1	64m	0
+1	0	400c
+1	65m	0
+1	0	500c
+1	67m	0
+1	0	700c
+1	69m	0
+1	0	900c
+1	71m	0
+1	0	1100c
+2	72m	0
+*-	*-	*-
+</script>
+
+
+Here is an example of a quarter-tone chromatic scale using fractional
+MIDI note number:
+
+{% include ratioscore.html id="quarter-tone" %}
+<script type="application/x-ratioscore" id="quarter-tone">
+**dtime	**ratio
+*MM180	*Iclars
+1	60.0m
+1	60.5m
+1	61.0m
+1	61.5m
+1	62.0m
+1	62.5m
+1	63.0m
+1	63.5m
+1	64.0m
+1	64.5m
+1	65.0m
+1	65.5m
+1	66.0m
+1	66.5m
+2	67.0m
+*-	*-
+</script>
+
 
 <h2> Frequency </h2>
 
