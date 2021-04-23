@@ -165,8 +165,12 @@ function generateGrid() {
 		for (let c=1; c<=columns; c++) {
 			let reduced = getInterval(c, r, true);
 			intervals[reduced] = 1;
-		// 	output += "<td class='playinterval' onclick='playInterval(event);'>";
-			output += "<td class='playinterval'>";
+			let midikey = calculateMidiKey(reduced, SETTINGS.reference);
+			if ((midikey < 110) && (midikey > 9)) {
+				output += "<td class='playinterval'>";
+			} else {
+				output += "<td class='invalid'>";
+			}
 			output += getInterval(c, r, SETTINGS.reduce);
 			output += "</td>";
 		}
@@ -183,6 +187,116 @@ function generateGrid() {
 
 //////////////////////////////
 //
+// calculateMidiKey --
+//
+
+function calculateMidiKey(interval, reference) {
+	let matches = reference.match(/^([A-G])(#)?(\d+)/);
+	if (!matches) {
+		return 60;
+	}
+	let pc         = matches[1];
+	let accidental = matches[2];
+	let octave     = matches[3];
+	let midiref;
+	if (pc === "C") {
+		midiref = 0;
+	} else if (pc === "D") {
+		midiref = 2;
+	} else if (pc === "E") {
+		midiref = 4;
+	} else if (pc === "F") {
+		midiref = 5;
+	} else if (pc === "G") {
+		midiref = 7;
+	} else if (pc === "A") {
+		midiref = 9;
+	} else if (pc === "B") {
+		midiref = 11;
+	} else {
+		midiref = 0;
+	}
+	if (matches[2]) {
+		midiref++;
+	}
+	midiref += 12 * (parseInt(octave) + 1);
+	matches = interval.match(/^\s*(\d+)\/(\d+)\s*$/);
+	let adjustment = 0;
+	if (matches) {
+		let top = matches[1];
+		let bot = matches[2];
+		adjustment = 12 * Math.log2(parseFloat(top)/parseFloat(bot));
+	} else {
+		matches = interval.match(/^\s*(\d+)\s*$/);
+		if (matches) {
+			adjustment = 12.0 * Math.log2(parseFloat(matches[1]));
+		} else {
+			adjustment = 0;
+		}
+	}
+	let midinote = midiref + adjustment;
+	return midinote;
+}
+
+
+
+//////////////////////////////
+//
+// calculateMidiKeyCents --
+//
+
+function calculateMidiKeyCents(cents, reference, dontround) {
+	let matches = reference.match(/^([A-G])(#)?(\d+)/);
+	if (!matches) {
+		return 60;
+	}
+	let pc         = matches[1];
+	let accidental = matches[2];
+	let octave     = matches[3];
+	let midiref;
+	if (pc === "C") {
+		midiref = 0;
+	} else if (pc === "D") {
+		midiref = 2;
+	} else if (pc === "E") {
+		midiref = 4;
+	} else if (pc === "F") {
+		midiref = 5;
+	} else if (pc === "G") {
+		midiref = 7;
+	} else if (pc === "A") {
+		midiref = 9;
+	} else if (pc === "B") {
+		midiref = 11;
+	} else {
+		midiref = 0;
+	}
+	if (matches[2]) {
+		midiref++;
+	}
+	midiref += 12 * (parseInt(octave) + 1);
+
+	let midinote = midiref + cents/ 100.0;
+	// Round to 3 digits:
+	if (!dontround) {
+		midinote = parseInt(midinote * 1000.0 + 0.5) / 1000.0;
+		midinote = "" + midinote;
+		if (!midinote.match(/\./)) {
+			midinote += ".000";
+		} else if (midinote.match(/\.\d$/)) {
+			midinote += "00";
+		} else if (midinote.match(/\.\d\d$/)) {
+			midinote += "0";
+		}
+	}
+
+	return midinote;
+}
+
+
+
+//////////////////////////////
+//
 // sortedList --
 //
 
@@ -193,6 +307,8 @@ function sortedList(intervals) {
 		let obj = {};
 		obj.interval = keys[i];
 		obj.cents = calculateCents(keys[i]);
+		obj.midikey = calculateMidiKeyCents(obj.cents, SETTINGS.reference);
+		obj.freq = interval2hz(keys[i], SETTINGS.reference);
 		newlist[obj.cents] = obj;
 	}
 	let centkeys = Object.keys(newlist);
@@ -201,11 +317,13 @@ function sortedList(intervals) {
 
 	let negative = "";
 	negative += "<table class='sortedlist'>\n";
-	negative += "<tr><th>Ratio</th><th></th><th>Cents</th></tr>\n";
+	negative += "<tr><th>Ratio</th><th></th><th>Cents</th><th></th><th>MIDI key</th><th></th><th>Hz</th></tr>\n";
 	for (let i=0; i<centkeys.length; i++) {
-		let cents = newlist[centkeys[i]].cents;
+		let cents    = newlist[centkeys[i]].cents;
 		let interval = newlist[centkeys[i]].interval;
-		if (cents < 0.0) {
+		let midikey  = newlist[centkeys[i]].midikey;
+		let freq     = newlist[centkeys[i]].freq;
+		if ((cents < 0.0) && (midikey > 9) && (midikey < 110)) {
 			negative += "<tr>";
 			negative += "<td class='playinterval'>";
 			negative += interval;
@@ -214,6 +332,16 @@ function sortedList(intervals) {
 			negative += "</td>";
 			negative += "<td class='playcents'>";
 			negative += cents;
+			negative += "</td>";
+			negative += "<td>&mdash;";
+			negative += "</td>";
+			negative += "<td class='playmidikey'>";
+			negative += midikey;
+			negative += "</td>";
+			negative += "<td>&mdash;";
+			negative += "</td>";
+			negative += "<td class='playhz'>";
+			negative += freq;
 			negative += "</td>";
 			negative += "</tr>\n";
 		}
@@ -224,11 +352,13 @@ function sortedList(intervals) {
 
 	let positive = "";
 	positive += "<table class='sortedlist'>\n";
-	positive += "<tr><th>Ratio</th><th></th><th>Cents</th></tr>\n";
+	positive += "<tr><th>Ratio</th><th></th><th>Cents</th><th></th><th>MIDI&nbsp;key</th><th></th><th>Hz</th></tr>\n";
 	for (let i=0; i<centkeys.length; i++) {
-		let cents = newlist[centkeys[i]].cents;
+		let cents    = newlist[centkeys[i]].cents;
 		let interval = newlist[centkeys[i]].interval;
-		if (cents > 0.0) {
+		let midikey  = newlist[centkeys[i]].midikey;
+		let freq     = newlist[centkeys[i]].freq;
+		if ((cents > 0.0) && (midikey > 9) && (midikey < 110)) {
 			positive += "<tr>";
 			positive += "<td class='playinterval'>";
 			positive += interval;
@@ -237,6 +367,16 @@ function sortedList(intervals) {
 			positive += "</td>";
 			positive += "<td class='playcents'>";
 			positive += cents;
+			positive += "</td>";
+			positive += "<td>&mdash;";
+			positive += "</td>";
+			positive += "<td class='playmidikey'>";
+			positive += midikey;
+			positive += "</td>";
+			positive += "<td>&mdash;";
+			positive += "</td>";
+			positive += "<td class='playhz'>";
+			positive += freq;
 			positive += "</td>";
 			positive += "</tr>\n";
 		}
@@ -265,6 +405,36 @@ function sortedList(intervals) {
 }
 
 
+//////////////////////////////
+//
+// midi2hz -- not used anymore because midikey is already rounded.
+//
+
+function midi2hz(midikey) {
+	let value = 440.0 * Math.pow(2, (parseFloat(midikey) - 69)/12);
+	return value;
+}
+
+
+
+//////////////////////////////
+//
+// interval2hz --
+//
+
+function interval2hz(interval, reference) {
+	let midinote = calculateMidiKey(interval, reference);
+	let cents = 100 * (midinote - 69.0);
+	let freq = 440.0 * Math.pow(2, cents / 1200.0);
+	freq = parseInt(freq * 10.0 + 0.5) / 10.0;
+	freq = "" + freq;
+	if (!freq.match(/\./)) {
+		freq += ".0";
+	}
+	return freq;
+}
+
+
 
 //////////////////////////////
 //
@@ -272,6 +442,7 @@ function sortedList(intervals) {
 //
 
 function calculateCents(ratio) {
+
 	let matches;
 	let value = 0;
 	matches = ratio.match(/^\s*(\d+)\s*\/\s*(\d+)\s*$/);
@@ -290,7 +461,7 @@ function calculateCents(ratio) {
 	if (value <= 0.0) {
 		return "error";
 	}
-	
+
 	let cents = Math.log2(value) * 1200.0;
 	if (cents < 0.0) {
 		cents = -parseInt(-cents * 100.0 + 0.5) / 100.0;
@@ -304,6 +475,7 @@ function calculateCents(ratio) {
 		cents = cents + "0";
 	}
 	return cents;
+
 }
 
 
@@ -331,7 +503,6 @@ function playCents(event) {
 		playMp3();
 		return;
 	}
-
 	let formdata = new FormData();
 	formdata.append("inputdata", ratioscore);
 	formdata.append("outputformat", "mp3");
@@ -344,6 +515,94 @@ function playCents(event) {
 		AUDIOcache[ratioscore] = audiourl;
 		AUDIOsequence.push(ratioscore);
 		AUDIOseqname.push(cents + " cents");
+		AUDIOratioscore = ratioscore;
+		AUDIOurl = audiourl;
+		playMp3();
+	};
+	request.send(formdata);
+}
+
+
+
+//////////////////////////////
+//
+// playHz --
+//
+
+function playHz(event) {
+	console.log("PLAYING HERE  HZ", event);
+	let freq;
+	if (typeof event === "string") {
+		freq = event;
+	} else {
+		let target = event.target;
+		freq = target.textContent;
+	}
+	let ratioscore = createRatioscoreHertz(freq);
+	if (AUDIOcache[ratioscore]) {
+		AUDIOsequence.push(ratioscore);
+		AUDIOseqname.push(freq + " Hz");
+		AUDIOratioscore = ratioscore;
+		AUDIOurl = AUDIOcache[ratioscore];
+		playMp3();
+		return;
+	}
+	let formdata = new FormData();
+	formdata.append("inputdata", ratioscore);
+	formdata.append("outputformat", "mp3");
+	let request = new XMLHttpRequest();
+	request.open("POST", "https://data.ratioscore.humdrum.org");
+	request.responseType = "blob";
+	request.onload = function () {
+		let myblob = this.response;
+		let audiourl = window.URL.createObjectURL(myblob);
+		AUDIOcache[ratioscore] = audiourl;
+		AUDIOsequence.push(ratioscore);
+		AUDIOseqname.push(freq + " Hz");
+		AUDIOratioscore = ratioscore;
+		AUDIOurl = audiourl;
+		playMp3();
+	};
+	request.send(formdata);
+}
+
+
+
+//////////////////////////////
+//
+// playMidiKey --
+//
+
+function playMidiKey(event) {
+	console.log("PLAYAING MIDI key", event);
+	let midikey;
+	if (typeof event === "string") {
+		midikey = event;
+	} else {
+		let target = event.target;
+		midikey = target.textContent;
+	}
+	let ratioscore = createRatioscoreMidiKey(midikey);
+	if (AUDIOcache[ratioscore]) {
+		AUDIOsequence.push(ratioscore);
+		AUDIOseqname.push(midikey + " MIDI");
+		AUDIOratioscore = ratioscore;
+		AUDIOurl = AUDIOcache[ratioscore];
+		playMp3();
+		return;
+	}
+	let formdata = new FormData();
+	formdata.append("inputdata", ratioscore);
+	formdata.append("outputformat", "mp3");
+	let request = new XMLHttpRequest();
+	request.open("POST", "https://data.ratioscore.humdrum.org");
+	request.responseType = "blob";
+	request.onload = function () {
+		let myblob = this.response;
+		let audiourl = window.URL.createObjectURL(myblob);
+		AUDIOcache[ratioscore] = audiourl;
+		AUDIOsequence.push(ratioscore);
+		AUDIOseqname.push(midikey + " MIDI");
 		AUDIOratioscore = ratioscore;
 		AUDIOurl = audiourl;
 		playMp3();
@@ -458,6 +717,63 @@ function createRatioscoreCents(cents) {
 
 //////////////////////////////
 //
+// createRatioscoreHertz --
+//
+
+function createRatioscoreHertz(freq) {
+	let instrument = SETTINGS.instrument;
+	if (instrument.match(/^\d/)) {
+		instrument = "*I#" + instrument;
+	} else {
+		instrument = "*I" + instrument;
+	}
+	let refsound = "1";
+	if (!SETTINGS.playref) {
+		refsound = "0";
+	}
+	let output = "";
+	let reference = "*ref:" + SETTINGS.reference;
+	output += "**dtime\t**ratio\t**ratio\n";
+	output += "*MM60\t" + instrument + "\t" + instrument + "\n";
+	output += "*\t" + "*" + "\t" + reference + "\n";
+	output += "1\t" + freq + "z\t" + refsound + "\n";
+	output += "*-\t*-\t*-\n";
+	return output;
+}
+
+
+
+
+//////////////////////////////
+//
+// createRatioscoreMidiKey --
+//
+
+function createRatioscoreMidiKey(midikey) {
+	let instrument = SETTINGS.instrument;
+	if (instrument.match(/^\d/)) {
+		instrument = "*I#" + instrument;
+	} else {
+		instrument = "*I" + instrument;
+	}
+	let refsound = "1";
+	if (!SETTINGS.playref) {
+		refsound = "0";
+	}
+	let reference = "*ref:" + SETTINGS.reference;
+	let output = "";
+	output += "**dtime\t**ratio\t**ratio\n";
+	output += "*MM60\t" + instrument + "\t" + instrument + "\n";
+	output += "*\t" + "*" + "\t" + reference + "\n";
+	output += "1\t" + midikey + "m\t" + refsound + "\n";
+	output += "*-\t*-\t*-\n";
+	return output;
+}
+
+
+
+//////////////////////////////
+//
 // getInterval --
 //
 
@@ -507,7 +823,7 @@ function updateSettingsFromInput() {
 
 ///////////////////////////////
 //
-// playMp3Url -- 
+// playMp3Url --
 //
 
 function playMp3Url(url) {

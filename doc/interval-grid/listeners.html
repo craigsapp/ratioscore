@@ -48,6 +48,8 @@ document.addEventListener("click", function (event) {
 	let target = event.target;
 	let interval = "XXX";
 	let cents = "XXX";
+	let freq = "XXX";
+	let midikey = "XXX";
 
 	while (target) {
 		if (target.nodeName === "BODY") {
@@ -65,16 +67,28 @@ document.addEventListener("click", function (event) {
 			cents = target.textContent;
 			break;
 		}
+		if (target.classList.contains("playhz")) {
+			freq = target.textContent;
+			break;
+		}
+		if (target.classList.contains("playmidikey")) {
+			midikey = target.textContent;
+			break;
+		}
 		target = target.parentNode;
 	}
 
-	if (interval === cents) {
+	if ((interval === cents) && (interval === midikey) && (interval === freq)) {
 		return;
 	}
 	if (interval !== "XXX") {
 		playInterval(interval);
-	} else {
+	} else if (cents !== "XXX") {
 		playCents(cents);
+	} else if (freq !== "XXX") {
+		playHz(freq);
+	} else if (midikey !== "XXX") {
+		playMidiKey(midikey);
 	}
 });
 
