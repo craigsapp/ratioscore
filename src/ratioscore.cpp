@@ -78,6 +78,7 @@ HTp     getVelToken       (HTp current);
 vector<int> getDrumsAsMidi(HTp current);
 void    getSubstitutions  (HumdrumFile& infile);
 string  applyRatioSubstitutions(const string& input);
+string  applyDrumSubstitutions(const string& input);
 void    fillCurrentTempoNull(HumdrumFile& infile);
 
 
@@ -109,6 +110,7 @@ vector<double> m_timeline;           // used with --max-time option.
 bool        m_debugQ = false;        // used with --debug option
 vector<double> m_currTempo;          // used for grate calculations
 vector<pair<string, string>> m_ratioSubs; // used with !!!RDF**ratio:
+vector<pair<string, string>> m_drumSubs;  // used with !!!RDF**drum:
 int         m_pad = 0;
 
 ///////////////////////////////////////////////////////////////////////////
@@ -381,8 +383,11 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 //
 
 void getSubstitutions(HumdrumFile& infile) {
-	m_ratioSubs.clear();
 	HumRegex hre;
+
+	m_ratioSubs.clear();
+	m_drumSubs.clear();
+
 	for (int i=0; i<infile.getLineCount(); i++) {
 		if (infile[i].hasSpines()) {
 			continue;
@@ -392,6 +397,11 @@ void getSubstitutions(HumdrumFile& infile) {
 			string symbol = hre.getMatch(1);
 			string replacement = hre.getMatch(2);
 			m_ratioSubs.push_back(make_pair(symbol, replacement));
+		}
+		if (hre.search(token, "^!!!RDF\\*\\*drum\\s*:\\s*([^\\s]+)\\s*=\\s*([^\\s]+)")) {
+			string symbol = hre.getMatch(1);
+			string replacement = hre.getMatch(2);
+			m_drumSubs.push_back(make_pair(symbol, replacement));
 		}
 	}
 
@@ -995,7 +1005,7 @@ void generateDrumTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hum
 
 vector<int> getDrumsAsMidi(HTp current){
 	HumRegex hre;
-	string text = *current;
+	string text = applyDrumSubstitutions(*current);
 	vector<int> output;
 	while (hre.search(text, "(\\d+)")) {
 		int value = hre.getMatchInt(1);
@@ -1021,10 +1031,15 @@ double getReferencePitchAsMidi(const string& token) {
 		double frequency = hre.getMatchDouble(1);
 		reference = 12.0 * log2(frequency / 440.0) + 69.0;
 	}
-	if (hre.search(token, "^\\*ref[:=]?(\\d+\\.?\\d*)$")) {
+	else if (hre.search(token, "^\\*ref[:=]?(\\d+\\.?\\d*)$")) {
 		// Allow incorrectly labeled frequency (missing "z"):
 		double frequency = hre.getMatchDouble(1);
 		reference = 12.0 * log2(frequency / 440.0) + 69.0;
+	}
+
+	// Read reference as MIDI key number:
+	else if (hre.search(token, "^\\*ref[:=]?(\\d+\\.?\\d*)m")) {
+		reference = hre.getMatchDouble(1);
 	}
 
 	// Read reference as note name:
@@ -1227,6 +1242,9 @@ double getPitchAsMidi(HTp token, double reference) {
 		}
 		double midi = 12.0 * log2(frequency / 440.0) + 69.0;
 		return midi;
+	} else if (hre.search(cleaned, "^([+]?\\d+\\.?\\d*)m$")) {
+		double midi = hre.getMatchDouble(1);
+		return midi;
 	}
 
 	// Reduce "#^#" (has priority over #*# and #/#)
@@ -1417,6 +1435,27 @@ string applyRatioSubstitutions(const string& input) {
 	for (int i=0; i<(int)m_ratioSubs.size(); i++) {
 		string symbol = m_ratioSubs[i].first;
 		string replacement = m_ratioSubs[i].second;
+		hre.replaceDestructive(output, replacement, symbol, "g");
+	}
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// applyDrumSubstitutions --
+//
+
+string applyDrumSubstitutions(const string& input) {
+	if (m_drumSubs.empty()) {
+		return input;
+	}
+	HumRegex hre;
+	string output = input;
+	for (int i=0; i<(int)m_drumSubs.size(); i++) {
+		string symbol = m_drumSubs[i].first;
+		string replacement = m_drumSubs[i].second;
 		hre.replaceDestructive(output, replacement, symbol, "g");
 	}
 	return output;
