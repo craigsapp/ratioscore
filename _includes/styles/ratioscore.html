@@ -1,4 +1,7 @@
 <style>
+/*
+	vim: ts=3
+*/
 
 <link href="https://use.fontawesome.com/releases/v5.9.0/css/all.css" rel="stylesheet">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -51,7 +54,7 @@ h1 {
 
 h2 {
 	color: {{ site.header_color }};
-	margin-top: 60px;
+	margin-top: 56px;
 	font-size: 2rem;
 	font-weight: bold;
 }
@@ -164,13 +167,23 @@ th {
 	border: 0 !important;
 }
 
-
 code.language-plaintext {
 	background: none !important;
 	padding: 0;
 	font-size: 110%;
 	color: {{ site.text_color }};
 }
+
+::-moz-selection {
+	/* color: red; */
+	background: #daa520;
+}
+
+::selection {
+	/* color: red; */
+	background: #daa52066;
+}
+
 
 </style>
 

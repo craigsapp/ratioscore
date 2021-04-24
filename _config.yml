@@ -15,16 +15,18 @@ baseurl:          /
 paginate:         5
 
 # Stylings
-content_background:                 "#B9936A"
-hyperlink_color:                    "#7B622C"
-hyperlink_hover_color:              "#BD7072"
-ratioscore_light:                   "#BFA571"
-header_color:                       "#3B1C04"
-text_color:                         "#3B1C04"
+
+#content_background:                "#b9936a"
+content_background:                 "#dcb48c"
+hyperlink_color:                    "#7b622c"
+hyperlink_hover_color:              "#bd7072"
+ratioscore_light:                   "#bfa571"
+header_color:                       "#6b3f1c"
+text_color:                         "#3b1c04"
 
 # General colors
-ratioscore_dark:                    "#3B1C04"
-ratioscore_light:                   "#BF9471"
+ratioscore_dark:                    "#3b1c04"
+ratioscore_light:                   "#bf9471"
 
 # Sidebar colors:
 sidebar_background:                 "#6b3f1c"
@@ -32,37 +34,37 @@ sidebar_hyperlink_color:            "white"
 sidebar_hyperlink_hover_color:      "#fcc637cc"
 
 # Ratioscore toolbar colors:
-ratioscore_button_background:       "#5D3515"
-ratioscore_button_light:            "#BF9471"
+ratioscore_button_background:       "#5d3515"
+ratioscore_button_light:            "#bf9471"
 ratioscore_button_highlight:        "#fcc637cc"
-ratioscore_button_background_hover: "#3B1C04"
+ratioscore_button_background_hover: "#3b1c04"
 
 # Ratioscore editor colors:
 ratioscore_editor_font_color:       "#000000"
-ratioscore_editor_background:       "#FFE4B1"
+ratioscore_editor_background:       "#ffe4b1"
 
 
 # https://paletton.com/#uid=50t0u0kkzfscZnYgqjboJbEu27m
 #
-# Main color:  #7B4F2C
-# Darker hue:  #3B1C04
-#              #5D3515
-#              #996D4A
-# Lighter hue: #BF9471
+# Main color:  #7b4f2C
+# Darker hue:  #3b1c04
+#              #5d3515
+#              #996d4A
+# Lighter hue: #bf9471
 #
 # Red related colors:
-# Main color:  #7A2C2E
-# Darker hue:  #3A0405
-#              #5C1517
-#              #974A4C
-# Lighter hue: #BD7072
+# Main color:  #7a2c2E
+# Darker hue:  #3a0405
+#              #5c1517
+#              #974a4c
+# Lighter hue: #bd7072
 #
 # Yellowish related colors:
-# Main color:  #7B602C
-# Darker hue:  #3B2804
-#              #5D4415
-#              #997E4A
-# Lighter hue: #BFA571
+# Main color:  #7b602c
+# Darker hue:  #3b2804
+#              #5d4415
+#              #997e4a
+# Lighter hue: #bfa571
 #
 
 

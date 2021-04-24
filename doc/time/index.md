@@ -1,5 +1,5 @@
 ---
-title: "Representing time"
+title: "Time"
 permalink: /time/index.html
 layout: page
 vim: ts=8:ft=html
@@ -11,7 +11,7 @@ score, with possibilities being:
 
 | Spine&nbsp;heading&nbsp;&nbsp;&nbsp;&nbsp; | Meaning          |
 | -------------- | -------------------------------------------- |
-| `**time`       | Absoute time in seconds.                     |
+| `**time`       | Absoute time (nominally) in seconds.         |
 | `**dtime`      | Delta time in seconds.                       |
 | `**ms`         | Absolute time in milliseconds seconds.       |
 | `**dms`        | Delta time in milliseconds seconds.          |
