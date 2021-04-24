@@ -1,5 +1,5 @@
 ---
-title: "Ratioscore: Bohlen-Pierce scale"
+title: "Bohlen-Pierce scale"
 permalink: /bohlen-pierce/index.html
 layout: default
 vim: ts=8:ft=html

@@ -1,5 +1,5 @@
 ---
-title: "Ratioscore: Shruti"
+title: "Shruti"
 permalink: /shruti/index.html
 layout: default
 vim: ts=8:ft=html

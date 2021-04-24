@@ -1,5 +1,5 @@
 ---
-title: "Ratioscore: 53-TET"
+title: "53-TET"
 permalink: /53tet/index.html
 layout: default
 vim: ts=8:ft=html

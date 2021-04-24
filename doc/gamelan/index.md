@@ -1,5 +1,5 @@
 ---
-title: "Ratioscore: Gamelan"
+title: "Gamelan"
 permalink: /gamelan/index.html
 layout: default
 vim: ts=8:ft=html
