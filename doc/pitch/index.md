@@ -337,7 +337,7 @@ relative to the reference pitch:
 MIDI key numbers can be used in `**ratio` spines by following the key
 number by the letter `m`.  A reference pitch is not needed if 
 key numbers are used, since MIDI note 69.0 is assigned to the 
-frequence 440 Hz and other integer values for MIDI keyt are
+frequency 440 Hz and other integer values for MIDI keyt are
 assumed to be in equal temperament.
 
 {% include ratioscore.html id="midikey" %}

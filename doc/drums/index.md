@@ -204,7 +204,7 @@ Polyrhythm example:
 *-	*-	*-
 </script>
 
-See the <a href="/doc/polyrhythm">Polyrhythm generator</a> page.
+See the <a href="/polyrhythm">Polyrhythm generator</a> page.
 
 Drum and ratio tracks may occur in the same score and can
 be interleaved in any order.

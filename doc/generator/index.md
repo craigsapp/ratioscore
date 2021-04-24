@@ -64,7 +64,7 @@ in a cell on the spreadsheet.
 
 Here is an example view after pasting a Ratioscore into Google Sheets:
 
-<a target="_blank" href="spreadsheet.jpg"><img src="spreadsheet.jpg" style="display:block; margin-left:auto; margin-right:auto; width:50%;"></a>
+<a target="_blank" href="/doc/generator/spreadsheet.jpg"><img src="/doc/generator/spreadsheet.jpg" style="display:block; margin-left:auto; margin-right:auto; width:50%;"></a>
 
 The Ratioscore can then be edited in the spreadsheet and then copied
 back into a Ratioscore box on this website to create a MIDI or MP3 file

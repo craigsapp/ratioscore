@@ -102,7 +102,7 @@ Sibelius to quantize the note durations into musical rhythms.
 
 <h2> Conference </h2>
 
-Ratioscores will be presented at <a href="/doc/tenor2021">TENOR 2021</a>.
+Ratioscores will be presented at <a href="/tenor2021">TENOR 2021</a>.
 
 
 <h2> Software </h2>

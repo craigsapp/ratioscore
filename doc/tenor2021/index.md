@@ -1,5 +1,5 @@
 ---
-title: "TENOR 2021 examples"
+title: "TENOR 2021"
 permalink: /tenor2021/index.html
 layout: default
 vim: ts=8:ft=html
@@ -14,7 +14,7 @@ slides</a>).
 
 <h2> Figure 1 </h2>
 
-<img src="figure1.png">
+<img src="/doc/tenor2021/figure1.png">
 
 {% include ratioscore.html id="figure1" %}
 <script type="application/x-ratioscore" id="figure1">
@@ -35,7 +35,7 @@ slides</a>).
 
 <h2> Figure 2 </h2>
 
-<img src="figure2.png">
+<img src="/doc/tenor2021/figure2.png">
 
 {% include ratioscore.html id="figure2" %}
 <script type="application/x-ratioscore" id="figure2">
@@ -100,7 +100,7 @@ Listening to only the clarinet part:
 
 <h2> Figure 3 </h2>
 
-<img src="figure3.png">
+<img src="/doc/tenor2021/figure3.png">
 
 {% include ratioscore.html id="figure3" tabsize="12" %}
 <script type="application/x-ratioscore" id="figure3">
@@ -199,7 +199,7 @@ the glissando will be rearticulated unless an underscore (`_`) is
 added to a note in the glissando.
 
 
-<img src="figure6.png">
+<img src="/doc/tenor2021/figure6.png">
 
 {% include ratioscore.html id="figure6" %}
 <script type="application/x-ratioscore" id="figure6">
