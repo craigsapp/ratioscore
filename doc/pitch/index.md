@@ -141,10 +141,12 @@ an octave higher, and so on.  Rests are indicated by `0`.
 
 <h2> Fractions </h2>
 
-To get intervals between harmonics, ratios can be used, such as `3/2` for a perfect fifth.  In the 
-following example, `5/1` is the 5th harmonic of the reference pitch (two octaves and a major third),
-`5/2` is an octave lower (major tenth), `5/3` is a major 6th above the reference, `5/4` is a major
-third, and `5/5` is the reference pitch. Also: `5/10` is an octave lower than the reference,
+To get intervals between harmonics, rational numbers can be used,
+such as `3/2` for a perfect fifth.  In the following example, `5/1`
+is the 5th harmonic of the reference pitch (two octaves and a major
+third), `5/2` is an octave lower (major tenth), `5/3` is a major
+6th above the reference, `5/4` is a major third, and `5/5` is the
+reference pitch. Also: `5/10` is an octave lower than the reference,
 `5/8` is down a minor 6th, and `5/6` is down a minor third.
 
 
@@ -224,7 +226,7 @@ third, and `5/5` is the reference pitch. Also: `5/10` is an octave lower than th
 3	5/6	5/8	5/10
 ==	==	==	==
 *-	*-	*-	*-
-!!!filter: myank -m 0,1,1,2,3,4,2,3,1,2,3,2,1,4,4,5,4,3,3,2,1,2,3,4,5,4,5,6
+!!!filter: myank -m 0,1*2,3,4,2,3,1,2,3,2,1,4*2,5,4,3*2,2,1,2,3,4,5,4,5,6
 </script>
 
 See the <a href="/intervals">interval dictionary</a> for a list of
