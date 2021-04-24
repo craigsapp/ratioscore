@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	let reference = document.querySelector("#reference");
 	if (reference) {
-		reference.addEventListener("keyup", calculateEQscore);
+		reference.addEventListener("change", calculateEQscore);
 	}
 	if (cgi.r) {
 		reference.value = cgi.r;
