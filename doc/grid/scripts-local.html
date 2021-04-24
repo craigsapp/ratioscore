@@ -315,7 +315,7 @@ function sortedList(intervals) {
 
 	let negative = "";
 	negative += "<table class='sortedlist'>\n";
-	negative += "<tr><th>Ratio</th><th></th><th>Cents</th><th></th><th>MIDI&nbsp;key</th><th></th><th>Hz</th></tr>\n";
+	negative += "<tr><th>Ratio</th><th>Cents</th><th>MIDI&nbsp;key</th><th>Hz</th></tr>\n";
 	for (let i=0; i<centkeys.length; i++) {
 		let cents    = newlist[centkeys[i]].cents;
 		let interval = newlist[centkeys[i]].interval;
@@ -326,17 +326,11 @@ function sortedList(intervals) {
 			negative += "<td class='playinterval'>";
 			negative += interval;
 			negative += "</td>";
-			negative += "<td>&mdash;";
-			negative += "</td>";
 			negative += "<td class='playcents'>";
 			negative += cents;
 			negative += "</td>";
-			negative += "<td>&mdash;";
-			negative += "</td>";
 			negative += "<td class='playmidikey'>";
 			negative += midikey;
-			negative += "</td>";
-			negative += "<td>&mdash;";
 			negative += "</td>";
 			negative += "<td class='playhz'>";
 			negative += freq;
@@ -350,7 +344,7 @@ function sortedList(intervals) {
 
 	let positive = "";
 	positive += "<table class='sortedlist'>\n";
-	positive += "<tr><th>Ratio</th><th></th><th>Cents</th><th></th><th>MIDI&nbsp;key</th><th></th><th>Hz</th></tr>\n";
+	positive += "<tr><th>Ratio</th><th>Cents</th><th>MIDI&nbsp;key</th><th>Hz</th></tr>\n";
 	for (let i=0; i<centkeys.length; i++) {
 		let cents    = newlist[centkeys[i]].cents;
 		let interval = newlist[centkeys[i]].interval;
@@ -361,17 +355,11 @@ function sortedList(intervals) {
 			positive += "<td class='playinterval'>";
 			positive += interval;
 			positive += "</td>";
-			positive += "<td>&mdash;";
-			positive += "</td>";
 			positive += "<td class='playcents'>";
 			positive += cents;
 			positive += "</td>";
-			positive += "<td>&mdash;";
-			positive += "</td>";
 			positive += "<td class='playmidikey'>";
 			positive += midikey;
-			positive += "</td>";
-			positive += "<td>&mdash;";
 			positive += "</td>";
 			positive += "<td class='playhz'>";
 			positive += freq;

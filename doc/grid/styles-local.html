@@ -31,7 +31,12 @@ select {
 	font-size: 18px;
 }
 
-table.sortedlist {
+table.sortedlist, table.sortedlist tr, table.sortedlist td {
+	padding: 0;
+}
+
+table.sortedlist tr:hover {
+	background: {{ site.ratioscore_light }} !important;
 }
 
 table.sortedlist td:nth-child(2) {
@@ -52,6 +57,11 @@ table.sortedlist td:nth-child(2)  {
 
 table.sortedlist th:first-child {
 	text-align: left;
+}
+
+table.plusminus, table.plusminus tr, table.plusminus td {
+	padding: 0;
+	margin: 0;
 }
 
 table.plusminus {
