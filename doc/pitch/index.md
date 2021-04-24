@@ -5,12 +5,13 @@ layout: page
 vim: ts=8:ft=html
 ---
 
-Notes are created in a Ratioscore by adding fractions in `**ratio`
-spines (columns) to a <a href="/timeline">timeline</a>.  The
-fractions are used to calculate the pitch of the note by multiplying
-the frequency of the reference pitch.  For example of the reference
-pitch is A4 (=440Hz), then the fraction `3/2` will generate the
-frequency 660 Hz.
+Notes are created in a Ratioscore by adding integers, fractions,
+basic mathematic expressions, midi key numbers, cents, or frequencies
+in `**ratio` spines (columns) to a <a href="/timeline">timeline</a>.
+The fractions are used to calculate the pitch of the note by
+multiplying the frequency of the reference pitch.  For example of
+the reference pitch is A4 (=440Hz), then the fraction `3/2` will
+generate the frequency 660 Hz.
 
 
 <h2> Reference pitch </h2>
@@ -138,7 +139,7 @@ an octave higher, and so on.  Rests are indicated by `0`.
 </script>
 
 
-<h2> Ratios </h2>
+<h2> Fractions </h2>
 
 To get intervals between harmonics, ratios can be used, such as `3/2` for a perfect fifth.  In the 
 following example, `5/1` is the 5th harmonic of the reference pitch (two octaves and a major third),
@@ -256,6 +257,27 @@ Here is an example of exponent notation to generate 12-TET:
 
 See the <a href="/scales/equal-temperament">Equal-temperament calculator</a> page.
 
+<h2> Expressions </h2>
+
+When describing pitches as integers fractions and exponents, basic mathematical operations
+can be used to express the ratio in a factored form for clarity:
+
+
+{% include ratioscore.html id="expression-example" %}
+<script type="application/x-ratioscore" id="expression-example">
+**dtime	**ratio
+*	*Iclars
+*	*ref:F#3
+1	9/8
+1	3*3/2*2*2
+*-	*-
+</script>
+
+Note that multiplication has priority over division, so `3*3/2*2` will be treated as `(3*3)/(2*2)`
+rather than `((3*3)/2)*2`.
+
+
+
 
 <h2> Cents </h2>
 
@@ -283,8 +305,8 @@ when the two notes are less in tune):
 *-	*-	*-
 </script>
 
-Here is an example of a quarter-tone chromatic scale using cents
-MIDI note number:
+Here is an example of a quarter-tone chromatic scale using cent intervals
+relative to the reference pitch:
 
 {% include ratioscore.html id="quarter-tone-cents" %}
 <script type="application/x-ratioscore" id="quarter-tone-cents">
@@ -312,10 +334,10 @@ MIDI note number:
 
 <h2> MIDI key number </h2>
 
-MIDI key numbers can be used in `**ratio` spines by following the MIDI key
-number by the letter `m`.  A reference pitch is not needed if MIDI
+MIDI key numbers can be used in `**ratio` spines by following the key
+number by the letter `m`.  A reference pitch is not needed if 
 key numbers are used, since MIDI note 69.0 is assigned to the 
-frequence 440 Hz and other integer values for MIDI notes are
+frequence 440 Hz and other integer values for MIDI keyt are
 assumed to be in equal temperament.
 
 {% include ratioscore.html id="midikey" %}
@@ -342,8 +364,7 @@ assumed to be in equal temperament.
 </script>
 
 
-Here is an example of a quarter-tone chromatic scale using fractional
-MIDI note number:
+Here is an example of quarter-tones using fractional MIDI key numbers:
 
 {% include ratioscore.html id="quarter-tone" %}
 <script type="application/x-ratioscore" id="quarter-tone">
@@ -370,9 +391,9 @@ MIDI note number:
 
 <h2> Frequency </h2>
 
-Specific frequencies can be used by appending a floating point
+Specific frequencies can be used by appending a floating-point
 number with the letter `z` (for "Hz"). If only frequencies are given
-for pitches, then the reference pitch is not necessary. 
+in a `**ratio` column, then the reference pitch is not necessary. 
 Here is a C major scale in equal temperament using frequencies and
 cents for comparison:
 
@@ -398,5 +419,13 @@ cents for comparison:
 2	523.25z	0
 *-	*-	*-
 </script>
+
+
+<h2> Symbols </h2>
+
+See the <a href="/symbols">Symbols</a> page for a description of
+giving arbitrary names to pitches.
+
+
 
 

@@ -24,4 +24,48 @@ vim: ts=3
 {% include droparea/main.html %}
 
 
+<script>
+
+
+//////////////////////////////
+//
+// DOMContentloaded event listener -- Restore previous contents of editor
+//    when returning.
+//
+
+document.addEventListener("DOMContentLoaded", function () {
+	let previousContents = localStorage.ratioscore;
+	if (previousContents) {
+		let element = document.querySelector("#example");
+		let element2 = document.querySelector("#inputdata-example");
+		if (element) {
+			element.textContent = previousContents;
+		}
+		if (element2) {
+			element2.textContent = previousContents;
+		}
+	}
+
+	// Store the editor contents periodically,
+	// but only saving it if the previous contents
+	// is different from the current contents.
+	let lastcontents = "";
+	setInterval(function () {
+		let element = document.querySelector("#inputdata-example");
+		if (element) {
+			let contents = element.textContent;
+			if (contents !== lastcontents) {
+				localStorage.ratioscore = contents;
+			}
+			lastcontents = contents;
+		}
+	}, 1000);
+
+});
+
+
+
+</script>
+
+
 

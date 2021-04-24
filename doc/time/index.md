@@ -246,7 +246,7 @@ beat per second.
 
 
 
-<h2> Time fractions </h2>
+<h2> Fractions </h2>
 
 The `**time`, `**dtime`, `**ms`, and `**dms` timelines can use rational numbers in 
 addition to floating point numbers.
