@@ -255,7 +255,7 @@ Here is an example of exponent notation to generate 12-TET:
 *-	*-
 </script>
 
-See the <a href="/scales/equal-temperament">Equal-temperament calculator</a> page.
+See the <a href="/equal-temperament">Equal-temperament calculator</a> page.
 
 <h2> Expressions </h2>
 
