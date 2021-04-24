@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: symbol substitution"
-permalink: /doc/symbols/index.html
-layout: default
+title: "Symbol substitution"
+permalink: /symbols/index.html
+layout: page
 vim: ts=8:ft=html
 ---
 

@@ -1,29 +1,22 @@
 ---
-title: "Ratioscore: Equal-temperament calculator"
-permalink: /doc/scales/equal-temperament/index.html
+title: "Equal-temperament calculator"
+permalink: /equal-temperament/index.html
 layout: default
-vim: ts=8:ft=html
+vim: ts=3:ft=html
 ---
 
 {% include_relative listeners.html %}
 {% include_relative styles-local.html %}
 {% include_relative scripts-local.html %}
 
-<nobr>
-Octave: <input id="octave" value="2"> 
-</nobr>
-<nobr>
-Divisions: <input id="divisions" value="12">
-</nobr>
-<nobr>
-Tempo: <input id="tempo" value="120">
-</nobr>
-<nobr>
-Reference: <input id="reference" value="C4">
-</nobr>
-<nobr>
-{% include_relative instrument.html %}
-</nobr>
+<div style="line-height:34px;">
+	<nobr><label for="octave">Octave:</label><input id="octave" value="2"></nobr>
+	<nobr><label for="divisions">Divisions:</label><input id="divisions" value="12"></nobr>
+	<nobr><label for="tempo">Tempo:</label><input id="tempo" value="120"></nobr>
+	<nobr><label for="reference">Reference:</label>{% include_relative reference-pitch.html %}</nobr>
+	<nobr><label for="instrument">Instrument:</label>{% include_relative instrument.html %}</nobr>
+</div>
+
 <!--
 <span class="link" onclick="copyUrl(); alert('Link copied to clipboard');">copy link</span>
 -->
@@ -33,7 +26,7 @@ Reference: <input id="reference" value="C4">
 </script>
 
 
-Notes:
+<h3> Notes </h3>
 
 <ul>
 

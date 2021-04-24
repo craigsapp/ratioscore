@@ -1,6 +1,6 @@
 ---
 title: "Ratioscore: Shruti"
-permalink: /doc/scales/shruti/index.html
+permalink: /shruti/index.html
 layout: default
 vim: ts=8:ft=html
 ---

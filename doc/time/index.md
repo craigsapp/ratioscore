@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: specifying time"
-permalink: /doc/timeline/index.html
-layout: default
+title: "Representing time"
+permalink: /time/index.html
+layout: page
 vim: ts=8:ft=html
 ---
 
@@ -27,8 +27,8 @@ line.  Time values need to be sorted from low to high in the score.
 Here is an example of playing a new note once every quarter second,
 and then once every half second, then once every second:
 
-{% include ratioscore.html id="time" %}
-<script type="application/x-ratioscore" id="time">
+{% include ratioscore.html id="time-example" %}
+<script type="application/x-ratioscore" id="time-example">
 **time	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
@@ -58,8 +58,8 @@ The `**dtime` spine gives the time in seconds to wait until playint
 the next line of the score.  Here is an example that produces the
 same rhythms as the previous example using `**time`:
 
-{% include ratioscore.html id="dtime" %}
-<script type="application/x-ratioscore" id="dtime">
+{% include ratioscore.html id="dtime-example" %}
+<script type="application/x-ratioscore" id="dtime-example">
 **dtime	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
@@ -85,8 +85,8 @@ same rhythms as the previous example using `**time`:
 The `**ms` spine is similar to `**time`, but the units are milliseconds
 (1000 millseconds equals one second).
 
-{% include ratioscore.html id="ms" %}
-<script type="application/x-ratioscore" id="ms">
+{% include ratioscore.html id="ms-example" %}
+<script type="application/x-ratioscore" id="ms-example">
 **ms	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
@@ -112,8 +112,8 @@ The `**ms` spine is similar to `**time`, but the units are milliseconds
 The `**dms` spine is similar to `**dtime`, but the units are delta
 milliseconds.
 
-{% include ratioscore.html id="dms" %}
-<script type="application/x-ratioscore" id="dms">
+{% include ratioscore.html id="dms-example" %}
+<script type="application/x-ratioscore" id="dms-example">
 **dms	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
@@ -142,8 +142,8 @@ One or more augmentation dots can be added after the number, such
 as `2.` for a dotted half note, or `20..` four a doubly-dotted
 quintuplet sixteenth note.
 
-{% include ratioscore.html id="recip" %}
-<script type="application/x-ratioscore" id="recip">
+{% include ratioscore.html id="recip-example" %}
+<script type="application/x-ratioscore" id="recip-example">
 **recip	**ratio	**ratio	**ratio
 *	*Ikoto	*Ikoto	*Ikoto
 *	*ref:C3	*ref:C4	*ref:C5
@@ -162,7 +162,7 @@ quintuplet sixteenth note.
 *-	*-	*-	*-
 </script>
 
-<h2> Implicit timeline </h2>
+<h2> Implicit time </h2>
 
 If there is no timeline in the score, then an implicit `**dtime` is used, with each
 data line in the score played for one second (plus any tempo changes).  Tempo changes
@@ -191,7 +191,7 @@ can be given in any `**ratio` or `**drum` spine.
 </script>
 
 
-<h2> Tempo changes </h2>
+<h2> Tempo </h2>
 
 All time spines can be altered by tempo changes.  This will cause
 time descriptions such as `**time`, `**dtime`, `**ms` and `**dms`
@@ -202,8 +202,8 @@ number of beats to perform in one minute (`MM` = "Maelzel's Metronome").
 `*MM60` is the default tempo for a time spines, and is equal to one
 beat per second.
 
-{% include ratioscore.html id="tempo" %}
-<script type="application/x-ratioscore" id="tempo">
+{% include ratioscore.html id="tempo-example" %}
+<script type="application/x-ratioscore" id="tempo-example">
 **recip	**ratio	**ratio
 *	*Iorgan	*Iclars
 *	*ref:C3	*ref:C4
@@ -334,8 +334,8 @@ Barlines are indicated by placing an equals sign (`=`) in each column of the
 score.  An optional measure number can follow the equals sign.  The divisions
 of the score into measures does not have to be equal or metrical.
 
-{% include ratioscore.html id="barlines" %}
-<script type="application/x-ratioscore" id="barlines">
+{% include ratioscore.html id="barlines-example" %}
+<script type="application/x-ratioscore" id="barlines-example">
 **dtime	**ratio
 *	*Iflt
 *	*ref:A3

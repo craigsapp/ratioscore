@@ -1,0 +1,125 @@
+<script>
+// vim: ts=3
+
+
+//////////////////////////////
+//
+// DOMContentLoaded event -- add anchords
+//
+
+document.addEventListener("DOMContentLoaded", function () {
+	let list = document.querySelectorAll("h2");
+	for (let i=0; i<list.length; i++) {
+		let contents = prepareAnchorText(list[i].textContent);
+		let anchor = document.createElement("a");
+		anchor.name = contents;
+		list[i].parentNode.insertBefore(anchor, list[i]);
+		checkForUrlHash();
+	}
+	setTimeout(function () {
+		// have to wait until sidebar has been prepared
+		insertHeadingsIntoSidebar();
+	}, 50);
+});
+
+
+
+//////////////////////////////
+//
+// checkForUrlHash -- If there is a URL hash, move to it.
+//
+
+function checkForUrlHash() {
+	console.log("complete checkForUrlHash");
+}
+
+
+
+//////////////////////////////
+//
+// insertHeadingsIntoSidebar --
+//
+
+function insertHeadingsIntoSidebar() {
+	let list = document.querySelectorAll("h2");
+	let anchors = [];
+	let anchortexts = [];
+	for (let i=0; i<list.length; i++) {
+		let contents = prepareAnchorText(list[i].textContent);
+		anchors.push(contents);
+		anchortexts.push(list[i].innerHTML);
+	}
+	console.log("ANCHORS", anchors);
+	
+	let pagelink = getPageLink();
+	if (!pagelink) {
+console.log("NO PAGELINK");
+		return;
+	}
+	console.log("PAGELINK", pagelink);
+	let subheads = document.createElement("div");
+	subheads.classList.add("subheadings");
+	let output = "";
+	for (let i=0; i<anchors.length; i++) {
+		output += '<a href="#' + anchors[i] + '">';
+		output += anchortexts[i] + "</a>";
+		if (i < anchors.length - 1) {
+			output += "|";
+		}
+	}
+console.log("OUTPUT", output);
+	
+	subheads.innerHTML = output;
+	insertAfter(subheads, pagelink);
+}
+
+
+
+//////////////////////////////
+//
+// insertAfter --
+//
+
+function insertAfter(newNode, existingNode) {
+    existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
+}
+	
+
+
+//////////////////////////////
+//
+// getPageLink --
+//
+
+function getPageLink() {
+	let list = document.querySelectorAll("nav a.sidebar-nav-item");
+	let target = document.location.href;
+	target = target.replace(/#.*$/, "");
+	target = target.replace(/\?.*$/, "");
+	target = target.replace(/\/(index.html)?$/, "");
+	for (let i=0; i<list.length; i++) {
+		let href = list[i].href.replace(/\/(index.html)?$/, "");
+		if (href === target) {
+			return list[i];
+		}
+	}
+}
+
+//////////////////////////////
+//
+// prepareAnchorText --
+//
+
+function prepareAnchorText(text) {
+	text = text.replace(/^\s*/, "").replace(/\s*$/, "");
+	text = text.replace(/[^A-Za-z0-9 _-]/g, "");
+	text = text.toLowerCase();
+	text = text.replace(/\s+/g, "_");
+	return text;
+}
+
+
+</script>
+
+
+

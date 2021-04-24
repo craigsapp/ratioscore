@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: dynamics"
-permalink: /doc/dynamics/index.html
-layout: default
+title: "Dynamics"
+permalink: /dynamics/index.html
+layout: page
 vim: ts=8:ft=html
 ---
 

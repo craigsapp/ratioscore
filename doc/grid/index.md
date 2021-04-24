@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: interval grid"
-permalink: /doc/grid/index.html
-layout: default
+title: "Interval grid"
+permalink: /grid/index.html
+layout: page
 vim: ts=8:ft=html
 ---
 

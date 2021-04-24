@@ -1,6 +1,6 @@
 ---
 title: "Ratioscore: Gamelan"
-permalink: /doc/scales/gamelan/index.html
+permalink: /gamelan/index.html
 layout: default
 vim: ts=8:ft=html
 ---

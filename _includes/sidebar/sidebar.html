@@ -1,0 +1,28 @@
+<!--
+	vim: ts=3
+-->
+
+<div class="sidebar">
+	<div class="container">
+	<!-- <div class="container sidebar-sticky"> -->
+	<div class="sidebar-about">
+		<table class="sidebar-title">
+			<tr>
+				<td>
+					<h1 style="padding:0; margin:0">
+						<a href="{{ site.baseurl }}">{{ site.title }}</a>
+					</h1>
+					<p class="lead">{{ site.description }}</p>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<nav class="sidebar-nav">
+		{% include documentation.html %}
+      <a target="_blank" class="sidebar-nav-item" href="{{ site.github.repo }}">Github project</a>
+	</nav>
+
+	<div style="height:20px"></div><!-- extra space needed for playbar -->
+  </div>
+</div>

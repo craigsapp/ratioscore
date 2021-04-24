@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: instruments"
-permalink: /doc/instruments/index.html
-layout: default
+title: "Instruments"
+permalink: /instruments/index.html
+layout: page
 vim: ts=3:ft=html
 ---
 
@@ -16,9 +16,9 @@ href="https://www.humdrum.org/instrument-codes/index.html">Humdrum
 instrument codes</a>.
 
 
-<h2> General MIDI instrument numbers </h2>
+<h2> Number </h2>
 
-Here is a list of General MIDI instruments that can be used in Ratioscores:
+Here is a list of General MIDI instruments numbers that can be used in Ratioscores:
 
 
 <ul>
@@ -267,8 +267,16 @@ above list of General MIDI instruments.
 </script>
 
 
-<h2 style="margin-top:90px; margin-bottom:50px;"> Instrument codes </h2>
+<h2 style="margin-top:90px; margin-bottom:50px;"> Tag </h2>
 
+Text-based tags can be used to select an instrument:
+
+<ul>
+<li> clars = [soprano] clarinet </li>
+<li> koto = koto </li>
+<li> violn = violin </li>
+<li> cello = cello </li>
+</ul>
 
 
 {% include ratioscore.html id="humdrum-instrument" %}

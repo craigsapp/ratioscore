@@ -1,3 +1,74 @@
+# Dependencies
+markdown:         redcarpet
+highlighter:      pygments
+
+# Permalinks
+permalink:        pretty
+relative_permalinks: false
+
+# Setup
+title:            Ratioscore
+tagline:          'Just Intonation Tool'
+description:      'Just Intonation Tool'
+url:              https://ratioscore.humdrum.org
+baseurl:          /
+
+paginate:         5
+
+# Stylings
+content_background:                 "#B9936A"
+hyperlink_color:                    "#7B622C"
+hyperlink_hover_color:              "#BD7072"
+ratioscore_light:                   "#BFA571"
+header_color:                       "#3B1C04"
+text_color:                         "#3B1C04"
+
+# General colors
+ratioscore_dark:                    "#3B1C04"
+ratioscore_light:                   "#BF9471"
+
+# Sidebar colors:
+sidebar_background:                 "#6b3f1c"
+sidebar_hyperlink_color:            "white"
+sidebar_hyperlink_hover_color:      "#fcc637cc"
+
+# Ratioscore toolbar colors:
+ratioscore_button_background:       "#5D3515"
+ratioscore_button_light:            "#BF9471"
+ratioscore_button_highlight:        "#fcc637cc"
+ratioscore_button_background_hover: "#3B1C04"
+
+# Ratioscore editor colors:
+ratioscore_editor_font_color:       "#000000"
+ratioscore_editor_background:       "#FFE4B1"
+
+
+# https://paletton.com/#uid=50t0u0kkzfscZnYgqjboJbEu27m
+#
+# Main color:  #7B4F2C
+# Darker hue:  #3B1C04
+#              #5D3515
+#              #996D4A
+# Lighter hue: #BF9471
+#
+# Red related colors:
+# Main color:  #7A2C2E
+# Darker hue:  #3A0405
+#              #5C1517
+#              #974A4C
+# Lighter hue: #BD7072
+#
+# Yellowish related colors:
+# Main color:  #7B602C
+# Darker hue:  #3B2804
+#              #5D4415
+#              #997E4A
+# Lighter hue: #BFA571
+#
+
+
+github:
+  repo:           https://github.com/craigsapp/ratioscore
 
 
 exclude:
@@ -6,3 +77,5 @@ exclude:
    - scores
    - external
    - tests
+
+

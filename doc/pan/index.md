@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: panning"
-permalink: /doc/pan/index.html
-layout: default
+title: "Panning"
+permalink: /pan/index.html
+layout: page
 vim: ts=8:ft=html
 ---
 

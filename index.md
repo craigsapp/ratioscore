@@ -1,11 +1,11 @@
 ---
-title: Ratioscore
 permalink: /index.html
 vim: ts=3
 ---
 
+<div style="height:18px;"></div>
 
-{% include ratioscore.html id="example" tabsize="12" height="500px" %}
+{% include ratioscore.html id="example" tabsize="12" minheight="500px" %}
 <script type="application/x-ratioscore" id="example">
 **dtime	**ratio
 *	*Iclars
@@ -22,10 +22,6 @@ vim: ts=3
 </script>
 
 {% include droparea/main.html %}
-
-<h2> Documentation </h2>
-
-{% include documentation.html %}
 
 
 

@@ -1,0 +1,56 @@
+
+<!--
+	vim: ts=3
+-->
+
+<table class="options">
+	<tr>
+		<th> Part </th>
+		<th> Duration </th>
+		<th> Timbre </th>
+		<th> Pitch </th>
+		<th> Reference </th>
+	</tr>
+
+	<tr>
+		<td> <span class="heading">1</span> </td>
+		<td> <input id="cycle-1" value="2" size="3"> </td>
+		<td> <select id="timbre-1">{% include_relative instrument.html %}</select> </td>
+		<td> <input id="pitch-1" value="1" size="3"> </td>
+		<td> <select id="ref-1">{% include_relative reference-pitch.html %}</select> </td>
+	</tr>
+	<tr>
+		<td> <span class="heading">2</span> </td>
+		<td> <input id="cycle-2" value="3" size="3"> </td>
+		<td> <select id="timbre-2">{% include_relative instrument.html %}</select> </td>
+		<td> <input id="pitch-2" value="1" size="3"> </td>
+		<td> <select id="ref-2">{% include_relative reference-pitch.html %}</select> </td>
+	</tr>
+	<tr>
+		<td> <span class="heading">3</span> </td>
+		<td> <input id="cycle-3" value="0" size="3"> </td>
+		<td> <select id="timbre-3">{% include_relative instrument.html %}</select> </td>
+		<td> <input id="pitch-3" value="1" size="3"> </td>
+		<td> <select id="ref-3">{% include_relative reference-pitch.html %}</select> </td>
+	</tr>
+	<tr>
+		<td> <span class="heading">4</span> </td>
+		<td> <input id="cycle-4" value="0" size="3"> </td>
+		<td> <select id="timbre-4">{% include_relative instrument.html %}</select> </td>
+		<td> <input id="pitch-4" value="1" size="3"> </td>
+		<td> <select id="ref-4">{% include_relative reference-pitch.html %}</select> </td>
+	</tr>
+	<tr>
+		<td> <span class="heading">5</span> </td>
+		<td> <input id="cycle-5" value="0" size="3"> </td>
+		<td> <select id="timbre-5">{% include_relative instrument.html %}</select> </td>
+		<td> <input id="pitch-5" value="1" size="3"> </td>
+		<td> <select id="ref-5">{% include_relative reference-pitch.html %}</select> </td>
+	</tr>
+</table>
+
+<nobr><label fot="repeats">Cycle repetitions: </label><input id="repeats" size="3" value="10"></nobr>
+<nobr><label fot="tempo">Tempo: </label><input id="tempo" size="3" value="320"></nobr>
+
+
+

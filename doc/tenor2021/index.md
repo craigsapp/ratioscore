@@ -1,6 +1,6 @@
 ---
-title: "Ratioscore: TENOR 2021 examples"
-permalink: /doc/tenor2021/index.html
+title: "TENOR 2021 examples"
+permalink: /tenor2021/index.html
 layout: default
 vim: ts=8:ft=html
 ---

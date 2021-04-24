@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: glissandos"
-permalink: /doc/glissandos/index.html
-layout: default
+title: "Glissandos"
+permalink: /glissandos/index.html
+layout: page
 vim: ts=8:ft=html
 ---
 
@@ -54,7 +54,7 @@ music notation more closely):
 </script>
 
 
-<h2> Pitchbend update rate for glissandos </h2>
+<h2> Pitchbend update rate </h2>
 
 When doing glissandos quickly on large intervals, the individual
 pitchbend adjustments may become audible.  By default, pitchbend

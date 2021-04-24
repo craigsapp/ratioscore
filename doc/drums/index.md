@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: drums"
-permalink: /doc/drums/index.html
-layout: default
+title: "Drums"
+permalink: /drums/index.html
+layout: page
 vim: ts=8:ft=html
 ---
 

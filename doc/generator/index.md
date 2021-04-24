@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: Score generator"
-permalink: /doc/generator/index.html
-layout: default
+title: "Score generator"
+permalink: /generator/index.html
+layout: page
 vim: ts=3:ft=html
 ---
 

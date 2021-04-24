@@ -1,6 +1,6 @@
 ---
 title: "Ratioscore: 53-TET"
-permalink: /doc/scales/53tet/index.html
+permalink: /53tet/index.html
 layout: default
 vim: ts=8:ft=html
 ---

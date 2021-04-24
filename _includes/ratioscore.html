@@ -19,20 +19,18 @@
 		onsubmit="event.preventDefault(); saveRatioscoreRendering(event, '{{include.id}}');">
 
 	<div style="{% if include.width %}width:{{include.width}}; {% else %}width:100%; {% endif %}">
-
-		<table style="width=100%; padding-top:0px">
-			<tr style="width:100%; margin:0; padding:0;" valign="top">
+		<table class="ratioscore-editor-toolbar">
+			<tr valign="top">
 				<td>
-					<div id="audio-{{include.id}}" 
-							title="download and play"
-							style="position:relative; left:-5px; top:0px; cursor:pointer;" 
+					<span 
+							title="Play"
+							class="button fa-stack fa-1x"
+							id="audio-{{include.id}}" 
 							onclick="PlayAudioFile('{{include.id}}', this);" 
-							href="" class="play">
-						<span title="Paste from system clipboard" class="button fa-stack fa-1x">
-							<i class="fa fa-square hovering fa-stack-2x"></i>
-							<i class="ratioscore-play-button fa fa-play fa-stack-1x fa-inverse"></i>
-						</span>
-					</div>
+					>
+						<i class="fa fa-square hovering fa-stack-2x"></i>
+						<i class="fa fa-play fa-stack-1x fa-inverse play"></i>
+					</span>
 				</td>
 				<td style="width:100%;">
 				</td>
@@ -63,17 +61,17 @@
 					<span onclick="event.preventDefault(); saveRatioscoreRendering(event, '{{include.id}}', 'mp3');" title="Download MP3" class="button fa-stack fa-1x">
 						<i class="fa fa-square hovering fa-stack-2x"></i>
 						<i class="fa fa-download fa-stack-1x chain-volume fa-inverse"></i>
-						<i class="fa fa-volume-up volume" style="color:#fcc637cc"></i>
+						<i class="fa fa-volume-up volume"></i>
 					</span>
 					<span onclick="event.preventDefault(); saveRatioscoreRendering(event, '{{include.id}}', 'mid');" title="Download MIDI" class="button fa-stack fa-1x">
 						<i class="fa fa-square hovering fa-stack-2x"></i>
-						<i class="fa fa-download fa-stack-1x chain-music fa-inverse"></i>
-						<i class="fa fa-music notes" style="color:#fcc637cc"></i>
+						<i class="fa fa-download fa-stack-1x chain-download fa-inverse"></i>
+						<i class="fa fa-music notes"></i>
 					</span>
 					<span onclick="event.preventDefault(); saveRatioscoreRendering(event, '{{include.id}}', 'ratioscore');" title="Download Ratioscore" class="button fa-stack fa-1x">
 						<i class="fa fa-square hovering fa-stack-2x"></i>
-						<i class="fa fa-download fa-stack-1x chain-music fa-inverse"></i>
-						<i class="fa fa-file-text-o notes" style="color:#fcc637cc"></i>
+						<i class="fa fa-download fa-stack-1x chain-download fa-inverse"></i>
+						<i class="fa fa-file-text-o rfile"></i>
 					</span>
 					<span title="Copy to system clipboard" onclick="CopyScoreToClipboard('{{include.id}}');" class="button fa-stack fa-1x">
 						<i class="fa fa-square hovering fa-stack-2x"></i>
@@ -99,7 +97,7 @@
 
 		<script
 				id="inputdata-{{include.id}}"
-				style="width:100%; resize:both; overflow:auto; {% if include.height %}height:{{include.height}}; {% else %}height:auto; {% endif %} {% if include.tabsize %}tab-size:{{include.tabsize}}; -moz-tab-size:{{include.tabsize}};{% else %}tab-size:10; -moz-tab-size:10;{% endif %}"
+				style="max-height: calc(100vh - 200px); width:100%; resize:both; overflow:auto; {% if include.minheight %}min-height:{{ include.minheight }};{% endif %}{% if include.height %}height:{{ include.height }}; {% else %}height:auto; {% endif %} {% if include.tabsize %}tab-size:{{ include.tabsize }}; -moz-tab-size:{{ include.tabsize }};{% else %}tab-size:10; -moz-tab-size:10;{% endif %}"
 				name="inputdata"
 				spellcheck="false"
 				oncopy="CopyScoreToClipboard(event.target.id);"

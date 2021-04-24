@@ -1,12 +1,12 @@
 ---
-title: "Ratioscore: representing pitch"
-permalink: /doc/pitch/index.html
-layout: default
+title: "Pitch"
+permalink: /pitch/index.html
+layout: page
 vim: ts=8:ft=html
 ---
 
 Notes are created in a Ratioscore by adding fractions in `**ratio`
-spines (columns) to a <a href="/doc/timeline">timeline</a>.  The
+spines (columns) to a <a href="/timeline">timeline</a>.  The
 fractions are used to calculate the pitch of the note by multiplying
 the frequency of the reference pitch.  For example of the reference
 pitch is A4 (=440Hz), then the fraction `3/2` will generate the
@@ -226,7 +226,7 @@ third, and `5/5` is the reference pitch. Also: `5/10` is an octave lower than th
 !!!filter: myank -m 0,1,1,2,3,4,2,3,1,2,3,2,1,4,4,5,4,3,3,2,1,2,3,4,5,4,5,6
 </script>
 
-See the <a href="/doc/intervals">interval dictionary</a> for a list of
+See the <a href="/intervals">interval dictionary</a> for a list of
 various named ratios.
 
 <h2> Exponents </h2>
@@ -254,7 +254,7 @@ Here is an example of exponent notation to generate 12-TET:
 *-	*-
 </script>
 
-See the <a href="/doc/scales/equal-temperament">Equal-temperament calculator</a> page.
+See the <a href="/scales/equal-temperament">Equal-temperament calculator</a> page.
 
 
 <h2> Cents </h2>

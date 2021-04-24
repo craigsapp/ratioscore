@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: About"
-permalink: /doc/about/index.html
-layout: default
+title: "About"
+permalink: /about/index.html
+layout: page
 vim: ts=8:ft=html
 ---
 
@@ -24,7 +24,7 @@ performance.
 {% include ratioscore.html id="quick-answers" height="600px" %}
 <script type="application/x-ratioscore" id="quick-answers">
 !!!COM: Zhu, Julie
-!!!OTL: The Answers (adapted for bells)
+!!!OTL: The Answers (prototype)
 !!!ODT: 2020/12
 **time	**ratio	**ratio	**ratio	**ratio
 *	*Iclars	*Iclars	*Iclars	*Iclars

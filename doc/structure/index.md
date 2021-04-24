@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: file structure"
-permalink: /doc/structure/index.html
-layout: default
+title: "File structure"
+permalink: /structure/index.html
+layout: page
 vim: ts=8:ft=html
 ---
 

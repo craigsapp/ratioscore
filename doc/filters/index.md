@@ -1,7 +1,7 @@
 ---
-title: "Ratioscore: filtering"
-permalink: /doc/filters/index.html
-layout: default
+title: "Filtering"
+permalink: /filters/index.html
+layout: page
 vim: ts=8:ft=html
 ---
 

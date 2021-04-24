@@ -1,0 +1,32 @@
+
+
+
+<script>
+// vim: ts=3
+
+document.addEventListener("DOMContentLoaded", function () {
+	let list = document.querySelectorAll("nav a.sidebar-nav-item");
+	let target = document.location.href;
+	target = target.replace(/#.*$/, "");
+	target = target.replace(/\?.*$/, "");
+	target = target.replace(/\/(index.html)?$/, "");
+	for (let i=0; i<list.length; i++) {
+		let href = list[i].href.replace(/\/(index.html)?$/, "");
+		console.log("COMPARING", href, "TO", target);
+		if (href === target) {
+			// console.log("SETTING LINK", href, "TO ACTIVE");
+			list[i].classList.add("active");
+		}
+	}
+	if (document.location.pathname !== "/") {
+		// add "Home link"
+		var link = document.createElement("a");
+		link.classList.add("sidebar-nav-item");
+		link.innerHTML = "Home";
+		link.href="/";
+		list[0].parentNode.insertBefore(link, list[0]);
+	}
+});
+
+
+</script>

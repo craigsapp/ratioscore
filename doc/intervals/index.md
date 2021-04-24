@@ -1,8 +1,8 @@
 ---
-title: "Ratioscore: interval dictionary"
-permalink: /doc/intervals/index.html
-layout: default
-vim: ts=8:ft=html
+title: "Interval dictionary"
+permalink: /intervals/index.html
+layout: page
+vim: ts=3:ft=html
 ---
 
 {% include_relative listeners.html %}
@@ -12,25 +12,12 @@ vim: ts=8:ft=html
 This page gives examples of various intervals sorted from smallest to 
 largest.
 
-<table>
-<tr>
-<td>
-<nobr>
-{% include_relative reference-pitch.html %}
-</nobr>
-</td>
-<td style="padding-left:30px" >
-<nobr>
-{% include_relative instrument.html %}
-</nobr>
-</td>
-<td style="padding-left:30px" >
-<nobr>
-{% include_relative tempo.html %}
-</nobr>
-</td>
-</tr>
-</table>
+<nobr><label for="reference">Reference pitch:</label>{% include_relative reference-pitch.html %}</nobr>
+<nobr><label for="tempo">Tempo:</label>{% include_relative tempo.html %}</nobr>
+<nobr><label for="instrument">Instrument:</label>{% include_relative instrument.html %}</nobr>
+
+<div style="height:10px;"></div>
+
 {% include_relative ratioscore-display.html %}
 
 

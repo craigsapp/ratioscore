@@ -1,6 +1,6 @@
 ---
 title: "Ratioscore: Bohlen-Pierce scale"
-permalink: /doc/scales/bohlen-pierce/index.html
+permalink: /bohlen-pierce/index.html
 layout: default
 vim: ts=8:ft=html
 ---
