@@ -4,7 +4,7 @@
 
 //////////////////////////////
 //
-// CopyToClipboard -- 
+// CopyToClipboard --
 //
 
 function CopyToClipboard(string) {
@@ -134,7 +134,7 @@ function PasteScoreFromClipboard(id) {
 //
 // ClearEditorContents --  If the editor is already empty, then restore
 //    the previously cleared contents.  Copy the selected text, or if no
-//    text is selected, then copy all of the text.  
+//    text is selected, then copy all of the text.
 //
 
 CLEARED_EDITOR_CONTENTS = {};
@@ -154,7 +154,7 @@ function ClearEditorContents(id) {
 		if (!CLEARED_EDITOR_CONTENTS[id].match(/^\s*$/)) {
 			element.textContent = CLEARED_EDITOR_CONTENTS[id];
 			CLEARED_EDITOR_CONTENTS[id] = "";
-		} 
+		}
 	} else {
 		CLEARED_EDITOR_CONTENTS[id] = element.textContent;
 		element.textContent = "";

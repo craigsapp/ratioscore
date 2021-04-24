@@ -49,11 +49,9 @@ function insertHeadingsIntoSidebar() {
 		anchors.push(contents);
 		anchortexts.push(list[i].innerHTML);
 	}
-	console.log("ANCHORS", anchors);
-	
+
 	let pagelink = getPageLink();
 	if (!pagelink) {
-console.log("NO PAGELINK");
 		return;
 	}
 	console.log("PAGELINK", pagelink);
@@ -67,8 +65,7 @@ console.log("NO PAGELINK");
 			output += "|";
 		}
 	}
-console.log("OUTPUT", output);
-	
+
 	subheads.innerHTML = output;
 	insertAfter(subheads, pagelink);
 }
@@ -83,7 +80,7 @@ console.log("OUTPUT", output);
 function insertAfter(newNode, existingNode) {
     existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
 }
-	
+
 
 
 //////////////////////////////

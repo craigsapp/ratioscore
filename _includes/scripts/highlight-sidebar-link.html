@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
 	target = target.replace(/\/(index.html)?$/, "");
 	for (let i=0; i<list.length; i++) {
 		let href = list[i].href.replace(/\/(index.html)?$/, "");
-		console.log("COMPARING", href, "TO", target);
 		if (href === target) {
 			// console.log("SETTING LINK", href, "TO ACTIVE");
 			list[i].classList.add("active");
