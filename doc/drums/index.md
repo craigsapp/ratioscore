@@ -163,7 +163,7 @@ Polyrhythm example:
 
 {% include ratioscore.html id="drum-34" %}
 <script type="application/x-ratioscore" id="drum-34">
-!!!filter: myank -m 0,43,43,43,53,43,43,53,53,43,53,53,53,1
+!!!filter: myank -m 0,43*3,53,43*2,53*2,43,53*3,1
 **dtime	**drum	**drum
 =0	=0	=0
 *MM500	*	*
@@ -211,7 +211,7 @@ be interleaved in any order.
 
 {% include ratioscore.html id="drum-ratio" %}
 <script type="application/x-ratioscore" id="drum-ratio">
-!!!filter: myank -m 0,1,2,3,2,1,3,2,2,1,3,1,1,2,3,2,3,2,2,2,1,1,1,1,3
+!!!filter: myank -m 0,1,2,3,2,1,3,2*2,1,3,1*2,2,3,2,3,2*3,1*4,3
 **dtime	**ratio	**drum	**ratio
 =0	=0	=0	=0
 *MM240	*I#14	*	*Iclars
