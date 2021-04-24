@@ -2,7 +2,7 @@
 title: "About"
 permalink: /about/index.html
 layout: page
-vim: ts=8:ft=html
+vim: ts=3:ft=html
 ---
 
 Ratioscore was designed as a composition prototyping system for
@@ -10,9 +10,22 @@ Ratioscore was designed as a composition prototyping system for
 work by the <a target="_blank" href="https://jackquartet.com">JACK
 Quartet</a>:
 
-<iframe width="800" height="600"
-src="https://www.youtube.com/embed/Dx5l-9MUZ1o">
-</iframe>
+<style>
+	iframe {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		align: center;
+	}
+</style>
+
+<div>
+  <div style="position:relative;padding-top:56.25%;">
+    <iframe src="https://www.youtube.com/embed/Dx5l-9MUZ1o" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>
 
 
 Below is the prototype for the final score (first minute of the
