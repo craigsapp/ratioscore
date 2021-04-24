@@ -10,7 +10,7 @@ within the score.  Filters are given on lines starting with `!!!filter:`
 and then the actual filter.
 
 
-<h2> Selecting/rearranging spines </h2>
+<h2 data-sidebar="Spines"> Manipulating spines </h2>
 
 The `extract` filter can be used to pull out specific spines (columns) of data, or
 rearrange them before converting to MIDI/MP3s.  Here is an example where
@@ -162,9 +162,9 @@ Removing the first spine will cause the second spine to be used as the timeline:
 
 
 
-<h2> Rearranging measures </h2>
+<h2 data-sidebar="Measures"> Rearranging measures </h2>
 
-The `myank` filter can be used to mix an match measures.
+The `myank` filter can be used to mix and match measures.
 
 
 {% include ratioscore.html id="myank" %}

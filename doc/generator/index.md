@@ -50,7 +50,7 @@ This page can be used to create a Ratioscore template:
 
 
 
-<h2> Editing Ratioscores in a spreadsheet </h2>
+<h2 class="ignore"> Spreadsheet editing </h2>
 
 It may be convenient to edit a Ratioscore in a spreadsheet program
 such as <a target="_blank" href="https://sheets.google.com">Google

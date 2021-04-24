@@ -1,5 +1,5 @@
 <script>
-// vim: ts=3
+// vim: ts=3:ft=javascript
 
 
 //////////////////////////////
@@ -42,12 +42,28 @@ function checkForUrlHash() {
 
 function insertHeadingsIntoSidebar() {
 	let list = document.querySelectorAll("h2");
+	if (list.length == 0) {
+		return;
+	}
 	let anchors = [];
 	let anchortexts = [];
 	for (let i=0; i<list.length; i++) {
+		if (list[i].classList.contains("ignore")) {
+			continue;
+		}
 		let contents = prepareAnchorText(list[i].textContent);
 		anchors.push(contents);
-		anchortexts.push(list[i].innerHTML);
+		let displaytext = list[i].innerHTML;
+		if (list[i].dataset.sidebar) {
+			displaytext = list[i].dataset.sidebar;
+		}
+		displaytext = displaytext.replace(/^\s+/, "");
+		displaytext = displaytext.replace(/\s+$/, "");
+		anchortexts.push(displaytext);
+	}
+
+	if (anchors.length == 0) {
+		return;
 	}
 
 	let pagelink = getPageLink();
@@ -62,7 +78,7 @@ function insertHeadingsIntoSidebar() {
 		output += '<a href="#' + anchors[i] + '">';
 		output += anchortexts[i] + "</a>";
 		if (i < anchors.length - 1) {
-			output += "|";
+			output += "&nbsp| ";
 		}
 	}
 

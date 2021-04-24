@@ -6,7 +6,7 @@ vim: ts=8:ft=html
 ---
 
 
-<h2> Inline attack velocity </h2>
+<h2 data-sidebar="Inline"> Inline attack velocity </h2>
 
 The default attack velocity for notes is MIDI value 64.  This can
 be changed by adding `*vel:#`, where `#` is an integer between 1
@@ -83,7 +83,7 @@ example each `v`/`V` adjusts the base velocity by 5 units instead of 10:
 
 
 
-<h2> Attack velocity tandem spine </h2>
+<h2 data-sidebar="Parallel"> Attack velocity tandem spine </h2>
 
 For numeric control of attack velocity, a separate column entitled `**vel` can
 be given to the right of the `**ratio` spine that it applies to.  If a `**vel`

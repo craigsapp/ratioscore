@@ -18,12 +18,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		}
 	}
 	if (document.location.pathname !== "/") {
-		// add "Home link"
-		var link = document.createElement("a");
-		link.classList.add("sidebar-nav-item");
-		link.innerHTML = "Home";
-		link.href="/";
-		list[0].parentNode.insertBefore(link, list[0]);
+		var homelink = document.querySelector("#homelink");
+		if (homelink) {
+			homelink.style.visibility = "visible";
+		}
 	}
 });
 

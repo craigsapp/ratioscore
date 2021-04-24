@@ -162,7 +162,7 @@ quintuplet sixteenth note.
 *-	*-	*-	*-
 </script>
 
-<h2> Implicit time </h2>
+<h2 data-sidebar="Implicit"> Implicit time </h2>
 
 If there is no timeline in the score, then an implicit `**dtime` is used, with each
 data line in the score played for one second (plus any tempo changes).  Tempo changes
@@ -360,7 +360,7 @@ of the score into measures does not have to be equal or metrical.
 
 
 
-<h2> Multiple timelines </h2>
+<h2 data-sidebar="Multiple"> Multiple timelines </h2>
 
 Multiple timelines can be present in the Ratioscore, but only the leftmost one
 will be used to perform the **ratio spines.

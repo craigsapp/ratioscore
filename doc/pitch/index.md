@@ -14,7 +14,7 @@ the reference pitch is A4 (=440Hz), then the fraction `3/2` will
 generate the frequency 660 Hz.
 
 
-<h2> Reference pitch </h2>
+<h2 data-sidebar="Reference"> Reference pitch </h2>
 
 The reference pitch is specified in the form   `*ref:A4`, where
 `A4` is the A above middle C.  Here is an example:
@@ -332,7 +332,7 @@ relative to the reference pitch:
 </script>
 
 
-<h2> MIDI key number </h2>
+<h2 data-sidebar="MIDI"> MIDI key number </h2>
 
 MIDI key numbers can be used in `**ratio` spines by following the key
 number by the letter `m`.  A reference pitch is not needed if 

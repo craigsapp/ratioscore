@@ -19,6 +19,55 @@ let DEFAULTS = {
 
 let SETTINGS = {};
 
+let SEQUENCE = {};
+
+SEQUENCE["1"] = 0;
+SEQUENCE["2"] = 1;
+SEQUENCE["3"] = 2;
+SEQUENCE["4"] = 3;
+SEQUENCE["5"] = 4;
+SEQUENCE["6"] = 5;
+SEQUENCE["7"] = 6;
+SEQUENCE["8"] = 7;
+SEQUENCE["9"] = 8;
+SEQUENCE["0"] = 9;
+SEQUENCE["-"] = 10;
+SEQUENCE["="] = 11;
+SEQUENCE["q"] = 12;
+SEQUENCE["w"] = 13;
+SEQUENCE["e"] = 14;
+SEQUENCE["r"] = 15;
+SEQUENCE["t"] = 16;
+SEQUENCE["y"] = 17;
+SEQUENCE["u"] = 18;
+SEQUENCE["i"] = 19;
+SEQUENCE["o"] = 20;
+SEQUENCE["p"] = 21;
+SEQUENCE["["] = 22;
+SEQUENCE["]"] = 23;
+SEQUENCE["\\"] = 24;
+SEQUENCE["a"] = 25;
+SEQUENCE["s"] = 26;
+SEQUENCE["d"] = 27;
+SEQUENCE["f"] = 28;
+SEQUENCE["g"] = 29;
+SEQUENCE["h"] = 30;
+SEQUENCE["j"] = 31;
+SEQUENCE["k"] = 32;
+SEQUENCE["l"] = 33;
+SEQUENCE[";"] = 34;
+SEQUENCE["'"] = 35;
+SEQUENCE["z"] = 36;
+SEQUENCE["x"] = 37;
+SEQUENCE["c"] = 38;
+SEQUENCE["v"] = 39;
+SEQUENCE["b"] = 40;
+SEQUENCE["n"] = 41;
+SEQUENCE["m"] = 42;
+SEQUENCE[","] = 43;
+SEQUENCE["."] = 44;
+SEQUENCE["/"] = 45;
+
 
 document.addEventListener("DOMContentLoaded", function () {
 	loadDefaultSettings();
@@ -121,6 +170,7 @@ document.addEventListener("keydown", function (event) {
 		AUDIOsequence = [];
 		AUDIOseqname = [];
 		AUDIOratiolist = [];
+		printNoteMapping();
 		var notename = document.querySelector("#notename");
 		if (notename) {
 			notename.innerHTML = "";
@@ -134,58 +184,10 @@ document.addEventListener("keydown", function (event) {
 		return;
 	}
 
-	let sequence = {};
-	sequence["1"] = 0;
-	sequence["2"] = 1;
-	sequence["3"] = 2;
-	sequence["4"] = 3;
-	sequence["5"] = 4;
-	sequence["6"] = 5;
-	sequence["7"] = 6;
-	sequence["8"] = 7;
-	sequence["9"] = 8;
-	sequence["0"] = 9;
-	sequence["-"] = 10;
-	sequence["="] = 11;
-	sequence["q"] = 12;
-	sequence["w"] = 13;
-	sequence["e"] = 14;
-	sequence["r"] = 15;
-	sequence["t"] = 16;
-	sequence["y"] = 17;
-	sequence["u"] = 18;
-	sequence["i"] = 19;
-	sequence["o"] = 20;
-	sequence["p"] = 21;
-	sequence["["] = 22;
-	sequence["]"] = 23;
-	sequence["\\"] = 24;
-	sequence["a"] = 25;
-	sequence["s"] = 26;
-	sequence["d"] = 27;
-	sequence["f"] = 28;
-	sequence["g"] = 29;
-	sequence["h"] = 30;
-	sequence["j"] = 31;
-	sequence["k"] = 32;
-	sequence["l"] = 33;
-	sequence[";"] = 34;
-	sequence["'"] = 35;
-	sequence["z"] = 36;
-	sequence["x"] = 37;
-	sequence["c"] = 38;
-	sequence["v"] = 39;
-	sequence["b"] = 40;
-	sequence["n"] = 41;
-	sequence["m"] = 42;
-	sequence[","] = 43;
-	sequence["."] = 44;
-	sequence["/"] = 45;
-
-	if (AUDIOsequence[sequence[event.key]]) {
-		playMp3Url(AUDIOcache[AUDIOsequence[sequence[event.key]]]);
-		let interval = AUDIOseqname[sequence[event.key]];
-		let rscore = AUDIOratiolist[sequence[event.key]];
+	if (AUDIOsequence[SEQUENCE[event.key]]) {
+		playMp3Url(AUDIOcache[AUDIOsequence[SEQUENCE[event.key]]]);
+		let interval = AUDIOseqname[SEQUENCE[event.key]];
+		let rscore = AUDIOratiolist[SEQUENCE[event.key]];
 
 		let nelement = document.querySelector("#notename");
 		if (nelement) {

@@ -54,7 +54,7 @@ music notation more closely):
 </script>
 
 
-<h2> Pitchbend update rate </h2>
+<h2 data-sidebar="Pitchbend"> Pitchbend update rate </h2>
 
 When doing glissandos quickly on large intervals, the individual
 pitchbend adjustments may become audible.  By default, pitchbend
@@ -101,7 +101,7 @@ to 1/5 and 1/10 of a second respectivly for the last two glissandos.
 </script>
 
 
-<h2> Other examples </h2>
+<h2 data-sidebar="Examples"> Other examples </h2>
 
 Going from a unison to a first-inversion major triad and back again:
 

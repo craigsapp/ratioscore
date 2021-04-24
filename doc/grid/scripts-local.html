@@ -155,7 +155,7 @@ function generateGrid() {
 	let intervals = {};
 
 	let output = "";
-	output += "<table>";
+	output += "<table class='grid'>";
 	for (let r=1; r<=rows; r++) {
 		output += "<tr>";
 		for (let c=1; c<=columns; c++) {
@@ -277,13 +277,11 @@ function calculateMidiKeyCents(cents, reference, dontround) {
 	let midinote = midiref + cents/ 100.0;
 	// Round to 3 digits:
 	if (!dontround) {
-		midinote = parseInt(midinote * 1000.0 + 0.5) / 1000.0;
+		midinote = parseInt(midinote * 100.0 + 0.5) / 100.0;
 		midinote = "" + midinote;
 		if (!midinote.match(/\./)) {
-			midinote += ".000";
+			midinote += ".00";
 		} else if (midinote.match(/\.\d$/)) {
-			midinote += "00";
-		} else if (midinote.match(/\.\d\d$/)) {
 			midinote += "0";
 		}
 	}
@@ -315,7 +313,7 @@ function sortedList(intervals) {
 
 	let negative = "";
 	negative += "<table class='sortedlist'>\n";
-	negative += "<tr><th>Ratio</th><th>Cents</th><th>MIDI&nbsp;key</th><th>Hz</th></tr>\n";
+	negative += "<tr><th>Ratio</th><th>Cents</th><th>MIDI</th><th>Hz</th></tr>\n";
 	for (let i=0; i<centkeys.length; i++) {
 		let cents    = newlist[centkeys[i]].cents;
 		let interval = newlist[centkeys[i]].interval;
@@ -344,7 +342,7 @@ function sortedList(intervals) {
 
 	let positive = "";
 	positive += "<table class='sortedlist'>\n";
-	positive += "<tr><th>Ratio</th><th>Cents</th><th>MIDI&nbsp;key</th><th>Hz</th></tr>\n";
+	positive += "<tr><th>Ratio</th><th>Cents</th><th>MIDI</th><th>Hz</th></tr>\n";
 	for (let i=0; i<centkeys.length; i++) {
 		let cents    = newlist[centkeys[i]].cents;
 		let interval = newlist[centkeys[i]].interval;
@@ -474,7 +472,6 @@ function calculateCents(ratio) {
 //
 
 function playCents(event) {
-	// console.log("PLAYAING CENTS", event);
 	let cents;
 	if (typeof event === "string") {
 		cents = event;
@@ -488,6 +485,7 @@ function playCents(event) {
 		AUDIOseqname.push(cents + " cents");
 		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = AUDIOcache[ratioscore];
+		printNoteMapping();
 		playMp3();
 		return;
 	}
@@ -504,7 +502,8 @@ function playCents(event) {
 		AUDIOsequence.push(ratioscore);
 		AUDIOseqname.push(cents + " cents");
 		AUDIOratiolist.push(ratioscore);
-		AUDIOurl = audiourl;
+		AUDIOurl = audiourl;;
+		printNoteMapping();
 		playMp3();
 	};
 	request.send(formdata);
@@ -518,7 +517,6 @@ function playCents(event) {
 //
 
 function playHz(event) {
-	console.log("PLAYING HERE  HZ", event);
 	let freq;
 	if (typeof event === "string") {
 		freq = event;
@@ -532,6 +530,7 @@ function playHz(event) {
 		AUDIOseqname.push(freq + " Hz");
 		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = AUDIOcache[ratioscore];
+		printNoteMapping();
 		playMp3();
 		return;
 	}
@@ -549,6 +548,7 @@ function playHz(event) {
 		AUDIOseqname.push(freq + " Hz");
 		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = audiourl;
+		printNoteMapping();
 		playMp3();
 	};
 	request.send(formdata);
@@ -575,6 +575,7 @@ function playMidiKey(event) {
 		AUDIOseqname.push(midikey + " MIDI");
 		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = AUDIOcache[ratioscore];
+		printNoteMapping();
 		playMp3();
 		return;
 	}
@@ -592,6 +593,7 @@ function playMidiKey(event) {
 		AUDIOseqname.push(midikey + " MIDI");
 		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = audiourl;
+		printNoteMapping();
 		playMp3();
 	};
 	request.send(formdata);
@@ -605,7 +607,6 @@ function playMidiKey(event) {
 //
 
 function playInterval(event) {
-	// console.log("PLAYING INTERVAL", event);
 	let interval;
 	if (typeof event === "string") {
 		interval = event;
@@ -619,11 +620,11 @@ function playInterval(event) {
 		AUDIOseqname.push(interval);
 		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = AUDIOcache[ratioscore];
+		printNoteMapping();
 		playMp3();
 		return;
 	}
 
-	// console.log("RATIOSCORE", ratioscore);
 	let formdata = new FormData();
 	formdata.append("inputdata", ratioscore);
 	formdata.append("outputformat", "mp3");
@@ -638,6 +639,7 @@ function playInterval(event) {
 		AUDIOseqname.push(interval);
 		AUDIOratiolist.push(ratioscore);
 		AUDIOurl = audiourl;
+		printNoteMapping();
 		playMp3();
 	};
 	request.send(formdata);
@@ -828,7 +830,7 @@ function playMp3Url(url) {
    }
 
 	AUDIO.style.display = "none";
-	var source = AUDIO.querySelector("source");
+	let source = AUDIO.querySelector("source");
 	if (!source) {
 		source = document.createElement("SOURCE");
 		AUDIO.appendChild(source);
@@ -870,7 +872,7 @@ function playMp3() {
 	// AUDIO.onpause = function () { }
 
 	AUDIO.style.display = "none";
-	var source = AUDIO.querySelector("source");
+	let source = AUDIO.querySelector("source");
 	if (!source) {
 		source = document.createElement("SOURCE");
 		AUDIO.appendChild(source);
@@ -881,6 +883,69 @@ function playMp3() {
 	AUDIO.play();
 }
 
+
+//////////////////////////////
+//
+// printNoteMapping --
+//
+
+function printNoteMapping() {
+	let target = document.querySelector("#notemapping");
+	if (!target) {
+		console.log("Cannot find #notemapping");
+		return;
+	}
+	let outputs = [];
+	outputs[0] = "";
+	outputs[1] = "";
+	outputs[2] = "";
+	outputs[3] = "";
+	outputs[4] = "";
+	let row = 0;
+	let rsequence = [];
+	let keys = Object.keys(SEQUENCE);
+	for (let i=0; i<keys.length; i++) {
+		rsequence[SEQUENCE[keys[i]]] = keys[i];
+	}
+	for (let i=0; i<rsequence.length; i++) {
+		let key = rsequence[i];
+		if (typeof key === "undefined") {
+			continue;
+		}
+		let interval = AUDIOseqname[i];
+		if (key === "q") { row++; }
+		if (key === "a") { row++; }
+		if (key === "z") { row++; }
+		if (typeof interval === "undefined") {
+			continue;
+		}
+		if (interval === "") {
+			continue;
+		}
+		outputs[row] += "<table class='keyint'><tr class='keyint'><td class='keyint'><span class='key'>";
+		if      (key === ">")  { outputs[row] += "&gt;";   }
+		else if (key === "<")  { outputs[row] += "&lt;";   }
+		else if (key === "'")  { outputs[row] += "&apos;"; }
+		else if (key === "\"") { outputs[row] += "&quot;"; }
+		else if (key === "&")  { outputs[row] += "&amp;";  }
+		else                   { outputs[row] += key;      }
+		outputs[row] += "</span><span class='int'>";
+		interval = interval.replace(/\s*cents?\s*$/i, "c");
+		interval = interval.replace(/\s*MIDI?\s*$/i, "m");
+		interval = interval.replace(/\s*Hz?\s*$/i, "z");
+		outputs[row] += interval;
+		outputs[row] += "</span></td></tr></table>";
+	}
+
+	let finaloutput = "";
+	for (let i=0; i<outputs.length; i++) {
+		if (!outputs[i]) {
+			continue;
+		}
+		finaloutput  += "<div class='row'>" + outputs[i] + "</div>";
+	}
+	target.innerHTML = finaloutput;
+}
 
 
 </script>

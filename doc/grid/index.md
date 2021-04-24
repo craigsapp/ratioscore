@@ -23,7 +23,7 @@ vim: ts=8:ft=html
 <div id="grid"></div>
 
 
-<h2> Computer keyboard performance </h2>
+<h2 class="ignore"> Computer keyboard performance </h2>
 
 As you press notes in the above grid or sorted list, the sounds
 will be remembered in order.  You can then press keys on the computer
@@ -38,7 +38,7 @@ When pressing a key, the ratio/cents value will be displayed here below:
 
 <div style="font-size: 3em; font-weight: bold;" id="notename"></div>
 
-<div style="font-size: 0.5em;" id="notemappng"></div>
+<div style="font-size: 0.5em;" id="notemapping"></div>
 
 <textarea style="display:none; margin-top:100px; min-height:100px; min-width:300px; font-size: 0.75em !important; font: Courier; tab-size:12;" id="ratioscore"></textarea>
 
