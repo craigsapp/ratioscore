@@ -130,10 +130,12 @@ Here are the names of the instruments in a drum track
 </script>
 
 
-Here is an example of giving instrument names to the note numbers:
+Below is an example of giving instrument names to the note numbers.
+The letters `v` and `V` are deaccent and accent marks respectively.
 
 
-{% include ratioscore.html id="drum-names" %}
+{% include ratioscore.html id="drum-names" tabsize="12" %}
+
 <script type="application/x-ratioscore" id="drum-names">
 !!!RDF**drum: triangle = 81
 !!!RDF**drum: clap = 39
@@ -142,46 +144,46 @@ Here is an example of giving instrument names to the note numbers:
 !!!RDF**drum: ocelot = 76
 **dtime	**drum	**drum	**drum	**drum
 =0	=0	=0	=0	=0
-*MM360	*	*	*	*
+*MM380	*vel:40	*vel:50	*vel:60	*vel:60
 =1	=1	=1	=1	=1
-1	triangle	clap	bongo	ocelot
-1	.	.	.	bell
-1	.	.	bongo	ocelot
-1	.	.	.	bell
+1	triangleV	clap	bongo	ocelotV
+1	.	.	.	bellv
+1	.	.	bongo	ocelotV
+1	.	.	.	bellv
 =2	=2	=2	=2	=2
-1	.	clap	bongo	ocelot
-1	.	.	.	bell
-1	triangle	.	bongo	ocelot
-1	triangle	.	.	bell
+1	.	clap	bongo	ocelotV
+1	.	.	.	bellv
+1	triangleVVV	.	bongoV	ocelotV
+1	triangle	.	.	bellv
 =3	=3	=3	=3	=3
 1	.	clap	bongo	.
 1	.	.	.	.
-1	triangle	.	.	ocelot
-1	.	.	.	bell ocelot
+1	triangle	.	.	ocelotv
+1	.	.	.	bellV ocelotV
 =4	=4	=4	=4	=4
-1	.	clap	bongo	bell
-1	triangle	.	.	.
+1	.	clap	bongo	bellv
+1	trianglev	.	.	.
 1	.	.	.	.
-1	.	.	.	bell
+1	.	.	.	bellV
 =5	=5	=5	=5	=5
-1	.	clap	.	bell ocelot
-1	triangle	.	bongo	ocelot
-1	.	.	bongo	ocelot
-1	.	clap	.	bell ocelot
+1	.	clap	.	bellv ocelotv
+1	trianglev	.	bongoV	ocelotV
+1	.	.	bongovv	ocelotV
+1	.	clap	.	bellv ocelotv
 =6	=6	=6	=6	=6
-1	.	clap	.	bell
+1	.	clap	.	bellV
 1	.	.	bongo	.
-1	triangle	.	bongo	.
-1	.	clap	.	bell
+1	triangleVV	.	bongoV	.
+1	.	clap	.	bellv
 =7	=7	=7	=7	=7
-1	.	clap	.	ocelot
-1	.	.	bongo	ocelot
-1	.	.	bongo	.
-1	.	clap	.	bell ocelot
+1	.	clap	.	ocelotV
+1	.	.	bongovv	ocelotv
+1	.	.	bongoVV	.
+1	.	clap	.	bellv ocelotv
 =8	=8	=8	=8	=2
-1	triangle	clap	bongo	ocelot
+1	triangleVV	clapVV	bongoVV	ocelotVV
 *-	*-	*-	*-	*-
-!!!filter: myank -m 0,1-7,6-1,1*3,2*4,3*5,4*6,5*7,6*8,7*9,8*5
+!!!filter: myank -m 0,1-7,6-1,1*3,2*4,3*5,4*6,5*7,6*8,7*9,8*3,1,2,1,3,1,4,1,5,1,6,1,7,6,7,5,7,4,7,3,7,2,7,1*8,2*7,3*6,4*5,5*4,6*3,7*2,8*5
 </script>
 
 
