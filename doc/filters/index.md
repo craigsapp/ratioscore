@@ -164,8 +164,8 @@ Removing the first spine will cause the second spine to be used as the timeline:
 
 <h2 data-sidebar="Measures"> Rearranging measures </h2>
 
-The `myank` filter can be used to mix and match measures.
-
+The `myank` filter can be used to mix and match measures.  First,
+here is a short sequence of notes played through once:
 
 {% include ratioscore.html id="myank" %}
 <script type="application/x-ratioscore" id="myank">
@@ -195,10 +195,12 @@ The `myank` filter can be used to mix and match measures.
 </script>
 
 
+And here is the same music with an myank filter line added to
+repeat measures in the given order and repetition counts.
 
 {% include ratioscore.html id="myank-expand" %}
 <script type="application/x-ratioscore" id="myank-expand">
-!!!filter: myank -m 0,3,3,2,1,2,2,3,2,1,3,2,4,2,1,4,2,2,3,1,4
+!!!filter: myank -m 0,3*2,2,1,2*3,3,2,1*4,3,2,4*2,2,1,4*3,2*5,3,1*4,4
 **recip	**ratio
 =0	=0
 *MM200	*ref:C3

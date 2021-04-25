@@ -130,6 +130,62 @@ Here are the names of the instruments in a drum track
 </script>
 
 
+Here is an example of giving instrument names to the note numbers:
+
+
+{% include ratioscore.html id="drum-names" %}
+<script type="application/x-ratioscore" id="drum-names">
+!!!RDF**drum: triangle = 81
+!!!RDF**drum: clap = 39
+!!!RDF**drum: bongo = 61
+!!!RDF**drum: bell = 56
+!!!RDF**drum: ocelot = 76
+**dtime	**drum	**drum	**drum	**drum
+=0	=0	=0	=0	=0
+*MM360	*	*	*	*
+=1	=1	=1	=1	=1
+1	triangle	clap	bongo	ocelot
+1	.	.	.	bell
+1	.	.	bongo	ocelot
+1	.	.	.	bell
+=2	=2	=2	=2	=2
+1	.	clap	bongo	ocelot
+1	.	.	.	bell
+1	triangle	.	bongo	ocelot
+1	triangle	.	.	bell
+=3	=3	=3	=3	=3
+1	.	clap	bongo	.
+1	.	.	.	.
+1	triangle	.	.	ocelot
+1	.	.	.	bell ocelot
+=4	=4	=4	=4	=4
+1	.	clap	bongo	bell
+1	triangle	.	.	.
+1	.	.	.	.
+1	.	.	.	bell
+=5	=5	=5	=5	=5
+1	.	clap	.	bell ocelot
+1	triangle	.	bongo	ocelot
+1	.	.	bongo	ocelot
+1	.	clap	.	bell ocelot
+=6	=6	=6	=6	=6
+1	.	clap	.	bell
+1	.	.	bongo	.
+1	triangle	.	bongo	.
+1	.	clap	.	bell
+=7	=7	=7	=7	=7
+1	.	clap	.	ocelot
+1	.	.	bongo	ocelot
+1	.	.	bongo	.
+1	.	clap	.	bell ocelot
+=8	=8	=8	=8	=2
+1	triangle	clap	bongo	ocelot
+*-	*-	*-	*-	*-
+!!!filter: myank -m 0,1-7,6-1,1*3,2*4,3*5,4*6,5*7,6*8,7*9,8*5
+</script>
+
+
+
 The attack velocity and volume system for ratio spines also applies to 
 drums:
 

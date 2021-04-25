@@ -281,15 +281,19 @@ Text-based tags can be used to select an instrument:
 
 {% include ratioscore.html id="humdrum-instrument" %}
 <script type="application/x-ratioscore" id="humdrum-instrument">
-**time	**ratio	**ratio
-*	*Ivioln	*Iclars
-*	*ref:G3	*ref:G2
-0	1	.
-0.5	.	3/2
-1	8/3	.
-2	11/4	11/5
-4	1	14/3
-*-	*-	*-
+**time	**ratio	**midi	**name
+*	*ref:C4	*	*
+*	*Ivioln	*	*
+1	1	40	violin
+*	*Iclars	*	*
+1	1	71	soprano clarinet
+*	*Iflt	*	*
+1	1	73	flute
+*	*Iorgan	*	*
+1	1	19	organ
+*	*Ivioln	*	*
+1	1	42	cello
+*-	*-	*-	*-
 </script>
 
 
