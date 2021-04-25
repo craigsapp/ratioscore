@@ -471,7 +471,7 @@ function calculateCents(ratio) {
 // playCents --
 //
 
-function playCents(event) {
+function playCents(event, suppress) {
 	let cents;
 	if (typeof event === "string") {
 		cents = event;
@@ -481,9 +481,11 @@ function playCents(event) {
 	}
 	let ratioscore = createRatioscoreCents(cents);
 	if (AUDIOcache[ratioscore]) {
-		AUDIOsequence.push(ratioscore);
-		AUDIOseqname.push(cents + " cents");
-		AUDIOratiolist.push(ratioscore);
+		if (!suppress) {
+			AUDIOsequence.push(ratioscore);
+			AUDIOseqname.push(cents + " cents");
+			AUDIOratiolist.push(ratioscore);
+		}
 		AUDIOurl = AUDIOcache[ratioscore];
 		printNoteMapping();
 		playMp3();
@@ -516,7 +518,7 @@ function playCents(event) {
 // playHz --
 //
 
-function playHz(event) {
+function playHz(event, suppress) {
 	let freq;
 	if (typeof event === "string") {
 		freq = event;
@@ -526,9 +528,11 @@ function playHz(event) {
 	}
 	let ratioscore = createRatioscoreHertz(freq);
 	if (AUDIOcache[ratioscore]) {
-		AUDIOsequence.push(ratioscore);
-		AUDIOseqname.push(freq + " Hz");
-		AUDIOratiolist.push(ratioscore);
+		if (!suppress) {
+			AUDIOsequence.push(ratioscore);
+			AUDIOseqname.push(freq + " Hz");
+			AUDIOratiolist.push(ratioscore);
+		}
 		AUDIOurl = AUDIOcache[ratioscore];
 		printNoteMapping();
 		playMp3();
@@ -561,7 +565,7 @@ function playHz(event) {
 // playMidiKey --
 //
 
-function playMidiKey(event) {
+function playMidiKey(event, suppress) {
 	let midikey;
 	if (typeof event === "string") {
 		midikey = event;
@@ -571,9 +575,11 @@ function playMidiKey(event) {
 	}
 	let ratioscore = createRatioscoreMidiKey(midikey);
 	if (AUDIOcache[ratioscore]) {
-		AUDIOsequence.push(ratioscore);
-		AUDIOseqname.push(midikey + " MIDI");
-		AUDIOratiolist.push(ratioscore);
+		if (!suppress) {
+			AUDIOsequence.push(ratioscore);
+			AUDIOseqname.push(midikey + " MIDI");
+			AUDIOratiolist.push(ratioscore);
+		}
 		AUDIOurl = AUDIOcache[ratioscore];
 		printNoteMapping();
 		playMp3();
@@ -606,7 +612,7 @@ function playMidiKey(event) {
 // playInterval --
 //
 
-function playInterval(event) {
+function playInterval(event, suppress) {
 	let interval;
 	if (typeof event === "string") {
 		interval = event;
@@ -616,9 +622,11 @@ function playInterval(event) {
 	}
 	let ratioscore = createRatioscore(interval);
 	if (AUDIOcache[ratioscore]) {
-		AUDIOsequence.push(ratioscore);
-		AUDIOseqname.push(interval);
-		AUDIOratiolist.push(ratioscore);
+		if (!suppress) {
+			AUDIOsequence.push(ratioscore);
+			AUDIOseqname.push(interval);
+			AUDIOratiolist.push(ratioscore);
+		}
 		AUDIOurl = AUDIOcache[ratioscore];
 		printNoteMapping();
 		playMp3();
@@ -946,6 +954,49 @@ function printNoteMapping() {
 	}
 	target.innerHTML = finaloutput;
 }
+
+
+
+//////////////////////////////
+//
+// playKeyint --
+//
+
+function playKeyint(element) {
+	if (!element) {
+		return;
+	}
+	if (element.nodeName !== "TD") {
+		return;
+	}
+	let span = element.querySelector("span.int");
+	if (!span) {
+		return;
+	}
+	let content = span.textContent;
+	console.log("CONTENT", content);
+
+	let matches = content.match(/^(\d+\.?\d*)m$/);
+	if (matches) {
+			playMidiKey(matches[1], true);
+			return;
+	}
+
+	matches = content.match(/^(\d+\.?\d*)z$/);
+	if (matches) {
+			playHz(matches[1], true);
+			return;
+	}
+
+	matches = content.match(/^([-+]?\d+\.?\d*)c$/);
+	if (matches) {
+			playCents(matches[1], true);
+			return;
+	}
+
+	playInterval(content, true);
+}
+
 
 
 </script>

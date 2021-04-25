@@ -206,6 +206,29 @@ document.addEventListener("keydown", function (event) {
 });
 
 
+
+/////////////////////////////
+//
+// Click event delegation -- play interval when virtual key is clicked on.
+//
+
+document.addEventListener("click", function (event) {
+	let target = event.target;
+	while (target) {
+		if (target.nodeName === "BODY") {
+			return;
+		}
+		if ((target.nodeName === "TD") && (target.classList.contains("keyint"))) {
+			playKeyint(target);
+			return;
+		}
+		target = target.parentNode;
+	}
+});
+
+
+
+
 </script>
 
 
