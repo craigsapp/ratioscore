@@ -976,6 +976,8 @@ function playKeyint(element) {
 	let content = span.textContent;
 	console.log("CONTENT", content);
 
+	setNoteName(content);
+
 	let matches = content.match(/^(\d+\.?\d*)m$/);
 	if (matches) {
 			playMidiKey(matches[1], true);
@@ -995,6 +997,19 @@ function playKeyint(element) {
 	}
 
 	playInterval(content, true);
+}
+
+
+
+function setNoteName(content) {
+	let element = document.querySelector("#notename");
+	if (!element) {
+		return;
+	}
+	content = content.replace(/z$/, " Hz");
+	content = content.replace(/m$/, " MIDI");
+	content = content.replace(/c$/, " cents");
+	element.innerHTML = content;
 }
 
 
