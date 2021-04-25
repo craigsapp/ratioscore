@@ -44,11 +44,15 @@ music notation more closely):
 {% include ratioscore.html id="tied" %}
 <script type="application/x-ratioscore" id="tied">
 **dtime	**ratio	**ratio
-*	*Iclars	*Ikoto
+*MM50	*Iclars	*Ikoto
 *	*ref:C4	*ref:C4
+*	*	*grate:10
 1	5/4	11/5
-1	5/4_	11/5
-1	5/4_	11/5
+0.2	5/4_	11/5H
+0.2	.	16/7_
+0.6	.	11/6_h
+0.25	5/4_	11/5H
+0.75	.	13/7_h
 1	5/4_	11/5
 *-	*-	*-
 </script>
