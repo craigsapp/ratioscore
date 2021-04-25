@@ -6,7 +6,7 @@ vim: ts=8:ft=html
 ---
 
 Notes are created in a Ratioscore by adding integers, fractions,
-basic mathematic expressions, midi key numbers, cents, or frequencies
+basic mathematical expressions, midi key numbers, cents, or frequencies
 in `**ratio` spines (columns) to a <a href="/timeline">timeline</a>.
 The fractions are used to calculate the pitch of the note by
 multiplying the frequency of the reference pitch.  For example of
@@ -151,8 +151,8 @@ reference pitch. Also: `5/10` is an octave lower than the reference,
 
 
 {% include ratioscore.html id="daipieynch" %}
-<script type="application/x-ratioscore" id="daipieynch">
-!!!OTL: Daipieynch
+<script type="application/x-ratioscore" id="daipiyench">
+!!!OTL: Daipiyench
 !!!COM: Sapp, Craig Stuart
 !!!ODT: 2021/04/15
 **dtime	**ratio	**ratio	**ratio
@@ -339,7 +339,7 @@ relative to the reference pitch:
 MIDI key numbers can be used in `**ratio` spines by following the key
 number by the letter `m`.  A reference pitch is not needed if 
 key numbers are used, since MIDI note 69.0 is assigned to the 
-frequency 440 Hz and other integer values for MIDI keyt are
+frequency 440 Hz and other integer values for MIDI keys are
 assumed to be in equal temperament.
 
 {% include ratioscore.html id="midikey" %}

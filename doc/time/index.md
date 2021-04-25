@@ -11,7 +11,7 @@ score, with possibilities being:
 
 | Spine&nbsp;heading&nbsp;&nbsp;&nbsp;&nbsp; | Meaning          |
 | -------------- | -------------------------------------------- |
-| `**time`       | Absoute time (nominally) in seconds.         |
+| `**time`       | Absolute time in seconds (excluding tempo changes).         |
 | `**dtime`      | Delta time in seconds.                       |
 | `**ms`         | Absolute time in milliseconds seconds.       |
 | `**dms`        | Delta time in milliseconds seconds.          |
@@ -54,7 +54,7 @@ extended for one second before being turned off.
 
 <h2> **dtime </h2>
 
-The `**dtime` spine gives the time in seconds to wait until playint
+The `**dtime` spine gives the time in seconds to wait until playing
 the next line of the score.  Here is an example that produces the
 same rhythms as the previous example using `**time`:
 
@@ -83,7 +83,7 @@ same rhythms as the previous example using `**time`:
 <h2> **ms </h2>
 
 The `**ms` spine is similar to `**time`, but the units are milliseconds
-(1000 millseconds equals one second).
+(1000 milliseconds equals one second).
 
 {% include ratioscore.html id="ms-example" %}
 <script type="application/x-ratioscore" id="ms-example">
@@ -328,7 +328,7 @@ are `3%2` (i.e., 3/2 = 1.5 triplet whole notes create a regular whole note).
 
 <h2> Barlines </h2>
 
-[Move this to another documentaiton page about Humdrum file structure]
+[Move this to another documentation page about Humdrum file structure]
 
 Barlines are indicated by placing an equals sign (`=`) in each column of the
 score.  An optional measure number can follow the equals sign.  The divisions
@@ -414,7 +414,7 @@ to the score:
 </script>
 
 The filter line can be placed anywhere in the score (top, bottom,
-middle).   The extract filter pulls out the spcified spines, which
+middle).   The extract filter pulls out the specified spines, which
 are from the second spine to the end of the line in this case,
 removing the first `**recip` spine.  This will perform the score
 using a repeated 8-16-16 rhythm instead of the constant 16th notes.
