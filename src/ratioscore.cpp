@@ -146,6 +146,7 @@ int main(int argc, char** argv) {
 		HumdrumFileStream instream(options);
 		HumdrumFile infile;
 		while (instream.read(infile)) {
+			infile.analyzeStructure();  // instream import not running analyzeStructure();
 			if (infile.hasGlobalFilters()) {
 				filter.run(infile);
 				if (filter.hasHumdrumText()) {
@@ -184,6 +185,7 @@ int main(int argc, char** argv) {
 		HumdrumFileStream instream(options);
 		HumdrumFile infile;
 		while (instream.read(infile)) {
+			infile.analyzeStructure();  // instream import not running analyzeStructure();
 
 			if (infile.hasGlobalFilters()) {
 				filter.run(infile);
