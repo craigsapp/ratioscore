@@ -9,7 +9,7 @@ Notes are created in a Ratioscore by adding integers, fractions,
 basic mathematical expressions, midi key numbers, cents, or frequencies
 in `**ratio` spines (columns) to a <a href="/timeline">timeline</a>.
 The fractions are used to calculate the pitch of the note by
-multiplying the frequency of the reference pitch.  For example of
+multiplying the frequency of the reference pitch.  For example, if
 the reference pitch is A4 (=440Hz), then the fraction `3/2` will
 generate the frequency 660 Hz.
 
