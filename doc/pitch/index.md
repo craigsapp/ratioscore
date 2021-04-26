@@ -150,7 +150,7 @@ reference pitch. Also: `5/10` is an octave lower than the reference,
 `5/8` is down a minor 6th, and `5/6` is down a minor third.
 
 
-{% include ratioscore.html id="daipieynch" %}
+{% include ratioscore.html id="daipiyench" %}
 <script type="application/x-ratioscore" id="daipiyench">
 !!!OTL: Daipiyench
 !!!COM: Sapp, Craig Stuart
