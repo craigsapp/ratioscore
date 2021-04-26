@@ -4,33 +4,110 @@
 
 //////////////////////////////
 //
-// DOMContentLoaded event -- add anchords
+// DOMContentLoaded event -- add anchors
 //
 
 document.addEventListener("DOMContentLoaded", function () {
+
+	let contents = [];
 	let list = document.querySelectorAll("h2");
 	for (let i=0; i<list.length; i++) {
-		let contents = prepareAnchorText(list[i].textContent);
+		contents[i] = prepareAnchorText(list[i].textContent);
 		let anchor = document.createElement("a");
-		anchor.name = contents;
+		anchor.name = contents[i];
 		list[i].parentNode.insertBefore(anchor, list[i]);
-		checkForUrlHash();
 	}
+
+	// Add URL copy links to headings
+	// <i class="fa fa-link fa-inverse anchorlink"></i>
+	list = document.querySelectorAll("h2");
+	for (let i=0; i<list.length; i++) {
+		let ielem = document.createElement("i");
+		ielem.title = "Copy link";
+		ielem.dataset.url = createHeadingUrl(contents[i]);
+		ielem.classList.add("anchorlink");
+		ielem.classList.add("fa");
+		ielem.classList.add("fa-link");
+		ielem.classList.add("fa-inverse");
+		list[i].appendChild(ielem);
+		list[i].onclick = copyHeadingUrl;
+	}
+
 	setTimeout(function () {
 		// have to wait until sidebar has been prepared
 		insertHeadingsIntoSidebar();
 	}, 50);
+
+	checkForUrlHash();
 });
+
+
+//////////////////////////////
+//
+// copyHeadingUrl --
+//
+
+function copyHeadingUrl(event) {
+	let target = event.target;
+	if (!target) {
+		return;
+	}
+	let i = target.querySelector("i");
+	if (!i) {
+		return;
+	}
+	let url = i.dataset.url;
+	console.log("URL", url);
+	if (!url) {
+		return;
+	}
+	CopyToClipboard(url);
+}
 
 
 
 //////////////////////////////
 //
-// checkForUrlHash -- If there is a URL hash, move to it.
+// createHeadingUrl --
+//
+
+function createHeadingUrl(anchor) {
+	var url = document.location.origin;
+	url += document.location.pathname;
+	url += "#" + anchor;
+	return url;
+}
+
+
+
+//////////////////////////////
+//
+// checkForUrlHash -- If there is a URL hash, move to it (when page is
+//     first loaded).
 //
 
 function checkForUrlHash() {
 	console.log("complete checkForUrlHash");
+	let hash = document.location.hash;
+	if (!hash) {
+		return;
+	}
+	let name = hash.replace(/#/, "");
+	var list = document.querySelectorAll("a");
+
+	var target = document.querySelector("a[name=" + name + "]");
+	if (!target) {
+		return;
+	}
+	setTimeout(function() {
+		target.scrollIntoView(
+			{
+				block: "start",
+				inline: "nearest",
+				behavior: "auto"
+			}
+		);
+	}, 250);
 }
 
 

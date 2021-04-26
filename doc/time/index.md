@@ -419,10 +419,11 @@ are from the second spine to the end of the line in this case,
 removing the first `**recip` spine.  This will perform the score
 using a repeated 8-16-16 rhythm instead of the constant 16th notes.
 
+<h2 data-sidebar="Independent"> Independent timelines </h2>
 
-<h2 data-sidebar="Serial"> Independent timelines </h2>
 
-Here is an example of storing parts serially in the score:
+Here is an example of storing parts serially in the score.  This allows
+separate timelines to be used in each part.
 
 {% include ratioscore.html id="serial" %}
 <script type="application/x-ratioscore" id="serial">
@@ -500,7 +501,7 @@ segment, or the start of each segment can be started with
 !!!filter: myank -m 0,1,2,3,2,1*5,3*3,2*4,1,2,1,2,3*2,4
 =0	=0
 *	*ref:C2
-*	*Iclars
+*	*I#70
 =1	=1
 1	5
 0.4	4
