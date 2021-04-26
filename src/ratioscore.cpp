@@ -129,29 +129,44 @@ int main(int argc, char** argv) {
 	m_pad = options.getInteger("pad");
 
 	HumdrumFile infile;
+
 	MidiFile outfile;
+	outfile.clear();
+
+	// Set ticks-per-quarter note.  Could be adjusted if **recip timeline.
+	outfile.setTicksPerQuarterNote(1000);  // using millisecond ticks
+
+
 	Tool_filter filter;
 
 	m_pbrange.resize(16);
 	fill(m_pbrange.begin(), m_pbrange.end(), 2.0);
 
 	if (options.getArgCount() == 0) {
-		infile.read(cin);
-		if (infile.hasGlobalFilters()) {
-			filter.run(infile);
-			if (filter.hasHumdrumText()) {
-				infile.readString(filter.getHumdrumText());
+		HumdrumFileStream instream(options);
+		HumdrumFile infile;
+		while (instream.read(infile)) {
+			if (infile.hasGlobalFilters()) {
+				filter.run(infile);
+				if (filter.hasHumdrumText()) {
+					infile.readString(filter.getHumdrumText());
+				}
+			}
+			if (options.getBoolean("seconds")) {
+				addSecondsSpine(cout, infile);
+				return 0;
+			}
+			bool status = convertFile(outfile, infile);
+			if (!status) {
+				cerr << "Problem converting score." << endl;
+				exit(1);
 			}
 		}
-		if (options.getBoolean("seconds")) {
-			addSecondsSpine(cout, infile);
-			return 0;
-		}
-		bool status = convertFile(outfile, infile);
-		if (!status) {
-			cerr << "Problem converting score." << endl;
-			exit(1);
-		}
+
+		outfile.addTempo(0, 0, 60.0);
+		outfile.markSequence();
+		outfile.sortTracks();
+
 		if (options.getBoolean("raw")) {
 			outfile.write(cout);
 		} else {
@@ -166,22 +181,31 @@ int main(int argc, char** argv) {
 			}
 		}
 	} else if (options.getArgCount() == 1) {
-		infile.read(options.getArg(1));
-		if (infile.hasGlobalFilters()) {
-			filter.run(infile);
-			if (filter.hasHumdrumText()) {
-				infile.readString(filter.getHumdrumText());
+		HumdrumFileStream instream(options);
+		HumdrumFile infile;
+		while (instream.read(infile)) {
+
+			if (infile.hasGlobalFilters()) {
+				filter.run(infile);
+				if (filter.hasHumdrumText()) {
+					infile.readString(filter.getHumdrumText());
+				}
+			}
+			if (options.getBoolean("seconds")) {
+				addSecondsSpine(cout, infile);
+				return 0;
+			}
+			bool status = convertFile(outfile, infile);
+			if (!status) {
+				cerr << "Problem converting score." << endl;
+				exit(1);
 			}
 		}
-		if (options.getBoolean("seconds")) {
-			addSecondsSpine(cout, infile);
-			return 0;
-		}
-		bool status = convertFile(outfile, infile);
-		if (!status) {
-			cerr << "Problem converting score." << endl;
-			exit(1);
-		}
+
+		outfile.addTempo(0, 0, 60.0);
+		outfile.markSequence();
+		outfile.sortTracks();
+
 		if (options.getBoolean("raw")) {
 			outfile.write(cout);
 		} else {
@@ -202,6 +226,8 @@ int main(int argc, char** argv) {
 		}
 	} else {
 		for (int i=0; i<options.getArgCount(); i++) {
+			outfile.clear();
+			outfile.setTicksPerQuarterNote(1000);  // using millisecond ticks
 			infile.read(options.getArg(i+1));
 			if (infile.hasGlobalFilters()) {
 				filter.run(infile);
@@ -214,6 +240,11 @@ int main(int argc, char** argv) {
 				cerr << "Problem converting score " << options.getArg(i+1) << "." << endl;
 			}
 			string filename = getOutputFilename(options.getArg(i+1));
+
+			outfile.addTempo(0, 0, 60.0);
+			outfile.markSequence();
+			outfile.sortTracks();
+
 			outfile.write(filename);
 		}
 	}
@@ -241,8 +272,6 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 
 	m_glissTime.resize(infile.getTrackCount() + 1);
 	fill(m_glissTime.begin(), m_glissTime.end(), 50);
-
-	outfile.setTPQ(1000);
 
 	for (int i=0; i<(int)m_sstarts.size(); i++) {
 		if (*m_sstarts[i] == "**time") {
@@ -340,28 +369,23 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 	// 	cout << m_timemap[i] << endl;
 	// }
 
-	outfile.clear();
-	int miditracks = (int)(m_ratioStarts.size() + m_drumStarts.size());
-	if (miditracks <= 0) {
+	int newtracks = (int)(m_ratioStarts.size() + m_drumStarts.size());
+	if (newtracks <= 0) {
 		return false;
 	}
 
-	outfile.addTracks(miditracks); // previously one track, which is for expression
+	int starttracks = outfile.getTrackCount();
 
-	// Set ticks-per-quarter note.  Could be adjusted if **recip timeline.
-	outfile.setTicksPerQuarterNote(1000);  // using millisecond ticks
-
-	// Do not add this if there is a starting tempo on the timeline:
-	outfile.addTempo(0, 0, 60.0);
+	outfile.addTracks(newtracks); // originally one track, which is for expression
 
 	fillCurrentTempo(infile, timespine);
 
 	int ratiotracks = (int)m_ratioStarts.size();
 	for (int i=0; i<ratiotracks; i++) {
-		generateRatioTrack(outfile, i+1, m_ratioStarts[i], m_velStarts[i], infile);
+		generateRatioTrack(outfile, i+starttracks, m_ratioStarts[i], m_velStarts[i], infile);
 	}
 	for (int i=0; i<(int)m_drumStarts.size(); i++) {
-		generateDrumTrack(outfile, ratiotracks+i+1, m_drumStarts[i], m_velStartsDrum[i], infile);
+		generateDrumTrack(outfile, ratiotracks+i+starttracks, m_drumStarts[i], m_velStartsDrum[i], infile);
 	}
 
 	if (timespine) {
@@ -370,8 +394,6 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 		addTempoMessagesNull(outfile, infile);
 	}
 
-	outfile.markSequence();
-	outfile.sortTracks();
 	return true;
 }
 
