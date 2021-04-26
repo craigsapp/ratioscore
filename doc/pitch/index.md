@@ -110,8 +110,8 @@ with `1` being the fundamental of the reference pitch, `2` being
 an octave higher, and so on.  Rests are indicated by `0`.
 
 
-{% include ratioscore.html id="harmonics" %}
-<script type="application/x-ratioscore" id="harmonics">
+{% include ratioscore.html id="harmonics-example" %}
+<script type="application/x-ratioscore" id="harmonics-example">
 **dtime	**ratio
 *	*Iclars
 *MM400	*ref:C2
@@ -291,8 +291,8 @@ Here is an example of playing an Equal-tempered C major scale at
 the same time as C major in Just intonation (listen to the beating
 when the two notes are less in tune):
 
-{% include ratioscore.html id="cents" %}
-<script type="application/x-ratioscore" id="cents">
+{% include ratioscore.html id="cents-example" %}
+<script type="application/x-ratioscore" id="cents-example">
 **dtime	**ratio	**ratio
 *	*Iclars	*Iclars
 *	*ref:C4	*ref:C4
