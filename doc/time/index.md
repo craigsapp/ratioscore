@@ -422,8 +422,8 @@ using a repeated 8-16-16 rhythm instead of the constant 16th notes.
 <h2 data-sidebar="Independent"> Independent timelines </h2>
 
 
-Here is an example of storing parts serially in the score.  This allows
-separate timelines to be used in each part.
+Here is an example of storing parts one after the other in the score
+rather than in a single timeline.  
 
 {% include ratioscore.html id="serial" %}
 <script type="application/x-ratioscore" id="serial">
