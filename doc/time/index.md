@@ -420,5 +420,121 @@ removing the first `**recip` spine.  This will perform the score
 using a repeated 8-16-16 rhythm instead of the constant 16th notes.
 
 
+<h2 data-sidebar="Serial"> Independent timelines </h2>
+
+Here is an example of storing parts serially in the score:
+
+{% include ratioscore.html id="serial" %}
+<script type="application/x-ratioscore" id="serial">
+**dtime	**ratio
+*MM180	*ref:C4
+*	*Iclars
+1	1
+1	9/8
+1	5/4
+1	4/3
+1	3/2
+1	5/3
+1	15/8
+1	2
+*-	*-
+**recip	**ratio	**drum
+*	*ref:B3	*
+*	*Ikoto	*
+8	0	.
+8	2	76
+8	.	76
+4	15/8	.
+4	5/3	.
+8	3/2	77
+8	.	77
+4	4/3	.
+4	5/4	76
+4	9/8	77
+4	1	76 77
+*-	*-	*-
+</script>
+
+Note that the timeline data type does not have to match
+between the different parts, and one or more parts can
+be present in each segment.  Only one segment
+should have tempo changs.  Here is the equivalent with
+all parts in a single timeline:
+
+{% include ratioscore.html id="parallel" %}
+<script type="application/x-ratioscore" id="parallel">
+**dtime	**ratio	**ratio	**drum
+*MM180	*ref:C4	*ref:B3	*
+*	*Iclars	*Ikoto	*
+0.5	1	0	.
+0.5	.	2	76
+0.5	9/8	.	76
+0.5	.	15/8	.
+0.5	5/4	.	.
+0.5	.	5/3	.
+0.5	4/3	.	.
+0.5	.	3/2	77
+0.5	3/2	.	77
+0.5	.	4/3	.
+0.5	5/3	.	.
+0.5	.	5/4	76
+0.5	15/8	.	.
+0.5	.	9/8	77
+0.5	2	.	.
+0.5	.	1	76 77
+0.5	0	.	.
+*-	*-	*-	*-
+</script>
+
+
+Metadata and filters can be placed inside of `**`/`*-` for each
+segment, or the start of each segment can be started with
+`!!!!SEGMENT: name`, where <i>name</i> is optional.
+
+
+
+{% include ratioscore.html id="twoloop" %}
+<script type="application/x-ratioscore" id="twoloop">
+!!!!SEGMENT: melody
+**dtime	**ratio
+!!!filter: myank -m 0,1,2,3,2,1*5,3*3,2*4,1,2,1,2,3*2,4
+=0	=0
+*	*ref:C2
+*	*Iclars
+=1	=1
+1	5
+0.4	4
+0.6	6
+=2	=2
+1	5
+0.6	6
+0.4	4
+=3	=3
+0.3	3
+0.2	5H
+0.2	5*9/8_
+0.4	5_h
+1	3
+=4	=4
+2	1
+=	=
+*-	*-
+!!!!SEGMENT: rhythm
+**recip	**drum	**drum	**drum
+!!!filter: myank -m 1*13
+=1	=1	=1	=1
+8	76	.	45
+16	.	77	.
+16	.	77	.
+8	76	.	.
+24	.	.	55
+22	.	77	.
+20	76	.	.
+18	.	77	66
+16	76	.	.
+4	76	77	.
+=2	=2	=2	=2
+*-	*-	*-	*-
+</script>
 
 
