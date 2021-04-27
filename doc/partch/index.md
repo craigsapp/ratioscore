@@ -74,7 +74,7 @@ to mute playback of the reference pitch.
 References: 
 
 <ul>
-<li> <a target="_blank" href="https://en.wikipedia.org/wiki/Harry_Partch's_43-tone_scale">Harry_Partch's 43-tone_scale</a> entry on Wikipedia.</li>
+<li> <a target="_blank" href="https://en.wikipedia.org/wiki/Harry_Partch's_43-tone_scale">Harry Partch's 43-tone_scale</a> entry on Wikipedia.</li>
 <li> <a target="_blank" href="https://www.youtube.com/watch?v=KwLeCO2w9H4">Harry Partch And The Genesis Scale</a> </li>
 </ul>
 

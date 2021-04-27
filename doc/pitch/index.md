@@ -259,10 +259,11 @@ Here is an example of exponent notation to generate 12-TET:
 
 See the <a href="/equal-temperament">Equal-temperament calculator</a> page.
 
-<h2> Expressions </h2>
+<h2 data-sidebar="Expressions"> Mathematical expressions </h2>
 
-When describing pitches as integers fractions and exponents, basic mathematical operations
-can be used to express the ratio in a factored form for clarity:
+When describing pitches as integers fractions and exponents, basic
+mathematical operations can be used to express the ratio in a
+factored form for clarity:
 
 
 {% include ratioscore.html id="expression-example" %}
@@ -272,13 +273,24 @@ can be used to express the ratio in a factored form for clarity:
 *	*ref:F#3
 1	9/8
 1	3*3/2*2*2
+1	3^2/2^3
+1	2^(2/12)
+!! The colon is equivalent to a slash:
+1	9:8
+1	3*3:2*2*2
+1	3^2:2^3
+!! Spaces ared ignored and can be used for alignment within a column:
+1	9   : 8
+1	3*3 : 2*2*2
+1	3^2 : 2^3
 *-	*-
 </script>
 
-Note that multiplication has priority over division, so `3*3/2*2` will be treated as `(3*3)/(2*2)`
-rather than `((3*3)/2)*2`.
-
-
+Note that multiplication has priority over division, so `3*3/2*2`
+will be treated as `(3*3)/(2*2)` rather than `((3*3)/2)*2`.  Also note
+that exponentiation has priority over multiplication.  Parentheses can be
+used to control the operator priority, but the current parser is not
+very advanced, so avoid complicated expressions.
 
 
 <h2> Cents </h2>

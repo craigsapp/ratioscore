@@ -37,7 +37,8 @@ performance.
 {% include ratioscore.html id="quick-answers" height="600px" %}
 <script type="application/x-ratioscore" id="quick-answers">
 !!!COM: Zhu, Julie
-!!!OTL: The Answers (prototype)
+!!!OTL: The Answers
+!!!ONB: Prototype (unquantized time, no dynamics)
 !!!ODT: 2020/12
 **time	**ratio	**ratio	**ratio	**ratio
 *	*Iclars	*Iclars	*Iclars	*Iclars
@@ -46,7 +47,7 @@ performance.
 6.182	2	.	.	.
 7.441	.	.	.	3
 9.337	.	3	.	.
-9.502	.	.	636	.
+9.502	.	.	63/6	.
 9.521	.	.	7/2	.
 11.522	.	.	.	6
 13.571	.	.	7	.
