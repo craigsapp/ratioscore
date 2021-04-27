@@ -60,29 +60,6 @@ mathematical operations with symbols to behave as expected, such as `do*2`.
 </script>
 
 
-
-
-{% include ratioscore.html id="slendro" %}
-<script type="application/x-ratioscore" id="slendro">
-!!!OTL: Gamelan
-**recip	**ratio
-*MM144	*I#14
-*	*ref:C4
-4	ji
-4	ro
-4	lu
-4	ma
-4	nem
-4	pi
-*-	*-
-!!!RDF**ratio: ji  = 1/1
-!!!RDF**ratio: ro  = 8/7
-!!!RDF**ratio: lu  = 21/16
-!!!RDF**ratio: ma  = 32/21
-!!!RDF**ratio: nem = 7/4
-!!!RDF**ratio: pi  = 2/1
-</script>
-
 Quarter-comma meantone temperament:
 
 
