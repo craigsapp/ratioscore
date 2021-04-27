@@ -56,7 +56,7 @@ Just intonation variant:
 </script>
 
 Playing both just and equal-tempered versions together to hear
-tunning differences (as beats):
+tuning differences (as beats):
 
 {% include ratioscore.html id="both-bohlen-pierce-scale" tabsize="12" %}
 <script type="application/x-ratioscore" id="both-bohlen-pierce-scale">
