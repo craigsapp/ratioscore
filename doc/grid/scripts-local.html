@@ -312,31 +312,33 @@ function sortedList(intervals) {
 	centkeys.sort(function(a, b) { return b - a; });
 
 	let negative = "";
-	negative += "<table class='sortedlist'>\n";
-	negative += "<tr><th>Ratio</th><th>Cents</th><th>MIDI</th><th>Hz</th></tr>\n";
-	for (let i=0; i<centkeys.length; i++) {
-		let cents    = newlist[centkeys[i]].cents;
-		let interval = newlist[centkeys[i]].interval;
-		let midikey  = newlist[centkeys[i]].midikey;
-		let freq     = newlist[centkeys[i]].freq;
-		if ((cents < 0.0) && (midikey > 9) && (midikey < 110)) {
-			negative += "<tr>";
-			negative += "<td class='playinterval'>";
-			negative += interval;
-			negative += "</td>";
-			negative += "<td class='playcents'>";
-			negative += cents;
-			negative += "</td>";
-			negative += "<td class='playmidikey'>";
-			negative += midikey;
-			negative += "</td>";
-			negative += "<td class='playhz'>";
-			negative += freq;
-			negative += "</td>";
-			negative += "</tr>\n";
+	if (!SETTINGS.octave) {
+		negative += "<table class='sortedlist'>\n";
+		negative += "<tr><th>Ratio</th><th>Cents</th><th>MIDI</th><th>Hz</th></tr>\n";
+		for (let i=0; i<centkeys.length; i++) {
+			let cents    = newlist[centkeys[i]].cents;
+			let interval = newlist[centkeys[i]].interval;
+			let midikey  = newlist[centkeys[i]].midikey;
+			let freq     = newlist[centkeys[i]].freq;
+			if ((cents < 0.0) && (midikey > 9) && (midikey < 110)) {
+				negative += "<tr>";
+				negative += "<td class='playinterval'>";
+				negative += interval;
+				negative += "</td>";
+				negative += "<td class='playcents'>";
+				negative += cents;
+				negative += "</td>";
+				negative += "<td class='playmidikey'>";
+				negative += midikey;
+				negative += "</td>";
+				negative += "<td class='playhz'>";
+				negative += freq;
+				negative += "</td>";
+				negative += "</tr>\n";
+			}
 		}
+		negative += "</table>\n";
 	}
-	negative += "</table>\n";
 
 	centkeys.sort(function(a, b) { return a - b; });
 
@@ -775,8 +777,19 @@ function createRatioscoreMidiKey(midikey) {
 //
 
 function getInterval(top, bot, reduce) {
-	if (reduce) {
+	let two  = new RationalNumber(2, 1);
+	let half = new RationalNumber(1, 2);
+	if (reduce || SETTINGS.octave) {
 		let value = new RationalNumber(top, bot);
+		if (SETTINGS.octave) {
+			while ((value.valueOf() < 1.0) || (value.valueOf() > 2.0)) {
+				if (value.valueOf() < 1.0) {
+					value.multiplyTo(two);
+				} else if (value.valueOf() > 2.0) {
+					value.multiplyTo(half);
+				}
+			}
+		}
 		return value.toString();
 	} else {
 		return top + "/" + bot;
