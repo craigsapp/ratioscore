@@ -1,0 +1,115 @@
+
+
+
+<style>
+
+#grid {
+	padding-top: 50px;
+}
+
+table.grid: td, table.sortedlist td, table.plusminus td {
+	padding-right: 10px;
+	letter-spacing: -1px;
+	min-width: 50px;
+	text-align: center;
+}
+
+td.playinterval:hover, td.playcents:hover, td.playhz:hover, td.playmidikey:hover {
+	background: goldenrod !important;
+}
+
+
+select:focus, .input:focus {
+	outline: none;
+}
+
+input {
+	font-size: 18px;
+}
+
+select {
+	font-size: 18px;
+}
+
+table.sortedlist, table.sortedlist tr, table.sortedlist td {
+	padding: 0;
+}
+
+table.sortedlist tr:hover {
+	background: {{ site.ratioscore_light }} !important;
+}
+
+table.sortedlist td, table.sortedlist th {
+	text-align: center !important;
+}
+
+td.invalid {
+	color: #ddcccc;
+}
+
+td.extreme {
+	color: #88000099;
+}
+
+table.sortedlist td:nth-child(2)  {
+	text-align: right;
+}
+
+table.sortedlist th:first-child {
+	text-align: left;
+}
+
+table.plusminus, table.plusminus tr, table.plusminus td {
+	padding: 0;
+	margin: 0;
+}
+
+table.plusminus {
+	margin-top:100px;
+}
+
+table.plusminus tr {
+	vertical-align: top;
+}
+
+table.plusminus td:nth-child {
+	width: 100px;
+}
+
+table.keyint {
+	width:45px !important;
+	display: inline-block;
+	margin-right: 30px !important;
+	margin-bottom: 20px !important;
+	margin-top: 20px !important;
+}
+
+table.keyint td {
+	border-radius: 5px;
+	background-color: {{ site.sidebar_background }} !important;
+}
+
+
+span.key { 
+	display: block;
+	text-align: center;
+	color: white;
+	font-size: 1.5rem;
+	font-weight: bold;
+	width:50px !important;
+}
+
+span.int { 
+	display: block;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+	font-size: 0.5rem;
+	width:50px !important;
+}
+
+td.keyint:hover {
+	background: limegreen !important;
+}
+
+</style>

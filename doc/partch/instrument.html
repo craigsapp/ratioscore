@@ -1,0 +1,179 @@
+<select id="instrument" onchange="changeInstrument(event);">
+
+	<optgroup label="Keyboards">
+		<option value="0">Acoustic grand piano</option>
+		<option value="1">Bright acoustic piano</option>
+		<option value="2">Electric grand piano</option>
+		<option value="3">Honky-tonk piano</option>
+		<option value="4">Electric piano 1</option>
+		<option value="5">Electric piano 2</option>
+		<option value="6">Harpsichord</option>
+		<option value="7">Clavi</option>
+	</optgroup>
+
+	<optgroup label="Pitched perc.">
+		<option value="8">Celesta</option>
+		<option value="9">Glockenspiel</option>
+		<option value="10">Music box</option>
+		<option value="11">Vibraphone</option>
+		<option value="12">Marimba</option>
+		<option selected value="13">Xylophone</option>
+		<option value="14">Tubular bells</option>
+		<option value="15">Dulcimer</option>
+	</optgroup>
+
+	<optgroup label="Organs">
+		<option value="16">Drawbar organ</option>
+		<option value="17">Percussive organ</option>
+		<option value="18">Rock organ</option>
+		<option value="19">Pipe organ</option>
+		<option value="20">Reed organ</option>
+		<option value="21">Accordion</option>
+		<option value="22">Harmonica</option>
+		<option value="23">Tango Accordion</option>
+	</optgroup>
+
+	<optgroup label="Guitars">
+		<option value="24">Nylon acoustic guitar</option>
+		<option value="25">Steel acoustic guitar</option>
+		<option value="26">Jazz electric guitar</option>
+		<option value="27">Clean electric guitar</option>
+		<option value="28">Muted eletric guitar</option>
+		<option value="29">Overdriven guitar</option>
+		<option value="30">Distortion guitar</option>
+		<option value="31">Guitar harmonics</option>
+	</optgroup>
+
+	<optgroup label="Bass">
+		<option value="32">Acoustic bass</option>
+		<option value="33">Fingered electric bass</option>
+		<option value="34">Picked electric bass</option>
+		<option value="35">Fretless bass</option>
+		<option value="36">Slap bass 1</option>
+		<option value="37">Slap bass 2</option>
+		<option value="38">Synth bass 1</option>
+		<option value="39">Synth bass 2</option>
+	</optgroup>
+
+	<optgroup label="Strings">
+		<option value="40">Violin</option>
+		<option value="41">Viola</option>
+		<option value="42">Cello</option>
+		<option value="43">Contrabass</option>
+		<option value="44">Tremolo strings</option>
+		<option value="45">Pizzicato strings</option>
+		<option value="46">Orchestral harp</option>
+		<option value="47">Timpani</option>
+	</optgroup>
+
+	<optgroup label="Ensemble">
+		<option value="48">String ensemble 1</option>
+		<option value="49">String ensemble 2</option>
+		<option value="50">Synth strings 1</option>
+		<option value="51">Synth strings 2</option>
+		<option value="52">Choir aahs</option>
+		<option value="53">Choir oohs</option>
+		<option value="54">Synth voice</option>
+		<option value="55">Orchestra hit</option>
+	</optgroup>
+
+	<optgroup label="Brass">
+		<option value="56">Trumpet</option>
+		<option value="57">Trombone</option>
+		<option value="58">Tuba</option>
+		<option value="59">Muted trumpet</option>
+		<option value="60">French horn</option>
+		<option value="61">Brass section</option>
+		<option value="62">Synth brass 1</option>
+		<option value="63">Synth brass 2</option>
+	</optgroup>
+
+	<optgroup label="Reeds">
+		<option value="64">Soprano sax</option>
+		<option value="65">Alto sax</option>
+		<option value="66">Tenor sax</option>
+		<option value="67">Baritone sax</option>
+		<option value="68">Oboe</option>
+		<option value="69">English horn</option>
+		<option value="70">Bassoon</option>
+		<option value="71" >Clarinet</option>
+	</optgroup>
+
+	<optgroup label="Pipes">
+		<option value="72">Piccolo</option>
+		<option value="73">Flute</option>
+		<option value="74">Recorder</option>
+		<option value="75">Pan flute</option>
+		<option value="76">Blown bottle</option>
+		<option value="77">Shakuhachi</option>
+		<option value="78">Whistle</option>
+		<option value="79">Ocarina</option>
+	</optgroup>
+
+	<optgroup label="Leads">
+		<option value="80">Square lead</option>
+		<option value="81">Sawtooth lead</option>
+		<option value="82">Calliope lead</option>
+		<option value="83">Chiff lead</option>
+		<option value="84">Charang lead</option>
+		<option value="85">Voice lead</option>
+		<option value="86">Fifths lead</option>
+		<option value="87">Base + lead</option>
+	</optgroup>
+
+	<optgroup label="Pads">
+		<option value="88">New age pad</option>
+		<option value="89">Warm pad</option>
+		<option value="90">Polysynth pad</option>
+		<option value="91">Choir pad</option>
+		<option value="92">Bowed pad</option>
+		<option value="93">Metallic pad</option>
+		<option value="94">Halo pad</option>
+		<option value="95">Sweep pad</option>
+	</optgroup>
+
+	<optgroup label="Effects">
+		<option value="96">Rain</option>
+		<option value="97">Soundtrack</option>
+		<option value="98">Cystal</option>
+		<option value="99">Atmosphere</option>
+		<option value="100">Brightness</option>
+		<option value="101">Goblins</option>
+		<option value="102">Echoes</option>
+		<option value="103">Sci-fi</option>
+	</optgroup>
+
+	<optgroup label="Ethnic">
+		<option value="104">Sitar</option>
+		<option value="105">Banjo</option>
+		<option value="106">Shamisen</option>
+		<option value="107">Koto</option>
+		<option value="108">Kalimba</option>
+		<option value="109">Bagpipe</option>
+		<option value="110">Fiddle</option>
+		<option value="111">Shanai</option>
+	</optgroup>
+
+	<optgroup label="Percussive">
+		<option value="112">Tinkle bell</option>
+		<option value="113">Agogo</option>
+		<option value="114">Steel drums</option>
+		<option value="115">Woodblock</option>
+		<option value="116">Taiko drum</option>
+		<option value="117">Melodic tom</option>
+		<option value="118">Synth drum</option>
+		<option value="119">Reverse cymbal</option>
+	</optgroup>
+
+	<optgroup label="Sound effects">
+		<option value="120">Guitar fret noise</option>
+		<option value="121">Breath noise</option>
+		<option value="122">Seashore</option>
+		<option value="123">Bird tweet</option>
+		<option value="124">Telephone ring</option>
+		<option value="125">Helicopter</option>
+		<option value="126">Applause</option>
+		<option value="127">Gunshot</option>
+	</optgroup>
+
+</select>

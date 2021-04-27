@@ -16,7 +16,7 @@ vim: ts=8:ft=html
 <nobr><label for="rows">Rows:&nbsp;</label><input id="rows" value="10" size="3"></nobr>
 <nobr><label for="columns">Columns:&nbsp;</label><input id="columns" value="10" size="3"></nobr>
 <nobr><label for="reference">Reference&nbsp;pitch:&nbsp;</label>{% include_relative reference-pitch.html %}</nobr>
-<nobr><label for="reference">Instrument:</label>{% include_relative instrument.html %}</nobr>
+<nobr><label for="instrument">Instrument:</label>{% include_relative instrument.html %}</nobr>
 <nobr><label for="reduce">Reduce&nbsp;fractions:</label><input id="reduce" type="checkbox"></nobr>
 <nobr><label for="playref">Play&nbsp;reference:</label><input id="playref" checked type="checkbox"></nobr>
 

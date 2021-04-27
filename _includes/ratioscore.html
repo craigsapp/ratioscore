@@ -97,7 +97,7 @@
 
 		<script
 				id="inputdata-{{include.id}}"
-				style="max-height: calc(100vh - 200px); width:100%; resize:both; overflow:auto; {% if include.minheight %}min-height:{{ include.minheight }};{% endif %}{% if include.height %}height:{{ include.height }}; {% else %}height:auto; {% endif %} {% if include.tabsize %}tab-size:{{ include.tabsize }}; -moz-tab-size:{{ include.tabsize }};{% else %}tab-size:10; -moz-tab-size:10;{% endif %}"
+				style="{% if include.height %}height:{{ include.height }};{% else %}max-height: calc(100vh - 200px);{% endif %} width:100%; resize:both; overflow:auto; {% if include.minheight %}min-height:{{ include.minheight }};{% endif %}{% if include.height %}height:{{ include.height }}; {% else %}height:auto; {% endif %} {% if include.tabsize %}tab-size:{{ include.tabsize }}; -moz-tab-size:{{ include.tabsize }};{% else %}tab-size:10; -moz-tab-size:10;{% endif %}"
 				name="inputdata"
 				spellcheck="false"
 				oncopy="CopyScoreToClipboard(event.target.id);"

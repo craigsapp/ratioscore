@@ -1,0 +1,155 @@
+
+
+<script>
+// vim: ts=3
+
+
+//////////////////////////////
+//
+// hideRatioscores --
+//
+
+function hideRatioscores() {
+	let scores = document.querySelectorAll("script.databox");
+	for (let i=0; i<scores.length; i++) {
+		scores[i].classList.remove("visible");
+	}
+}
+
+
+
+//////////////////////////////
+//
+// showRatioscores --
+//
+
+function showRatioscores() {
+	let scores = document.querySelectorAll("script.databox");
+	for (let i=0; i<scores.length; i++) {
+		scores[i].classList.add("visible");
+	}
+}
+
+
+
+//////////////////////////////
+//
+// hideRatioscoresButton --
+//
+
+function hideRatioscoresButton(event) {
+	hideRatioscores();
+
+	if (event) {
+		event.target.style.display = "none";
+	} else {
+		let element = document.querySelector("#hideRatioscores");
+		if (element) {
+			element.style.display = "none";
+		}
+	}
+
+	let element = document.querySelector("#showRatioscores");
+	if (element) {
+		element.style.display = "block";
+	}
+}
+
+
+
+//////////////////////////////
+//
+// showRatioscoresButton --
+//
+
+function showRatioscoresButton(event) {
+	showRatioscores();
+
+	if (event) {
+		event.target.style.display = "none";
+	} else {
+		let element = document.querySelector("#showRatioscores");
+		if (element) {
+			element.style.display = "none";
+		}
+	}
+
+	let element = document.querySelector("#hideRatioscores");
+	if (element) {
+		element.style.display = "block";
+	}
+}
+
+
+
+//////////////////////////////
+//
+// changeReferencePitch --
+//
+
+function changeReferencePitch(event) {
+	var newpitch = event.target.value;
+	if (!newpitch.match(/^[A-G][bsn#-]?\d$/)) {
+		console.log("INVALID PITCH, ignoring");
+		return;
+	}
+	var databoxes = document.querySelectorAll("script.databox");
+	for (let i=0; i<databoxes.length; i++) {
+		let text = databoxes[i].textContent;
+		text = text.replace(/\*ref:[^\t\n\r]*/gs, "*ref:" + newpitch);
+		databoxes[i].textContent = text;
+	}
+}
+
+
+
+//////////////////////////////
+//
+// changeInstrument --
+//
+
+function changeInstrument(event) {
+	var instrument = event.target.value;
+	if (instrument.match(/^[0-9]/)) {
+		instrument = "#" + instrument;
+	}
+	var databoxes = document.querySelectorAll("script.databox");
+	for (let i=0; i<databoxes.length; i++) {
+		let text = databoxes[i].textContent;
+		text = text.replace(/\*I[^\t\n\r]*/gs, "*I" + instrument);
+		databoxes[i].textContent = text;
+	}
+}
+
+
+
+//////////////////////////////
+//
+// changeTempo --
+//
+
+function changeTempo(event) {
+	var tempo = event.target.value;
+console.log("TEMPO", tempo);
+	if (tempo.match(/^\s*[1-9][0-9]/)) {
+		tempo = parseFloat(tempo);
+	} else {
+		tempo = 60;
+	}
+	if (tempo > 5000) {
+		tempo = 60;
+	}
+	var databoxes = document.querySelectorAll("script.databox");
+	for (let i=0; i<databoxes.length; i++) {
+		let text = databoxes[i].textContent;
+		text = text.replace(/\*MM[^\t\n\r]*/gs, "*MM" + tempo);
+		databoxes[i].textContent = text;
+	}
+}
+
+
+
+</script>
+
+
+
