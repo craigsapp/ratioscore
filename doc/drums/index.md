@@ -265,7 +265,9 @@ Polyrhythm example:
 See the <a href="/polyrhythm">Polyrhythm generator</a> page.
 
 Drum and ratio tracks may occur in the same score and can
-be interleaved in any order.
+be interleaved in any order.  Any number of drum tracks can
+be present in the score, but ratio tracks are limited to 
+15 due to the structure of MIDI.
 
 {% include ratioscore.html id="drum-ratio" %}
 <script type="application/x-ratioscore" id="drum-ratio">

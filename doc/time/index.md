@@ -9,14 +9,14 @@ There are multiple ways to indicate time in a Ratioscore.   The
 left-most timing spine (column) will be used to control time in the
 score, with possibilities being:
 
-| Spine&nbsp;heading&nbsp;&nbsp;&nbsp;&nbsp; | Meaning          |
-| -------------- | -------------------------------------------- |
-| `**time`       | Absolute time in seconds (excluding tempo changes).         |
-| `**dtime`      | Delta time in seconds.                       |
-| `**ms`         | Absolute time in milliseconds seconds.       |
-| `**dms`        | Delta time in milliseconds seconds.          |
-| `**recip`      | Musical time in divisions of a whole note.   |
-| *none*         | No timeline: treat each data line as 1 second long.   |
+| Spine&nbsp;heading&nbsp;&nbsp;&nbsp;&nbsp; | Meaning                  |
+| -------------- | ---------------------------------------------------- |
+| `**time`       | Absolute time in seconds (excluding tempo changes).  |
+| `**dtime`      | Delta time in seconds.                               |
+| `**ms`         | Absolute time in milliseconds.                       |
+| `**dms`        | Delta time in milliseconds.                          |
+| `**recip`      | Musical time in divisions of a whole note.           |
+| *none*         | No timeline: treat each data line as 1 second long.  |
 
 
 
@@ -459,7 +459,7 @@ rather than in a single timeline.
 Note that the timeline data type does not have to match
 between the different parts, and one or more parts can
 be present in each segment.  Only one segment
-should have tempo changs.  Here is the equivalent with
+should have tempo changes.  Here is the equivalent with
 all parts in a single timeline:
 
 {% include ratioscore.html id="parallel" %}
