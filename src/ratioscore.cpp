@@ -1279,7 +1279,7 @@ double getPitchAsMidi(HTp token, double reference) {
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\?\\d*)\\^(\\d+\\?\\d*)");
+		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)");
 	}
 
 	// Reduce "#*#" (considering only integers, at least for now)
