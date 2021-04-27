@@ -140,6 +140,20 @@ function makeUrl() {
 
 function generateScore() {
 	updateSettingsFromInput();
+	if (SETTINGS.layout === "serial") {
+		generateScoreSerial();
+	} else {
+		generateScoreParallel();
+	}
+}
+
+
+//////////////////////////////
+//
+// generateScoreParallel --
+//
+
+function generateScoreParallel() {
 	let editor = document.querySelector("script#inputdata-polyrhythm");
 	let editor2 = document.querySelector("script#polyrhythm");
 	if (!editor) {
@@ -282,6 +296,168 @@ function generateScore() {
 
 	editor.textContent = output;
 	editor2.textContent = output;
+}
+
+
+
+//////////////////////////////
+//
+// generateScoreSerial --
+//
+
+function generateScoreSerial() {
+	let editor = document.querySelector("script#inputdata-polyrhythm");
+	let editor2 = document.querySelector("script#polyrhythm");
+	if (!editor) {
+		return;
+	}
+	if (!editor2) {
+		return;
+	}
+	let parts = getParts();
+	if (parts.length == 0) {
+		editor.textContent = "";
+		editor2.textContent = "";
+		return;
+	}
+
+	// Print data lines:
+	let linecount = 1;
+	for (let i=0; i<parts.length; i++) {
+		let found = 0;
+		for (let j=i+1; j<parts.length; j++) {
+			if (parts[i].cycles == parts[j].cycles) {
+				found = 1;
+				break;
+			}
+		}
+		if (!found) {
+			linecount *= parts[i].cycles;
+		}
+	}
+
+	let output = "";
+	for (let i=0; i<parts.length; i++) {
+		output += "!!!!SEGMENT:\n";
+		output += printPart(parts[i], linecount);
+	}
+
+	// print URL to create this polyrhythm score:
+	let url = makeUrl();
+	if (url !== "") {
+		output += "!!!URL: " + url + "\n";
+	}
+
+	editor.textContent = output;
+	editor2.textContent = output;
+}
+
+
+//////////////////////////////
+//
+// printPart --
+//
+
+function printPart(part, sum) {
+	let parts = [];
+	parts.push(part);
+
+	let tempo = SETTINGS.tempo;
+
+	let output = "";
+	let drumcount = 0;
+	let ratiocount = 0;
+	let tempoprinted = 0;
+
+	// Print exclusive interpretation line:
+	output += "**dtime";
+	for (let i=0; i<parts.length; i++) {
+		output += "\t";
+		if (parts[i].drum) {
+			output += "**drum";
+			drumcount++;
+		} else {
+			ratiocount++;
+			output += "**ratio";
+		}
+	}
+	output += "\n";
+
+	output += printMeasure(0, parts);
+
+	// Print instrument info:
+	if (ratiocount > 0) {
+		if (!tempoprinted) {
+			output += "*MM" + tempo;
+			tempoprinted = 1;
+		} else {
+			output += "*";
+		}
+		for (let i=0; i<parts.length; i++) {
+			if (parts[i].drum) {
+				output += "\t*";
+			} else {
+				output += "\t*I#" + parts[i].instrument;
+			}
+		}
+		output += "\n";
+	}
+
+
+	// Print reference pitch info:
+	if (ratiocount > 0) {
+		if (!tempoprinted) {
+			output += "*MM" + tempo;
+			tempoprinted = 1;
+		} else {
+			output += "*";
+		}
+		for (let i=0; i<parts.length; i++) {
+			if (parts[i].drum) {
+				output += "\t*";
+			} else {
+				output += "\t*ref:" + parts[i].ref;
+			}
+		}
+		output += "\n";
+	}
+
+
+	// Print tempo if it is missing:
+	if (!tempoprinted) {
+		tempoprinted = 1;
+		output += "*MM" + tempo;
+		for (let i=0; i<parts.length; i++) {
+			output += "\t*" + parts[i].cycles;
+		}
+		output += "\n";
+	}
+
+	output += printMeasure(1, parts);
+
+	let count = sum / part.cycles;
+console.log("COUNT", count, "SUM", sum, "CYCLES", part.cycles);
+
+	for (let i=0; i<count; i++) {
+		output += part.cycles;
+		output += "\t";
+		output += part.pitch;
+		output += "\n";
+	}
+
+	output += printMeasure(2, parts);
+
+	output += "1\t" + part.pitch + "\n";
+
+	output += printMeasure("=", parts);
+
+	let repeats = SETTINGS.repeats;
+	output += printMyank(repeats, parts);
+
+	// Print termination line:
+	output += "*-\t*-\n";
+
+	return output;
 }
 
 
