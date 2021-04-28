@@ -1,0 +1,99 @@
+
+
+
+<script>
+// vim: ts=3
+
+//////////////////////////////
+//
+// decreseTabSize --
+//
+
+function decreaseTabSize(id) {
+	let newid = "inputdata-" + id;
+	let element = document.querySelector("#" + newid);
+	if (!element) {
+		return;
+	}
+	var ctab = element.style.tabSize;
+	ctab = parseInt(ctab) - 1;
+	if (ctab <= 0) {
+		ctab = 1;
+	}
+	element.style.tabSize = ctab;
+	element.style["-moz=tab-size"] = ctab;
+}
+
+
+
+//////////////////////////////
+//
+// increaseTabSize --
+//
+
+function increaseTabSize(id) {
+	let newid = "inputdata-" + id;
+	let element = document.querySelector("#" + newid);
+	if (!element) {
+		return;
+	}
+	var ctab = element.style.tabSize;
+	ctab = parseInt(ctab) + 1;
+	if (ctab > 100) {
+		ctab = 100;
+	}
+	element.style.tabSize = ctab;
+	element.style["-moz=tab-size"] = ctab;
+}
+
+
+
+//////////////////////////////
+//
+// increaseFontSize --
+//
+
+function increaseFontSize(id) {
+	let newid = "inputdata-" + id;
+	let element = document.querySelector("#" + newid);
+	if (!element) {
+		return;
+	}
+	var csize = parseFloat(element.style.fontSize);
+	csize += 1;
+	if (csize > 72) {
+		csize = 72;
+	}
+	var cheight = csize * 18.0 / 16.0;
+	element.style.fontSize = csize + "px";
+	element.style.lineHeight = cheight + "px";
+}
+
+
+
+//////////////////////////////
+//
+// decreaseFontSize --
+//
+
+function decreaseFontSize(id) {
+	let newid = "inputdata-" + id;
+	let element = document.querySelector("#" + newid);
+	if (!element) {
+		return;
+	}
+	var csize = parseFloat(element.style.fontSize);
+	csize -= 1;
+	if (csize > 72) {
+		csize = 72;
+	}
+	var cheight = csize * 18.0 / 16.0;
+	element.style.fontSize = csize + "px";
+	element.style.lineHeight = cheight + "px";
+}
+
+
+
+</script>
+
+

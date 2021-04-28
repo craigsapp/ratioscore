@@ -1,0 +1,63 @@
+
+
+
+<script>
+// vim: ts=3
+
+//////////////////////////////
+//
+// expandToolbar -- Show the extended version of the ratioscore editor toolbar.
+//
+
+function expandToolbar(id) {
+	let list = document.querySelectorAll("#toolbar-" + id + " .extended");
+	if (list.length == 0) {
+		return;
+	}
+	for (let i=0; i<list.length; i++) {
+		list[i].classList.remove("hidden");
+	}
+
+	list = document.querySelectorAll("#toolbar-" + id + " .contracted");
+	if (list.length == 0) {
+		return;
+	}
+	for (let i=0; i<list.length; i++) {
+		list[i].classList.add("hidden");
+	}
+}
+
+
+
+//////////////////////////////
+//
+// contractToolbar -- Hide the extended version of the ratioscore editor toolbar.
+//
+
+function contractToolbar(id) {
+console.log("CONTRACTING TOOLBAR");
+	let list = document.querySelectorAll("#toolbar-" + id + " .extended");
+	if (list.length == 0) {
+		return;
+	}
+	for (let i=0; i<list.length; i++) {
+		list[i].classList.add("hidden");
+	}
+
+	list = document.querySelectorAll("#toolbar-" + id + " .contracted");
+	if (list.length == 0) {
+		return;
+	}
+	for (let i=0; i<list.length; i++) {
+		list[i].classList.remove("hidden");
+	}
+}
+
+
+
+
+
+</script>
+
+
+
