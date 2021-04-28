@@ -5,8 +5,8 @@ layout: page
 vim: ts=8:ft=html
 ---
 
-One or more `**drum` spines in a Ratioscore will be converted into
-drum tracks.  Drum notes are General MIDI key numbers 
+One or more `**drum` spines/columns/tracks in a Ratioscore will be
+converted into drum tracks.  Drum notes are General MIDI key numbers
 ranging from 35 to 81.
 
 {% include ratioscore.html id="drum" %}
@@ -25,7 +25,7 @@ ranging from 35 to 81.
 *-	*-	*-
 </script>
 
-Unlike ratios, drum tracks can contain multiple notes at one time:
+Unlike ratio tracks, drum tracks can contain multiple notes at one time:
 
 {% include ratioscore.html id="drum-combined" %}
 <script type="application/x-ratioscore" id="drum-combined">
@@ -134,7 +134,7 @@ Below is an example of giving instrument names to the note numbers.
 The letters `v` and `V` are deaccent and accent marks respectively.
 
 
-{% include ratioscore.html id="drum-names" tabsize="12" %}
+{% include ratioscore.html id="drum-names" height="900px" tabsize="12" %}
 <script type="application/x-ratioscore" id="drum-names">
 !!!RDF**drum: triangle = 81
 !!!RDF**drum: clap = 39

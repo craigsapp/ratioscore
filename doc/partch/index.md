@@ -18,7 +18,7 @@ vim: ts=8:ft=html
 Harry Partch's 43-tone scale.  Change the title of the second column to something other than `ratio`
 to mute playback of the reference pitch.
 
-{% include ratioscore.html id="genesis" height="900px" %}
+{% include ratioscore.html id="genesis" height="910px" %}
 <script type="application/x-ratioscore" id="genesis">
 !! Harry Partch's 43-note Genesis scale
 **dtime	**ratio	**ratio	**cents	**gap
