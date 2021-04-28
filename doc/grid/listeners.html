@@ -2,6 +2,7 @@
 <script>
 // vim: ts=3:ft=javascript
 
+let DUPLICATES       = {};
 let AUDIOcache       = {};
 let AUDIOsequence    = [];
 let AUDIOseqname     = [];
@@ -15,7 +16,9 @@ let DEFAULTS = {
 	"instrument": 71,
 	"duration": 2,
 	"reduce": 0,
-	"octave": 0
+	"octave": 0,
+	"odd": 0,
+	"dupe": 0
 };
 
 let SETTINGS = {};
@@ -228,6 +231,80 @@ document.addEventListener("click", function (event) {
 });
 
 
+
+//////////////////////////////
+//
+// Mousein event handler -- Highlight cell if duplicate marking
+//    is turned on and this cell is a duplicate.
+//
+
+document.addEventListener("mouseover", function (event) {
+	if (!SETTINGS.dupe) {
+		return;
+	}
+	let target = event.target;
+	if (target.nodeName !== "TD") {
+		return;
+	}
+	if (!target.classList.contains("duplicate")) {
+		return;
+	}
+
+	let number = new RationalNumber;
+	let text   = target.textContent;
+	number.fromString(text);
+	let entry = DUPLICATES[number];
+	if (!entry) {
+		return;
+	}
+console.log("ENTRY", entry);
+	for (let i=0; i<entry.elements.length; i++) {
+		let element = entry.elements[i];
+		if (!element) {
+			continue;
+		}
+		element.classList.add("highlight");
+	}
+
+	console.log("ENTERING DUPLICATE CELL", target.nodeName);
+});
+ 
+
+
+//////////////////////////////
+//
+// Mouseout event handler -- Remove duplicate highlighting for
+//   cell being left.
+//
+
+
+document.addEventListener("mouseout", function (event) {
+	let target = event.target;
+	if (target.nodeName !== "TD") {
+		return;
+	}
+	if (!target.classList.contains("duplicate")) {
+		return;
+	}
+
+	let number = new RationalNumber;
+	let text   = target.textContent;
+	number.fromString(text);
+	let entry = DUPLICATES[number];
+	if (!entry) {
+		return;
+	}
+	for (let i=0; i<entry.elements.length; i++) {
+		let element = entry.elements[i];
+		if (!element) {
+			continue;
+		}
+		element.classList.remove("highlight");
+	}
+
+	console.log("Leaving", target.nodeName);
+});
+ 
 
 
 </script>

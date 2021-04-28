@@ -10,7 +10,8 @@ vim: ts=8:ft=html
 {% include_relative styles-local.html %}
 
 <p>
-	Click on a ratio or cents value to listen to the note/interval.
+	Click on a ratio or cents/MIDI/Hz value in the sorted table
+below the grid to listen to the note/interval.
 </p>
 
 <nobr><label for="rows">Rows:&nbsp;</label><input id="rows" value="10" size="3"></nobr>
@@ -19,6 +20,8 @@ vim: ts=8:ft=html
 <nobr><label for="instrument">Instrument:</label>{% include_relative instrument.html %}</nobr>
 <nobr><label for="reduce">Reduce&nbsp;fractions:</label><input id="reduce" type="checkbox"></nobr>
 <nobr><label for="octave">Within&nbsp;octave:</label><input id="octave" type="checkbox"></nobr>
+<nobr><label for="odd">Odd&nbsp;rows/cols&nbsp;only:</label><input id="odd" type="checkbox"></nobr>
+<nobr><label for="dupe">Mark&nbsp;duplicates:</label><input id="dupe" type="checkbox"></nobr>
 <nobr><label for="playref">Play&nbsp;reference:</label><input id="playref" checked type="checkbox"></nobr>
 
 <div id="grid"></div>
