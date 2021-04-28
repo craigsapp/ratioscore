@@ -44,7 +44,7 @@ This page can be used to create a Ratioscore template:
 </select></nobr><nobr>Data lines: <input id="lines" value="10"></nobr><nobr>Reference pitch: <input id="reference" value="C4"></nobr><nobr>Instrument: {% include_relative instrument-select.html %}</nobr>
 
 <span class="link" onclick="copyUrl(); alert('Link copied to clipboard');">copy page link with settings</span>
-{% include ratioscore.html id="generated" tabsize="15" %}
+{% include ratioscore.html id="generated" %}
 <script type="application/x-ratioscore" id="generated">
 </script>
 

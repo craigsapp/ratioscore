@@ -13,7 +13,7 @@ vim: ts=3:ft=html
 
 
 
-{% include ratioscore.html id="polyrhythm" height="600px" erase="false" %}
+{% include ratioscore.html id="polyrhythm" erase="false" %}
 <script type="application/x-ratioscore" id="polyrhythm">
 </script>
 

@@ -19,7 +19,7 @@
 		onsubmit="event.preventDefault(); saveRatioscoreRendering(event, '{{include.id}}');">
 
 	<div style="{% if include.width %}width:{{include.width}}; {% else %}width:100%; {% endif %}">
-		<table class="ratioscore-editor-toolbar">
+		<table id="toolbar-{{include.id}}" class="ratioscore-editor-toolbar">
 			<tr valign="top">
 				<td>
 					<span 
@@ -58,6 +58,43 @@
 						<i class="fa fa-eraser fa-stack-1x fa-inverse"></i>
 					</span>
 					{% endunless %}
+
+					<span onclick="event.preventDefault(); decreaseTabSize('{{include.id}}');" title="Decrease tab size" class="hidden extended button fa-stack fa-1x">
+						<i class="fa fa-square hovering fa-stack-2x"></i>
+						<i class="fa fa-outdent fa-stack-1x fa-inverse"></i>
+					</span>
+					<span onclick="event.preventDefault(); increaseTabSize('{{include.id}}');" title="Increase tab size" class="hidden extended button fa-stack fa-1x">
+						<i class="fa fa-square hovering fa-stack-2x"></i>
+						<i class="fa fa-indent fa-stack-1x fa-inverse"></i>
+					</span>
+
+					<span onclick="event.preventDefault(); decreaseFontSize('{{include.id}}');" title="Decrease font size" class="hidden extended button fa-stack fa-1x">
+						<i class="fa fa-square hovering fa-stack-2x"></i>
+						<i class="fa fa-minus-circle fa-stack-1x fa-inverse"></i>
+					</span>
+					<span onclick="event.preventDefault(); increaseFontSize('{{include.id}}');" title="Increase font size" class="hidden extended button fa-stack fa-1x">
+						<i class="fa fa-square hovering fa-stack-2x"></i>
+						<i class="fa fa-plus-circle fa-stack-1x fa-inverse"></i>
+					</span>
+
+					<span title="Copy to system clipboard" onclick="CopyScoreToClipboard('{{include.id}}');" class="hidden extended button fa-stack fa-1x">
+						<i class="fa fa-square hovering fa-stack-2x"></i>
+						<i class="fa fa-copy fa-stack-1x fa-inverse"></i>
+					</span>
+					<span title="Paste from system clipboard" onclick="PasteScoreFromClipboard('{{include.id}}');" class="hidden extended button fa-stack fa-1x">
+						<i class="fa fa-square hovering fa-stack-2x"></i>
+						<i class="fa fa-paint-brush fa-stack-1x fa-inverse"></i>
+					</span>
+					<span title="Copy link to Ratioscore" onclick="CopyLinkToClipboard('{{include.id}}');" class="hidden extended button fa-stack fa-1x">
+						<i class="fa fa-square hovering fa-stack-2x"></i>
+						<i class="fa fa-link fa-stack-1x fa-inverse"></i>
+					</span>
+					<span title="Copy autoplay link to Ratioscore" onclick="CopyAutoplayLinkToClipboard('{{include.id}}');" class="hidden extended button fa-stack fa-1x">
+						<i class="fa fa-square hovering fa-stack-2x"></i>
+						<i class="fa fa-link fa-inverse chain"></i>
+						<i class="fa fa-bolt lightening" style="color:#fcc637cc"></i>
+					</span>
+
 					<span onclick="event.preventDefault(); saveRatioscoreRendering(event, '{{include.id}}', 'mp3');" title="Download MP3" class="button fa-stack fa-1x">
 						<i class="fa fa-square hovering fa-stack-2x"></i>
 						<i class="fa fa-download fa-stack-1x chain-volume fa-inverse"></i>
@@ -73,23 +110,17 @@
 						<i class="fa fa-download fa-stack-1x chain-download fa-inverse"></i>
 						<i class="fa fa-file-text-o rfile"></i>
 					</span>
-					<span title="Copy to system clipboard" onclick="CopyScoreToClipboard('{{include.id}}');" class="button fa-stack fa-1x">
+
+					<span title="Contract toolbar" onclick="contractToolbar('{{include.id}}');" class="hidden extended button fa-stack fa-1x">
 						<i class="fa fa-square hovering fa-stack-2x"></i>
-						<i class="fa fa-copy fa-stack-1x fa-inverse"></i>
+						<i class="fa fa-minus fa-stack-1x fa-inverse"></i>
 					</span>
-					<span title="Paste from system clipboard" onclick="PasteScoreFromClipboard('{{include.id}}');" class="button fa-stack fa-1x">
+
+					<span title="Expand toolbar" onclick="expandToolbar('{{include.id}}');" class="contracted button fa-stack fa-1x">
 						<i class="fa fa-square hovering fa-stack-2x"></i>
-						<i class="fa fa-paint-brush fa-stack-1x fa-inverse"></i>
+						<i class="fa fa-plus fa-stack-1x fa-inverse"></i>
 					</span>
-					<span title="Copy link to Ratioscore" onclick="CopyLinkToClipboard('{{include.id}}');" class="button fa-stack fa-1x">
-						<i class="fa fa-square hovering fa-stack-2x"></i>
-						<i class="fa fa-link fa-stack-1x fa-inverse"></i>
-					</span>
-					<span title="Copy autoplay link to Ratioscore" onclick="CopyAutoplayLinkToClipboard('{{include.id}}');" class="button fa-stack fa-1x">
-						<i class="fa fa-square hovering fa-stack-2x"></i>
-						<i class="fa fa-link fa-inverse chain"></i>
-						<i class="fa fa-bolt lightening" style="color:#fcc637cc"></i>
-					</span>
+
 					</nobr>
 				</td>
 			</tr>
@@ -97,7 +128,7 @@
 
 		<script
 				id="inputdata-{{include.id}}"
-				style="{% if include.height %}height:{{ include.height }};{% else %}max-height: calc(100vh - 200px);{% endif %} width:100%; resize:both; overflow:auto; {% if include.minheight %}min-height:{{ include.minheight }};{% endif %}{% if include.height %}height:{{ include.height }}; {% else %}height:auto; {% endif %} {% if include.tabsize %}tab-size:{{ include.tabsize }}; -moz-tab-size:{{ include.tabsize }};{% else %}tab-size:10; -moz-tab-size:10;{% endif %}"
+				style="font-size:16px; line-height:18px; {% if include.height %}height:{{ include.height }}{% endif %}; width:100%; resize:both; overflow:auto; {% if include.minheight %}min-height:{{ include.minheight }};{% endif %}{% if include.height %}height:{{ include.height }}; {% else %}height:auto; {% endif %} {% if include.tabsize %}tab-size:{{ include.tabsize }}; -moz-tab-size:{{ include.tabsize }};{% else %}tab-size:10; -moz-tab-size:10;{% endif %}"
 				name="inputdata"
 				spellcheck="false"
 				oncopy="CopyScoreToClipboard(event.target.id);"

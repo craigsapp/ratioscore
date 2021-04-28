@@ -134,7 +134,7 @@ Below is an example of giving instrument names to the note numbers.
 The letters `v` and `V` are deaccent and accent marks respectively.
 
 
-{% include ratioscore.html id="drum-names" height="900px" tabsize="12" %}
+{% include ratioscore.html id="drum-names" tabsize="12" %}
 <script type="application/x-ratioscore" id="drum-names">
 !!!RDF**drum: triangle = 81
 !!!RDF**drum: clap = 39

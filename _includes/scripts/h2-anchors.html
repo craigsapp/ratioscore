@@ -87,7 +87,6 @@ function createHeadingUrl(anchor) {
 //
 
 function checkForUrlHash() {
-	console.log("complete checkForUrlHash");
 	let hash = document.location.hash;
 	if (!hash) {
 		return;
@@ -147,7 +146,6 @@ function insertHeadingsIntoSidebar() {
 	if (!pagelink) {
 		return;
 	}
-	console.log("PAGELINK", pagelink);
 	let subheads = document.createElement("div");
 	subheads.classList.add("subheadings");
 	let output = "";

@@ -341,7 +341,17 @@ relative to the reference pitch:
 1	550c
 1	600c
 1	650c
-2	700c
+1	700c
+1	750c
+1	800c
+1	850c
+1	900c
+1	950c
+1	1000c
+1	1050c
+1	1100c
+1	1150c
+2	1200c
 *-	*-
 </script>
 
@@ -373,7 +383,7 @@ assumed to be in equal temperament.
 1	0	900c
 1	71m	0
 1	0	1100c
-2	72m	0
+2	72.5m	0
 *-	*-	*-
 </script>
 
