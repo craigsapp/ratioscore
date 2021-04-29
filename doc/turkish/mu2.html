@@ -2,8 +2,16 @@
 
 
 <script>
-// vim: ts=3:ft=javascript
-
+//
+// Programmer:    Craig Stuart Sapp <craig.stanford.edu>
+// Creation Date: Thu Apr 29 09:09:11 PDT 2021
+// Last Modified: Thu Apr 29 09:09:14 PDT 2021
+// Filename:      mu2.html
+// Syntax:        Javascript 6
+// vim:           ts=3:ft=javascript
+//
+// Description:   Converter from mu2 to ratioscore.
+//
 
 
 //////////////////////////////
@@ -31,7 +39,7 @@ function convertMu2FileToRatioscore(mu2file) {
 			linetype = parseInt(matches[1]);
 		}
 		if (linetype == 9) {
-			let event = createNoteEvent(line);
+			let event = createDurationEvent(line);
 			if (event) {
 				events.push(event);
 			}
@@ -43,10 +51,12 @@ function convertMu2FileToRatioscore(mu2file) {
 		}
 	}
 
+	addBarlines(events, meter);
+
 	let pitches = getPitches(events);
 
-console.log("PITCHES", pitches);
-console.log("EVENTS", events);
+	console.log("EVENTS", events);
+	// console.log("PITCHES", pitches);
 
 	let output = "";
 	if (title) {
@@ -87,23 +97,108 @@ console.log("EVENTS", events);
 
 //////////////////////////////
 //
-// printPitchRdf -- Need to sort the keys by frequency.
+// addBarlines --
+//
+
+function addBarlines(events, meter) {
+	let bardur = getMeasureDuration(meter);
+	if (!bardur) {
+		return;
+	}
+	if ((!events) || (events.length == 0)) {
+		return;
+	}
+	let barnum = 2;
+	let checker = new RationalNumber;
+	// add measure 1 at start of score
+	events[0].barnum = 1;
+	let sum = new RationalNumber(0, 1);
+	for (let i=0; i<events.length; i++) {
+		let event = events[i];
+		let edur = event.dur;
+		sum.addTo(edur);
+		checker = sum.divide(bardur);
+		if (checker.getDenominator() === 1) {
+			if (i < events.length - 1) {
+				events[i+1].barnum = barnum++;
+			}
+		}
+	}
+}
+
+
+
+
+//////////////////////////////
+//
+// printPitchRdf -- Using C4 as the reference for cents.
 //
 
 function printPitchRdf(pitches) {
 	let tuning = {% include_relative tuning.json %};
 	console.log("TUNING", tuning);
 	let keys = Object.keys(pitches);
-	let output = "";
+	let output      = "";
+	let naturals    = [];
+	let nonnaturals = [];
+
 	for (let i=0; i<keys.length; i++) {
-		let cents = tuning[keys[i]];
+		let key = keys[i];
+		let matches = key.match(/^([DFLMRS][aeio]l?)(\d)([bs#])?(\d)?/);
+		if (!matches) {
+			console.log("ERROR PROCESSING", key);
+			continue;
+		}
+		let diatonic   = matches[1];
+		let octave     = parseInt(matches[2]);
+		let accidental = matches[3];
+		let accsize    = parseInt(matches[4]);
+		let eq53       = tuning[diatonic]
+		eq53 += octave * 53;
+		if (accidental) {
+			if (accidental === "b") {
+				eq53 -= accsize;
+			} else if (accidental === "#") {
+				eq53 += accsize;
+			}
+		}
+		let diff53 = eq53 - 4 * 53;
+		let cents = diff53 * 1200.0 / 53.0
+
+		if (cents > 0) {
+			cents = parseInt(cents * 100.0 + 0.5) / 100.0;
+		} else {
+			cents = -(parseInt(-cents * 100.0 + 0.5) / 100.0);
+		}
+		if (accidental) {
+			nonnaturals[key] = cents;
+		} else {
+			naturals[key] = cents;
+		}
+	}
+
+
+	// accidental substitutions need to go first:
+	let nkeys = Object.keys(nonnaturals);
+	for (let i=0; i<nkeys.length; i++) {
 		output += "!!!RDF**ratio: ";
-		output += keys[i];
+		output += nkeys[i];
 		output += " = ";
-		output += cents;
+		output += nonnaturals[nkeys[i]];
 		output += "c";
 		output += "\n";
 	}
+
+	nkeys = Object.keys(naturals);
+	for (let i=0; i<nkeys.length; i++) {
+		output += "!!!RDF**ratio: ";
+		output += nkeys[i];
+		output += " = ";
+		output += naturals[nkeys[i]];
+		output += "c";
+		output += "\n";
+	}
+
 	return output;
 }
 
@@ -119,9 +214,18 @@ function printEvent(event) {
 		return "";
 	}
 	let output = "";
+	if (typeof event.barnum !== "undefined") {
+		output += "=" + event.barnum + "\t";
+		output += "=" + event.barnum;
+		output += "\n";
+	}
 	output += event.recip;
 	output += "\t";
-	output += event.pitch;
+	if (event.rest) {
+		output += 0;
+	} else {
+		output += event.pitch;
+	}
 	output += "\n";
 	return output;
 }
@@ -145,23 +249,35 @@ function createBarlineEvent(line) {
 
 //////////////////////////////
 //
-// createNoteEvent --
+// createDurationEvent --
 //
 
-function createNoteEvent(line) {
+function createDurationEvent(line) {
 	let fields = line.split(/\t/);
-	if (!fields[1]) {
-		// note tie: deal with later
-		return null;
-	}
 	let o = {};
 	o.type = fields[0];
-	o.pitch = fields[1];
-	o.top = fields[2];
-	o.bot = fields[3];
+	if (fields[1]) {
+		o.pitch = fields[1];
+	} else {
+		if (fields[2]) {
+			o.rest = 1;
+		} else {
+			return null;
+		}
+	}
+	if (fields[2]) {
+		o.top = fields[2];
+		o.bot = fields[3];
+	} else {
+		// grace note
+		o.top = fields[2] || 0;
+		o.bot = fields[3] || 1;
+	}
+	
 	o.legato = fields[4];
 	o.bas = fields[5];
 	o.vel = fields[6];
+	o.dur = new RationalNumber(o.top, o.bot);
 	// verses
 	// then floating-point version of rhythm.
 
@@ -246,18 +362,35 @@ function getTempo(lines) {
 
 function getPitches(events) {
 	let output = {};
+	let pitch;
 	for (let i=0; i<events.length; i++) {
 		let event = events[i];
 		if (event.type != 9) {
 			continue;
 		}
-		let pitch = event.pitch;
+		if (event.pitch) {
+			pitch = event.pitch;
+		} else {
+			continue;
+		}
 		if (!output[pitch]) {
 			output[pitch] = 1;
 		} else {
 			output[pitch]++;
 		}
 	}
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// Returns the duration of the measure in whole-note units.
+//
+
+function getMeasureDuration(meter) {
+	let output = new RationalNumber(meter);
 	return output;
 }
 

@@ -1,2 +1,13 @@
 Acem "Persian" mode in maqam 
 https://en.wikipedia.org/wiki/Ajam_(maqam)
+
+song 59 has tempo/meter change
+https://github.com/MTG/SymbTr-pdf/blob/master/acemasiran--sazsemaisi--aksaksemai----misirli_udi_ibrahim_efendi.pdf
+
+
+song 90 has first/second endings:
+https://github.com/MTG/SymbTr-pdf/blob/master/acemkurdi--sarki--duyek--artik_gelecek--arif_sami_toker.pdf
+Also has a fermata
+
+
+

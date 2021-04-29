@@ -1,8 +1,8 @@
 
 @MU2URLBASE: https://raw.githubusercontent.com/MTG/SymbTr/master/mu2
+@PDFURLBASE: https://github.com/MTG/SymbTr-pdf/blob/master
 
 @@BEGIN: SONGLIST
-
 
 @@BEGIN: SONG
 @FILE:		acem--ilahi--duyek--aldanma_dunya--zekai_dede

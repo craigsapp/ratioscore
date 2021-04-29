@@ -8,7 +8,7 @@
 
 
 <script>
-// vim: ts=3
+// vim: ts=3:ft=javascript
 
 
 //////////////////////////////
@@ -76,7 +76,7 @@ function getFileInfo(songlist) {
 // loadMu2File --
 //
 
-function loadMu2File(urlbase, filebase) {
+function loadMu2File(urlbase, pdfbase, filebase) {
 	let url = urlbase + "/" + filebase + ".mu2";
 	let request = new XMLHttpRequest();
 	request.onload = function () {
@@ -100,9 +100,61 @@ function loadMu2File(urlbase, filebase) {
 	};
 	request.open("GET", url);
 	request.send();
+	
+	let pdfelement = document.querySelector("#pdf");
+	if (!pdfelement) {
+		return;
+	}
+	let output = "<a target='symtr-pdf' href='";
+	output += pdfbase + "/" + filebase + ".pdf";
+	output += "'>";
+	output += "PDF of graphical score";
+	output += "</a>";
+	pdfelement.innerHTML = output;
 }
 
 
+//////////////////////////////
+//
+// buildSelect --
+//
+
+function buildSelect(songlist) {
+	var element = document.querySelector("#songlist");
+	if (!element) {
+		return;
+	}
+	let output = "<select id='songselect' onchange='playSong(event)'>";
+	for (let i=0; i<songlist.length; i++) {
+		output += "<option value='" + i + "'>";
+		output += "song " + i;
+		output += "</option>";
+	}
+	output += "</select>\n";
+
+	element.innerHTML = output;
+}
+
+
+//////////////////////////////
+//
+// playSong --
+//
+
+function playSong(event) {
+	let target = event.target;
+	let songnumber = target.value;
+	loadMu2File(WORKLIST.MU2URLBASE, WORKLIST.PDFURLBASE, WORKLIST.SONGLIST.SONG[songnumber].FILE);
+}
+
+
+
+
+
 </script>
+
+
+
+
 
 

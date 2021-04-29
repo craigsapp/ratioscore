@@ -1,6 +1,0 @@
-51: Meter and OMD?
-52: tempo (top bottom tempo) "1 8 168" is eighth note at 168
-58: Composer
-59: Lyricist
-60: Title
-9:  note
