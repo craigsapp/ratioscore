@@ -1,0 +1,270 @@
+
+
+
+<script>
+// vim: ts=3:ft=javascript
+
+
+
+//////////////////////////////
+//
+// convertMu2FileToRatioscore -- 
+//
+
+function convertMu2FileToRatioscore(mu2file) {
+	if (!mu2file) {
+		return "";
+	}
+	let lines = mu2file.split("\n");
+	let composer = getNumberContent(lines, 58);
+	let lyricist = getNumberContent(lines, 59);
+	let title    = getNumberContent(lines, 60);
+	let meter    = getMeter(lines);
+	let tempo    = getTempo(lines);
+
+	let events = [];
+	for (let i=0; i<lines.length; i++) {
+		let line = lines[i];
+		let matches = line.match(/^(\d+)/);
+		let linetype = -1;
+		if (matches) {
+			linetype = parseInt(matches[1]);
+		}
+		if (linetype == 9) {
+			let event = createNoteEvent(line);
+			if (event) {
+				events.push(event);
+			}
+		} else if (linetype == 14) {
+			let event = createBarlineEvent(line);
+			if (event) {
+				events.push(event);
+			}
+		}
+	}
+
+	let pitches = getPitches(events);
+
+console.log("PITCHES", pitches);
+console.log("EVENTS", events);
+
+	let output = "";
+	if (title) {
+		output += "!!!OTL: " + title + "\n";
+	}
+	if (composer) {
+		output += "!!!COM: " + composer + "\n";
+	}
+	if (lyricist) {
+		output += "!!!LYR: " + lyricist + "\n";
+	}
+
+	output += "**recip\t**ratio\n";
+
+	if (meter) {
+		output += "*M" + meter + "\t*I#25\n";
+	} else {
+		output += "*\t*Iclars\n";
+	}
+
+	if (tempo) {
+		output += "*MM" + tempo + "\t*ref:C4\n";
+	} else {
+		output += "*\t*ref:C4\n";
+	}
+
+	for (let i=0; i<events.length; i++) {
+		output += printEvent(events[i]);
+	}
+	output += "*-\t*-\n";
+
+	output += printPitchRdf(pitches);
+
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// printPitchRdf -- Need to sort the keys by frequency.
+//
+
+function printPitchRdf(pitches) {
+	let tuning = {% include_relative tuning.json %};
+	console.log("TUNING", tuning);
+	let keys = Object.keys(pitches);
+	let output = "";
+	for (let i=0; i<keys.length; i++) {
+		let cents = tuning[keys[i]];
+		output += "!!!RDF**ratio: ";
+		output += keys[i];
+		output += " = ";
+		output += cents;
+		output += "c";
+		output += "\n";
+	}
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// printEvent --
+//
+
+function printEvent(event) {
+	if (event.type != 9) {
+		return "";
+	}
+	let output = "";
+	output += event.recip;
+	output += "\t";
+	output += event.pitch;
+	output += "\n";
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// createBarlineEvent --
+//
+
+function createBarlineEvent(line) {
+	return null;
+	let fields = line.split(/\t/);
+	let o = {};
+	o.type = fields[0];
+	return o;
+}
+
+
+
+//////////////////////////////
+//
+// createNoteEvent --
+//
+
+function createNoteEvent(line) {
+	let fields = line.split(/\t/);
+	if (!fields[1]) {
+		// note tie: deal with later
+		return null;
+	}
+	let o = {};
+	o.type = fields[0];
+	o.pitch = fields[1];
+	o.top = fields[2];
+	o.bot = fields[3];
+	o.legato = fields[4];
+	o.bas = fields[5];
+	o.vel = fields[6];
+	// verses
+	// then floating-point version of rhythm.
+
+	if (o.top == 1) {
+		o.recip = o.bot;
+	} else if (o.top == 3) {
+		o.recip = parseInt(o.bot) / 2;
+		o.recip += ".";
+	}
+	return o;
+}
+
+
+
+//////////////////////////////
+//
+// getNumberContent --
+//
+
+function getNumberContent(lines, number) {
+	let regstring = "^" + number + "\\s*(.*)\\s*$";
+	let re = new RegExp(regstring);
+	for (let i=0; i<lines.length; i++) {
+		let line = lines[i];
+		let matches = re.exec(line);
+		if (matches) {
+			return matches[1];
+		}
+	}
+	return "";
+}
+
+
+//////////////////////////////
+//
+// getMeter --
+//
+
+function getMeter(lines) {
+	for (let i=0; i<lines.length; i++) {
+		let line = lines[i];
+		let matches = line.match(/^51\s+(\d+)\s+(\d+)/);
+		if (matches) {
+			return matches[1] + "/" + matches[2];
+		}
+	}
+	return "";
+}
+
+
+
+//////////////////////////////
+//
+// getTempo -- Convert to quarter note units.
+//
+
+function getTempo(lines) {
+	for (let i=0; i<lines.length; i++) {
+		let line = lines[i];
+		let matches = line.match(/^52\s+(\d+)\s+(\d+)\s+(\d+)/);
+		if (matches) {
+			let top = parseInt(matches[1]);
+			let bot = parseInt(matches[2]);
+			let tempo = parseInt(matches[3]);
+			let num = new RationalNumber(top, bot);
+			let quarter = new RationalNumber(1, 4);
+			let factor = quarter.divide(num);
+			let rtempo = new RationalNumber(tempo, 1);
+			rtempo.divideTo(factor);
+			return rtempo.toFloat();
+		}
+	}
+	return "";
+}
+
+
+
+//////////////////////////////
+//
+// getPitches --
+//
+
+function getPitches(events) {
+	let output = {};
+	for (let i=0; i<events.length; i++) {
+		let event = events[i];
+		if (event.type != 9) {
+			continue;
+		}
+		let pitch = event.pitch;
+		if (!output[pitch]) {
+			output[pitch] = 1;
+		} else {
+			output[pitch]++;
+		}
+	}
+	return output;
+}
+
+
+
+
+</script>
+
+
+

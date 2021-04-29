@@ -1,0 +1,108 @@
+
+<script>
+{% include_relative aton.js %}
+{% include_relative RationalNumber-base.js %}
+{% include_relative RationalNumber-math.js %}
+</script>
+
+
+
+<script>
+// vim: ts=3
+
+
+//////////////////////////////
+//
+// getAtonContent --
+//
+
+function getAtonContent(id) {
+	let element = document.querySelector("#" + id);
+	if (!element) {
+		console.log("CANNOT FIND ELEMENT WITH ID =", id);
+		return [];
+	}
+	let text = element.textContent;
+	let aton = new ATON;
+	return aton.parse(text);
+
+}
+
+
+//////////////////////////////
+//
+// getComposerList --
+//
+
+function getComposerList(songlist) {
+	let output = {};
+	for (let i=0; i<songlist.length; i++) {
+		let entry = songlist[i];
+		let composer = entry.COMPOSER;
+		let centry = output[composer];
+		if (!centry) {
+			centry = {};
+			centry.composer = composer;
+			centry.songs = [];
+			output[composer] = centry;
+		}
+		centry.songs.push(entry);
+	}
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// getFileInfo --
+//
+
+function getFileInfo(songlist) {
+	let output = {};
+	for (let i=0; i<songlist.length; i++) {
+		let entry = songlist[i];
+		let file = entry.FILE;
+		output[file] = entry;
+	}
+	return output
+}
+
+
+
+
+//////////////////////////////
+//
+// loadMu2File --
+//
+
+function loadMu2File(urlbase, filebase) {
+	let url = urlbase + "/" + filebase + ".mu2";
+	let request = new XMLHttpRequest();
+	request.onload = function () {
+		if (request.readyState == request.DONE) {
+			if (request.status == 200) {
+				let ratioscore = convertMu2FileToRatioscore(request.responseText);
+				let target = document.querySelector("#main");
+				if (!target) {
+					console.log("PROBLEM FINDING #main");
+					return;
+				}
+				let target2 = document.querySelector("#inputdata-main");
+				if (!target2) {
+					console.log("PROBLEM FINDING #inputdata-main");
+					return;
+				}
+				target.textContent = ratioscore;
+				target2.textContent = ratioscore;
+			}
+		}
+	};
+	request.open("GET", url);
+	request.send();
+}
+
+
+</script>
+
+

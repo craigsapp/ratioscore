@@ -1,0 +1,24 @@
+
+
+<script id="worklist" type="text/plain">
+{% include_relative worklist.aton %};
+</script>
+
+
+<script>
+// vim: ts=3
+
+let WORKLIST = [];
+let COMPOSERLIST = [];
+
+document.addEventListener("DOMContentLoaded", function () {
+	WORKLIST = getAtonContent("worklist");
+	COMPOSERLIST = getComposerList(WORKLIST.SONGLIST.SONG);
+	FILEINFO = getFileInfo(WORKLIST.SONGLIST.SONG);
+	loadMu2File(WORKLIST.MU2URLBASE, WORKLIST.SONGLIST.SONG[0].FILE);
+});
+
+
+</script>
+
+
