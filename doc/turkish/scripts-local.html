@@ -116,17 +116,21 @@ function loadMu2File(urlbase, pdfbase, filebase) {
 
 //////////////////////////////
 //
-// buildSelect --
+// buildSongSelect --
 //
 
-function buildSelect(songlist) {
+function buildSongSelect(songlist) {
 	var element = document.querySelector("#songlist");
 	if (!element) {
 		return;
 	}
 	let output = "<select id='songselect' onchange='playSong(event)'>";
 	for (let i=0; i<songlist.length; i++) {
-		output += "<option value='" + i + "'>";
+		output += "<option value='" + i + "'";
+		if (i == 555) {
+			output += " selected";
+		}
+		output += ">";
 		output += "song " + i;
 		output += "</option>";
 	}
