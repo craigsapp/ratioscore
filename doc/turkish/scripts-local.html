@@ -120,12 +120,16 @@ function loadMu2File(urlbase, pdfbase, filebase) {
 }
 
 
+
 //////////////////////////////
 //
 // buildSongSelect --
 //
 
 function buildSongSelect(songlist) {
+	if (!songlist) {
+		songlist = WORKLIST.SONGLIST.SONG;
+	}
 	var element = document.querySelector("#songlist");
 	if (!element) {
 		return;
@@ -152,13 +156,17 @@ function buildSongSelect(songlist) {
 }
 
 
+
 //////////////////////////////
 //
 // playSong --
 //
 
 function playSong(event) {
-	let target = event.target;
+	let target = document.querySelector("#songselect");
+	if (!target) {	
+		target = event.target;
+	}
 	let songnumber = target.value;
 	loadMu2File(WORKLIST.MU2URLBASE, WORKLIST.PDFURLBASE, WORKLIST.SONGLIST.SONG[songnumber].FILE);
 }
