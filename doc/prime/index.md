@@ -28,7 +28,7 @@ less for intervals an octave or less.
 *-	*-	*-	*-
 </script>
 
-<h2 data-sidebar="3-limit"> 3 prime-limit intervals </h2>
+<h2 data-sidebar="3-limit"> 3-prime limit intervals </h2>
 
 {% include ratioscore.html id="f23" tabsize="14" %}
 <script type="application/x-ratioscore" id="f23">
@@ -51,7 +51,7 @@ less for intervals an octave or less.
 *-	*-	*-	*-	*-
 </script>
 
-<h2 data-sidebar="5-limit"> 5 prime-limit intervals </h2>
+<h2 data-sidebar="5-limit"> 5-prime limit intervals </h2>
 
 {% include ratioscore.html id="f25" tabsize="12" %}
 <script type="application/x-ratioscore" id="f25">
@@ -108,7 +108,7 @@ less for intervals an octave or less.
 </script>
 
 
-<h2 data-sidebar="7-limit"> 7 prime-limit intervals </h2>
+<h2 data-sidebar="7-limit"> 7-prime limit intervals </h2>
 
 {% include ratioscore.html id="f27" tabsize="12" %}
 <script type="application/x-ratioscore" id="f27">
