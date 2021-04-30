@@ -105,10 +105,16 @@ function loadMu2File(urlbase, pdfbase, filebase) {
 	if (!pdfelement) {
 		return;
 	}
-	let output = "<a target='symtr-pdf' href='";
+	let output = "<a target='symbtr-pdf' href='";
 	output += pdfbase + "/" + filebase + ".pdf";
 	output += "'>";
 	output += "PDF of graphical score";
+	output += "</a>";
+	output += " | ";
+	output += "<a target='symbtr-mu2' href='";
+	output += urlbase + "/" + filebase + ".mu2";
+	output += "'>";
+	output += "Mu2 digital score";
 	output += "</a>";
 	pdfelement.innerHTML = output;
 }
@@ -131,7 +137,13 @@ function buildSongSelect(songlist) {
 			output += " selected";
 		}
 		output += ">";
-		output += "song " + i;
+		output += i + ". ";
+		if (songlist[i].TITLE) {
+			output += songlist[i].TITLE;
+		}
+		if (songlist[i].COMPOSER && (!songlist[i].COMPOSER.match(/^\s*\?\s*$/))) {
+			output += ", by " + songlist[i].COMPOSER.replace(/^\(/, "").replace(/\)$/, "");;
+		}
 		output += "</option>";
 	}
 	output += "</select>\n";
