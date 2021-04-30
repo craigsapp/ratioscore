@@ -261,8 +261,9 @@ tbody tr:nth-child(odd) th {
  */
 
 .lead {
-	font-size: 1.25rem;
-	font-weight: 300;
+	font-size: 1rem;
+	font-weight: 400;
+	color: {{ site.sidebar_hyperlink_hover_color }};
 }
 
 
