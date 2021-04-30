@@ -41,7 +41,7 @@ The `**cents` column is for reference.  You can listen to
 the cents column directly by changing it to a `**ratio` column and
 adding `c` at the end of each cent value.  You can suppress
 playback of the `**ratio` column by renaming it to something
-like `**Xratio`.
+like `**mute`.
 </li>
 
 <li markdown="1">

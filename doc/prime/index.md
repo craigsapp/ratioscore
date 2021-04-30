@@ -13,7 +13,7 @@ prime factors 7 and less.  To turn off the reference pitch, change
 the first `**ratio` column's name to something else.  To listen to
 the rational numbers where the prime factors are multipled out,
 change the `**rational` spine names to `**ratio` and change the
-second `**ratio` column heading to something else such as `**quiet`.
+second `**ratio` column heading to something else such as `**mute`.
 This works similarly for the `**cents` column, which should also
 sound the same as the second `**ratio` column.
 

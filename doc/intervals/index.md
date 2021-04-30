@@ -63,12 +63,32 @@ largest.
 
 
 {% include intervalscore.html
+	title="Septimal comma"
+	id="septimal-comma"
+	ratio="64/63"
+	cents="27.26"
+%}
+{% include ratioscore.html id="septimal-comma" erase="false" %}
+
+
+
+{% include intervalscore.html
 	title="Diesis"
 	id="diesis"
 	ratio="128/125"
 	cents="41.06"
 %}
 {% include ratioscore.html id="diesis" erase="false" %}
+
+
+
+{% include intervalscore.html
+	title="tridecimal comma"
+	id="tridecimal-comma"
+	ratio="1053/1024"
+	cents="48.35"
+%}
+{% include ratioscore.html id="tridecimal-comma" erase="false" %}
 
 
 
@@ -88,6 +108,16 @@ largest.
 	cents="50.00"
 %}
 {% include ratioscore.html id="eq-quarter-tone" erase="false" %}
+
+
+
+{% include intervalscore.html
+	title="Undecimal comma"
+	id="undecimal-comma"
+	ratio="33/32"
+	cents="53.27"
+%}
+{% include ratioscore.html id="undecimal-comma" erase="false" %}
 
 
 
