@@ -105,6 +105,7 @@ vector<int> m_glissTime;             // time between gliss adjustments
 int         m_pbadjust = 0;          // anticipation time for pitch bend before note
 int         m_lastDuration = 1000;   // duration of last event in score (if not rest).
 int         m_velocity = 64;         // default attack velocity of notes
+int         m_gracedur = 100;        // grace note duration (ms ideally)
 double      m_maxtime = 0.0;         // maximum time of output MIDI file
 vector<double> m_timeline;           // used with --max-time option.
 bool        m_debugQ = false;        // used with --debug option
@@ -902,6 +903,9 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 
 			int starttime = m_timemap[current->getLineIndex()] + m_pad;
 			int endtime = getEndTime(current) - 1;
+			if (starttime >= endtime) {
+				starttime -= m_gracedur;
+			}
 			int ptime = starttime - m_pbadjust;
 			if (ptime < 0) {
 				ptime = 0;
@@ -1248,9 +1252,14 @@ double getPitchAsMidi(HTp token, double reference) {
 	double pcents;
 	string botstring;
 
-	// Remove non-pitch information from token:
+	// Convert substitutions to actual data:
 	string cleaned = applyRatioSubstitutions(*token);
-	hre.replaceDestructive(cleaned, "", "[Hh_]", "g");
+
+	// Convert ":" to "/"
+	hre.replaceDestructive(cleaned, "/", ":", "g");
+
+	// Remove non-pitch information from token:
+	hre.replaceDestructive(cleaned, "", "[ Hh_]", "g");
 
 	// Check if only a cent interval:
 	if (hre.search(cleaned, "^([+-]?\\d+\\.?\\d*)c$")) {
@@ -1295,14 +1304,14 @@ double getPitchAsMidi(HTp token, double reference) {
 	}
 
 	// Reduce "(#/#)" (considering only integers)
-	while (hre.search(cleaned, "\\((\\d+)[/:](\\d+)\\)")) {
+	while (hre.search(cleaned, "\\((\\d+)/(\\d+)\\)")) {
 		double number1 = hre.getMatchInt(1);
 		double number2 = hre.getMatchInt(2);
 		double value = number1 / number2;
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+)[/:](\\d+)\\)");
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+)/(\\d+)\\)");
 	}
 
 	// Remove parentheses "(#)"
@@ -1354,14 +1363,14 @@ double getPitchAsMidi(HTp token, double reference) {
 	}
 
 	// Reduce "(#/#)" (considering only integers)
-	while (hre.search(cleaned, "\\((\\d+)[/:](\\d+)\\)")) {
+	while (hre.search(cleaned, "\\((\\d+)/(\\d+)\\)")) {
 		double number1 = hre.getMatchInt(1);
 		double number2 = hre.getMatchInt(2);
 		double value = number1 / number2;
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+)[/:](\\d+)\\)");
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+)/(\\d+)\\)");
 	}
 
 	// Remove parentheses "(#)"
