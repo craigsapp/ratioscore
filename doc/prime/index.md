@@ -30,25 +30,27 @@ less for intervals an octave or less.
 
 <h2 data-sidebar="3-limit"> 3-prime limit intervals </h2>
 
-{% include ratioscore.html id="f23" tabsize="14" %}
+{% include ratioscore.html id="f23" tabsize="12" %}
 <script type="application/x-ratioscore" id="f23">
+
 !! prime factors of 2 and 3 only
-**dtime	**ratio	**ratio	**cents	**name
-*MM60	*Iclars	*Iclars	*	*
-*	*ref:C4	*ref:C4	*	*
-1	1	2^8  : 3^5	90.22	m2
-1	1	3^2  : 2^3	203.91	M2
-1	1	2^5  : 3^3	294.14	m3
-1	1	3^4  : 2^6	407.82	M3
-1	1	2^2  : 3	498.05	P5
-1	1	2^10 : 3^6	588.27	d5
-1	1	3^6  : 2^9	611.73	A4
-1	1	3    : 2	701.96	P5
-1	1	2^7  : 3^4	792.18	m6
-1	1	3^3  : 2^4	905.87	M6
-1	1	2^4  : 3^2	996.09	m7
-1	1	3^5  : 2^7	1109.78	M7
-*-	*-	*-	*-	*-
+**dtime	**ratio	**ratio	**expanded	**cents	**name
+*MM60	*Iclars	*Iclars	*	*	*
+*	*ref:C4	*ref:C4	*	*	*
+1	1	2^8  : 3^5	256/243	90.22	m2
+1	1	3^2  : 2^3	9/8	203.91	M2
+1	1	2^5  : 3^3	32/27	294.14	m3
+1	1	3^4  : 2^6	81/64	407.82	M3
+1	1	2^2  : 3	4/3	498.05	P5
+1	1	2^10 : 3^6	1024/729	588.27	d5
+1	1	3^6  : 2^9	729/512	611.73	A4
+1	1	3    : 2	3/2	701.96	P5
+1	1	2^7  : 3^4	128/81	792.18	m6
+1	1	3^3  : 2^4	27/16	905.87	M6
+1	1	2^4  : 3^2	16/9	996.09	m7
+1	1	3^5  : 2^7	243/128	1109.78	M7
+*-	*-	*-	*-	*-	*-
+
 </script>
 
 <h2 data-sidebar="5-limit"> 5-prime limit intervals </h2>
