@@ -21,7 +21,7 @@ sound the same as the second `**ratio` column.
 <nobr><label for="reference">Reference&nbsp;pitch:&nbsp;</label>{% include_relative reference-pitch.html %}</nobr>
 <nobr><label for="instrument">Instrument:</label>{% include_relative instrument.html %}</nobr>
 
-<h2 data-sidebar="2-limit"> 2-prime limit intervals </h2>
+<h2 data-sidebar="2-limit"> 2-prime-limit intervals </h2>
 
 {% include ratioscore.html id="f2" tabsize="12" %}
 <script type="application/x-ratioscore" id="f2">
@@ -34,7 +34,7 @@ sound the same as the second `**ratio` column.
 *-	*-	*-	*-
 </script>
 
-<h2 data-sidebar="3-limit"> 3-prime limit intervals </h2>
+<h2 data-sidebar="3-limit"> 3-prime-limit intervals </h2>
 
 {% include ratioscore.html id="f23" tabsize="14" %}
 <script type="application/x-ratioscore" id="f23">
@@ -110,7 +110,7 @@ grouped together:
 
 </script>
 
-<h2 data-sidebar="5-limit"> 5-prime limit intervals </h2>
+<h2 data-sidebar="5-limit"> 5-prime-limit intervals </h2>
 
 {% include ratioscore.html id="f25" tabsize="12" %}
 <script type="application/x-ratioscore" id="f25">
@@ -175,7 +175,7 @@ grouped together:
 </script>
 
 
-<h2 data-sidebar="7-limit"> 7-prime limit intervals </h2>
+<h2 data-sidebar="7-limit"> 7-prime-limit intervals </h2>
 
 {% include ratioscore.html id="f27" tabsize="12" %}
 <script type="application/x-ratioscore" id="f27">
