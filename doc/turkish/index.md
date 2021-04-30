@@ -10,6 +10,8 @@ vim: ts=8:ft=html
 {% include_relative scripts-local.html %}
 {% include_relative styles-local.html %}
 
+Music from the <a target="_blank" href="https://github.com/MTG/SymbTr">Turkish Makam Music Symbolic Data Collection, <a target="_blank" href="https://sertansenturk.com">Sertan Şentürk</a>, ed.
+
 <div style="display:inline-block;" id="songlist"></div>
 <nobr><label for="rdf">Pitch&nbsp;units</label><select onchange="playSong(event);" id="rdf">
 	<option value="ratio">ratios</option>
