@@ -17,31 +17,31 @@ paginate:         5
 # Stylings
 
 #content_background:                "#b9936a"
-content_background:                 "#dcb48c"
+content_background:                 "#fcc637cc"
 hyperlink_color:                    "#7b622c"
 hyperlink_hover_color:              "#bd7072"
 ratioscore_light:                   "#bfa571"
-header_color:                       "#6b3f1c"
-text_color:                         "#3b1c04"
+header_color:                       "#8a7e00"
+text_color:                         "#8a7e00"
 
 # General colors
-ratioscore_dark:                    "#3b1c04"
+ratioscore_dark:                    "#667780"
 ratioscore_light:                   "#bf9471"
 
 # Sidebar colors:
-sidebar_background:                 "#6b3f1c"
-sidebar_hyperlink_color:            "white"
+sidebar_background:                 "#fffaed"
+sidebar_hyperlink_color:            "#667780"
 sidebar_hyperlink_hover_color:      "#fcc637cc"
 
 # Ratioscore toolbar colors:
-ratioscore_button_background:       "#5d3515"
-ratioscore_button_light:            "#bf9471"
-ratioscore_button_highlight:        "#fcc637cc"
-ratioscore_button_background_hover: "#3b1c04"
+ratioscore_button_background:       "#b0a6a0"
+ratioscore_button_light:            "#ffd000"
+ratioscore_button_highlight:        "#fffaed"
+ratioscore_button_background_hover: "#ff9752"
 
 # Ratioscore editor colors:
 ratioscore_editor_font_color:       "#000000"
-ratioscore_editor_background:       "#ffe4b1"
+ratioscore_editor_background:       "white"
 
 
 # https://paletton.com/#uid=50t0u0kkzfscZnYgqjboJbEu27m
