@@ -74,12 +74,13 @@ double  getReferencePitchAsMidi(const string& token);
 double  getMaxGlissRange  (HTp pstart);
 double  getGlissWidth     (vector<double>& gliss);
 void    fillCurrentTempo  (HumdrumFile& infile, HTp timespine);
+void    fillCurrentTempoNull(HumdrumFile& infile);
+void    fillGraceDur      (HumdrumFile& infile, HTp timespine);
 HTp     getVelToken       (HTp current);
 vector<int> getDrumsAsMidi(HTp current);
 void    getSubstitutions  (HumdrumFile& infile);
 string  applyRatioSubstitutions(const string& input);
 string  applyDrumSubstitutions(const string& input);
-void    fillCurrentTempoNull(HumdrumFile& infile);
 
 
 // variables:
@@ -105,9 +106,10 @@ vector<int> m_glissTime;             // time between gliss adjustments
 int         m_pbadjust = 0;          // anticipation time for pitch bend before note
 int         m_lastDuration = 1000;   // duration of last event in score (if not rest).
 int         m_velocity = 64;         // default attack velocity of notes
-int         m_gracedur = 100;        // grace note duration (ms ideally)
+vector<int> m_graceDur;              // grace note duration (ms units)
 double      m_maxtime = 0.0;         // maximum time of output MIDI file
-vector<double> m_timeline;           // used with --max-time option.
+vector<double> m_timeline;           // used with --max-time option
+bool        m_printTimemap = false; // used with -t option
 bool        m_debugQ = false;        // used with --debug option
 vector<double> m_currTempo;          // used for grate calculations
 vector<pair<string, string>> m_ratioSubs; // used with !!!RDF**ratio:
@@ -118,16 +120,18 @@ int         m_pad = 0;
 
 int main(int argc, char** argv) {
 	Options options;
-	options.define("o|output=s", "output name for MIDI file when using standard input.");
-	options.define("r|raw=b",    "output raw MIDI data to stdout.");
+	options.define("o|output=s",       "output name for MIDI file when using standard input.");
+	options.define("r|raw=b",          "output raw MIDI data to stdout.");
 	options.define("x|max-time=d:0.0", "maximum duration of output MIDI file in seconds");
-	options.define("s|seconds=b", "add time in seconds spine (resolving tempo changes)");
-	options.define("p|pad=i:0",   "padding time in ms to start of MIDI data");
-	options.define("debug=b", "display debugging information");
+	options.define("s|seconds=b",      "add time in seconds spine (resolving tempo changes)");
+	options.define("p|pad=i:0",        "padding time in ms to start of MIDI data");
+	options.define("t|timeline=b",     "print timeline");
+	options.define("debug=b",          "display debugging information");
 	options.process(argc, argv);
 	m_maxtime = options.getDouble("max-time");
 	m_debugQ = options.getBoolean("debug");
 	m_pad = options.getInteger("pad");
+	m_printTimemap = options.getBoolean("timeline");
 
 	HumdrumFile infile;
 
@@ -136,7 +140,6 @@ int main(int argc, char** argv) {
 
 	// Set ticks-per-quarter note.  Could be adjusted if **recip timeline.
 	outfile.setTicksPerQuarterNote(1000);  // using millisecond ticks
-
 
 	Tool_filter filter;
 
@@ -367,10 +370,10 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 
 	}
 
+	fillGraceDur(infile, timespine);
+	fillCurrentTempo(infile, timespine);
+	// needs to be done after fillCurrentTempo due to grace note calculations
 	buildTimemap(timespine, infile);
-	// for (int i=0; i<(int)m_timemap.size(); i++) {
-	// 	cout << m_timemap[i] << endl;
-	// }
 
 	int newtracks = (int)(m_ratioStarts.size() + m_drumStarts.size());
 	if (newtracks <= 0) {
@@ -381,7 +384,6 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 
 	outfile.addTracks(newtracks); // originally one track, which is for expression
 
-	fillCurrentTempo(infile, timespine);
 
 	int ratiotracks = (int)m_ratioStarts.size();
 	for (int i=0; i<ratiotracks; i++) {
@@ -497,6 +499,66 @@ void fillCurrentTempo(HumdrumFile& infile, HTp timespine) {
 		m_currTempo.at(lindex) = tempo;
 		current = current->getNextToken();
 	}
+
+	if (m_debugQ) {
+		cerr << "TEMPO ======================\n";
+		for (int i=0; i<(int)m_currTempo.size(); i++) {
+			cerr << m_currTempo.at(i) << "\t" << infile[i] << endl;
+		}
+		cerr << "============================" << endl;
+	}
+
+}
+
+
+
+//////////////////////////////
+//
+// fillGraceDur -- Keep track of the grace note duration.
+//    The default is *grace:100 (100 millisecond gracenotes).
+//
+
+void fillGraceDur(HumdrumFile& infile, HTp timespine) {
+	m_graceDur.resize(infile.getLineCount());
+	if (!timespine) {
+		fill(m_graceDur.begin(), m_graceDur.end(), 100);
+		return;
+	}
+	fill(m_graceDur.begin(), m_graceDur.end(), -1);
+
+	HTp current = timespine->getNextToken();
+	HumRegex hre;
+	int gracetime = 100;
+	while (current) {
+		if (hre.search(current, "^\\*grace:(\\d+)")) {
+			gracetime = hre.getMatchInt(1);
+		} else {
+			current = current->getNextToken();
+			continue;
+		}
+		if (gracetime <= 10) {
+			gracetime = 10;
+		}
+		int lindex = current->getLineIndex();
+		m_graceDur.at(lindex) = gracetime;
+		current = current->getNextToken();
+	}
+
+	m_graceDur[0] = 100;
+	for (int i=1; i<(int)m_graceDur.size(); i++) {
+		if (m_graceDur[i] < 0) {
+			m_graceDur[i] = m_graceDur[i-1];
+		}
+	}
+
+	if (m_debugQ) {
+		cerr << "GRADEDUR ======================\n";
+		for (int i=0; i<(int)m_graceDur.size(); i++) {
+			cerr << m_graceDur.at(i) << "\t" << infile[i] << endl;
+		}
+		cerr << "============================" << endl;
+	}
+
 }
 
 
@@ -761,6 +823,35 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 		}
 	}
 
+
+	vector<int*> points;
+	vector<int> index;
+	for (int i=0; i<infile.getLineCount(); i++) {
+		if (infile[i].isData()) {
+			points.push_back(&m_timemap.at(i));
+			index.push_back(i);
+		}
+	}
+
+	// Check for grace notes and adjust timeline to fit them in.
+	// Currently only one grace note in a row is expected.
+	for (int i=1; i<(int)points.size() - 1; i++) {
+		int value0 = *points[i-1];
+		int value1 = *points[i];
+		int value2 = *points[i+1];
+		int dur = value2 - value1;
+		double tempo = m_currTempo.at(index.at(i));
+		int olddur = value1 - value0;
+		int gracetime = int(m_graceDur.at(index.at(i)) * tempo / 60.0 + 0.5);
+		if (dur <= 0) {
+			if (olddur < 2 * gracetime) {
+				*points[i] -= olddur / 2;
+			} else {
+				*points[i] -= gracetime;
+			}
+		}
+	}
+
 	// fill in timings for nondata:
 	for (int i=1; i<(int)m_timemap.size(); i++) {
 		if (m_timemap[i] < 0) {
@@ -768,6 +859,11 @@ void buildTimemap(HTp sstart, HumdrumFile& infile) {
 		}
 	}
 
+	if (m_printTimemap) {
+		for (int i=0; i<m_timemap.size(); i++) {
+			cout << m_timemap.at(i) << "\t" << infile[i] << endl;
+		}
+	}
 }
 
 
@@ -903,9 +999,6 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 
 			int starttime = m_timemap[current->getLineIndex()] + m_pad;
 			int endtime = getEndTime(current) - 1;
-			if (starttime >= endtime) {
-				starttime -= m_gracedur;
-			}
 			int ptime = starttime - m_pbadjust;
 			if (ptime < 0) {
 				ptime = 0;
@@ -1712,14 +1805,6 @@ void prepareTimeline(HumdrumFile& infile) {
 		prepareTimelineNull(m_timeline, infile);
 	}
 
-	if (m_debugQ) {
-		cerr << "CALCULATED TIMELINE (seconds):" << endl;
-		for (int i=0; i<(int)m_timeline.size(); i++) {
-			cerr << i << "\t" << m_timeline.at(i) << endl;
-		}
-		cerr << "===========================" << endl;
-		cerr << endl;
-	}
 }
 
 
