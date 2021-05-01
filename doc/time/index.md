@@ -539,3 +539,58 @@ segment, or the start of each segment can be started with
 </script>
 
 
+<h2> Gracenotes </h2>
+
+If timeline entry has zero duration, it will be interpreted as a gracenote.  
+The previous note will be shortened by 100ms and the grace note start time
+moved back 100ms.  If the previous note is less than 200ms, the grace note
+start time will be 1/2 of the duration between the onset times of its
+neighboring pitches.  Only one gracenote in a sequece can currently be handled.
+
+{% include ratioscore.html id="grace-dtime" %}
+<script type="application/x-ratioscore" id="grace-dtime">
+**dtime	**ratio
+*	*I#25
+*	*ref:G3
+1	1
+0	9/4
+1	2
+0	7/5
+1	3/2
+1	1
+*-	*-
+</script>
+
+{% include ratioscore.html id="grace-time" %}
+<script type="application/x-ratioscore" id="grace-time">
+**time	**ratio
+*	*I#25
+*	*ref:G3
+0	1
+1	9/4
+1	2
+2	7/5
+2	3/2
+3	1
+*-	*-
+</script>
+
+In `**recip` data, use `q` to represent a grace note:
+
+{% include ratioscore.html id="grace-recip" %}
+<script type="application/x-ratioscore" id="grace-recip">
+**recip	**ratio
+*	*I#25
+*	*ref:G3
+4	1
+q	9/4
+4	2
+q	7/5
+4	3/2
+4	1
+*-	*-
+</script>
+
+
+
+

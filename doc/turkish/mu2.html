@@ -397,6 +397,9 @@ console.log("REPEAT SET TO ", o.repeat);
 	} else if (o.dur.getNumerator() == 3) {
 		o.recip = parseInt(o.dur.getDenominator()) / 2;
 		o.recip += ".";
+	} else if (o.dur.getNumerator() == 5) {
+		// such as 5/8
+		o.recip = o.dur.getDenominator() + "%" + o.dur.getNumerator();
 	}
 	return o;
 }
