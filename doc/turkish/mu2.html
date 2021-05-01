@@ -283,18 +283,36 @@ function printEvent(event) {
 	}
 	let output = "";
 
-	if (event.grace) {
-		output += "q";
-	} else {
-		output += event.recip;
+	let ntime = event.recip + "";
+	let count = 1;
+	if (event.repeat) {
+		count = event.repeat;
+		if (ntime) {
+			if (count > 1) {
+				let matches = ntime.match(/(\d+)/);
+				if (matches) {
+					let oldnum = parseInt(matches[1]);
+					let newnum = oldnum * count;
+					ntime = ntime.replace(oldnum + "", newnum + "");
+				}
+			}
+		}
 	}
-	output += "\t";
-	if (event.rest) {
-		output += 0;
-	} else {
-		output += event.pitch;
+
+	for (let i=0; i<count; i++) {
+		if (event.grace) {
+			output += "q";
+		} else {
+			output += ntime;
+		}
+		output += "\t";
+		if (event.rest) {
+			output += 0;
+		} else {
+			output += event.pitch;
+		}
+		output += "\n";
 	}
-	output += "\n";
 
 	if (typeof event.barnum !== "undefined") {
 		output += "=" + event.barnum + "\t";
@@ -368,10 +386,16 @@ function createDurationEvent(line) {
 	// verses
 	// then floating-point version of rhythm.
 
-	if (o.top == 1) {
-		o.recip = o.bot;
-	} else if (o.top == 3) {
-		o.recip = parseInt(o.bot) / 2;
+	if (o.dur.getNumerator() != o.top) {
+		// tremolo repeats
+		o.repeat = parseInt(o.top / o.dur.getNumerator());
+console.log("REPEAT SET TO ", o.repeat);
+	}
+
+	if (o.dur.getNumerator() == 1) {
+		o.recip = o.dur.getDenominator();
+	} else if (o.dur.getNumerator() == 3) {
+		o.recip = parseInt(o.dur.getDenominator()) / 2;
 		o.recip += ".";
 	}
 	return o;
