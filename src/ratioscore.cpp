@@ -1374,37 +1374,37 @@ double getPitchAsMidi(HTp token, double reference) {
 	}
 
 	// Reduce "#^#" (has priority over #*# and #/#)
-	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)")) {
+	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\^(-?\\d+\\.?\\d*)")) {
 		double number1 = hre.getMatchDouble(1);
 		double number2 = hre.getMatchDouble(2);
 		double value = pow(number1, number2);
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)");
+		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\^(-?\\d+\\.?\\d*)");
 	}
 
 	// Reduce "#*#" (considering only integers, at least for now)
 	// Maybe allow long long ints for large values
-	while (hre.search(cleaned, "(\\d+)\\*(\\d+)")) {
-		long number1 = hre.getMatchInt(1);
-		long number2 = hre.getMatchInt(2);
-		long value = number1 * number2;
+	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\*(\\d+\\.?\\d*)")) {
+		double number1 = hre.getMatchDouble(1);
+		double number2 = hre.getMatchDouble(2);
+		double value = number1 * number2;
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+)\\*(\\d+)");
+		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\*(\\d+\\.?\\d*)");
 	}
 
 	// Reduce "(#/#)" (considering only integers)
-	while (hre.search(cleaned, "\\((\\d+)/(\\d+)\\)")) {
-		double number1 = hre.getMatchInt(1);
-		double number2 = hre.getMatchInt(2);
+	while (hre.search(cleaned, "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)")) {
+		double number1 = hre.getMatchDouble(1);
+		double number2 = hre.getMatchDouble(2);
 		double value = number1 / number2;
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+)/(\\d+)\\)");
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)");
 	}
 
 	// Remove parentheses "(#)"
@@ -1433,22 +1433,22 @@ double getPitchAsMidi(HTp token, double reference) {
 	//////////////////////////////
 
 	// Reduce "#^#" (has priority over #*# and #/#)
-	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)")) {
+	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\^(-?\\d+\\.?\\d*)")) {
 		double number1 = hre.getMatchDouble(1);
 		double number2 = hre.getMatchDouble(2);
 		double value = pow(number1, number2);
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\^(\\d+\\.?\\d*)");
+		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\^(-?\\d+\\.?\\d*)");
 	}
 
 	// Reduce "#*#" (considering only integers, at least for now)
 	// Maybe allow long long ints for large values
 	while (hre.search(cleaned, "(\\d+)\\*(\\d+)")) {
-		long number1 = hre.getMatchInt(1);
-		long number2 = hre.getMatchInt(2);
-		long value = number1 * number2;
+		double number1 = hre.getMatchDouble(1);
+		double number2 = hre.getMatchDouble(2);
+		double value = number1 * number2;
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
@@ -1457,8 +1457,8 @@ double getPitchAsMidi(HTp token, double reference) {
 
 	// Reduce "(#/#)" (considering only integers)
 	while (hre.search(cleaned, "\\((\\d+)/(\\d+)\\)")) {
-		double number1 = hre.getMatchInt(1);
-		double number2 = hre.getMatchInt(2);
+		double number1 = hre.getMatchDouble(1);
+		double number2 = hre.getMatchDouble(2);
 		double value = number1 / number2;
 		stringstream sstr;
 		sstr.str("");
