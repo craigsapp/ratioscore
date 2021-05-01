@@ -18,6 +18,18 @@
 //
 // convertMu2FileToRatioscore -- 
 //
+// Line types:
+//   1 = cue note (not sung)
+//   4 = note with glissando to next note
+//   7 = note with tremolo
+//   8 = grace note
+//   9 = regular note/rest (if there is a note name and duration
+//        otherwise a section marker?
+//  10 = note with grace note after it
+//  12 = trilled note
+//  21 = blank line?
+//  23 = mordent on note
+//
 
 function convertMu2FileToRatioscore(mu2file) {
 	if (!mu2file) {
@@ -40,8 +52,26 @@ function convertMu2FileToRatioscore(mu2file) {
 		if (matches) {
 			linetype = parseInt(matches[1]);
 		}
-		if (linetype == 9) {
-			// grace or rest
+		if (linetype == 1) {
+			// note in accompaniment
+			let event = createDurationEvent(line);
+			if (event) {
+				events.push(event);
+			}
+		} else if (linetype == 4) {
+			// note with glissando after it
+			let event = createDurationEvent(line);
+			if (event) {
+				events.push(event);
+			}
+		} else if (linetype == 7) {
+			// note with tremolo
+			let event = createDurationEvent(line);
+			if (event) {
+				events.push(event);
+			}
+		} else if (linetype == 9) {
+			// note or rest
 			let event = createDurationEvent(line);
 			if (event) {
 				events.push(event);
@@ -52,15 +82,28 @@ function convertMu2FileToRatioscore(mu2file) {
 			if (event) {
 				events.push(event);
 			}
-//		} else if (linetype == 14) {
-//			let event = createBarlineEvent(line);
-//			if (event) {
-//				events.push(event);
-//			}
+		} else if (linetype == 10) {
+			// note with grace note after it
+			let event = createDurationEvent(line);
+			if (event) {
+				events.push(event);
+			}
+		} else if (linetype == 12) {
+			// trilled note
+			let event = createDurationEvent(line);
+			if (event) {
+				events.push(event);
+			}
+		} else if (linetype == 23) {
+			// note with mordent
+			let event = createDurationEvent(line);
+			if (event) {
+				events.push(event);
+			}
 		}
 	}
 
-	addBarlines(events, meter);
+	// addBarlines(events, meter);
 
 	let pitches = getPitches(events);
 
@@ -110,6 +153,8 @@ function convertMu2FileToRatioscore(mu2file) {
 //
 
 function addBarlines(events, meter) {
+	// using numbers in the 10 column to control barlines now
+	return;
 	let bardur = getMeasureDuration(meter);
 	if (!bardur) {
 		return;
@@ -233,15 +278,11 @@ function printPitchRdf(pitches) {
 //
 
 function printEvent(event) {
-	if (!((event.type == 9) || (event.type == 8))) {
+	if (!event.note) {
 		return "";
 	}
 	let output = "";
-	if (typeof event.barnum !== "undefined") {
-		output += "=" + event.barnum + "\t";
-		output += "=" + event.barnum;
-		output += "\n";
-	}
+
 	if (event.grace) {
 		output += "q";
 	} else {
@@ -254,6 +295,13 @@ function printEvent(event) {
 		output += event.pitch;
 	}
 	output += "\n";
+
+	if (typeof event.barnum !== "undefined") {
+		output += "=" + event.barnum + "\t";
+		output += "=" + event.barnum;
+		output += "\n";
+	}
+
 	return output;
 }
 
@@ -297,10 +345,21 @@ function createDurationEvent(line) {
 		o.bot = fields[3];
 	} else {
 		// grace note
-		o.top = fields[2] || 0;
-		o.bot = fields[3] || 1;
-		o.grace = 1;
+		if (fields[1]) {
+			o.top = fields[2] || 0;
+			o.bot = fields[3] || 1;
+			o.grace = 1;
+		} else {
+			return null;
+		}
 	}
+
+	if (fields[9] && fields[9].match(/^\s*\d+\s*$/)) {
+		let number = parseInt(fields[9]);
+		o.barnum = number + 1;
+	}
+
+	o.note = 1;
 
 	o.legato = fields[4];
 	o.bas = fields[5];
