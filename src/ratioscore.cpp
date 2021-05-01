@@ -81,6 +81,7 @@ vector<int> getDrumsAsMidi(HTp current);
 void    getSubstitutions  (HumdrumFile& infile);
 string  applyRatioSubstitutions(const string& input);
 string  applyDrumSubstitutions(const string& input);
+void    simplifyOperations(string &cleaned);
 
 
 // variables:
@@ -1345,22 +1346,30 @@ double getPitchAsMidi(HTp token, double reference) {
 	double pcents;
 	string botstring;
 
+	if (m_debugQ) {
+		cerr << "CONVERTING " << token << " TO MIDI NOTE NUMBER" << endl;
+	}
+
 	// Convert substitutions to actual data:
 	string cleaned = applyRatioSubstitutions(*token);
+
+	if (m_debugQ) {
+		cerr << "\tAFTER SUBSTITUTIONS " << cleaned << endl;
+	}
 
 	// Convert ":" to "/"
 	hre.replaceDestructive(cleaned, "/", ":", "g");
 
-	// Remove non-pitch information from token:
+	// Remove non-pitch information from token, including whitespace:
 	hre.replaceDestructive(cleaned, "", "[ Hh_]", "g");
 
-	// Check if only a cent interval:
+	// Check if only a cent interval (not allowed have expressions yet)::
 	if (hre.search(cleaned, "^([+-]?\\d+\\.?\\d*)c$")) {
 		double cents = hre.getMatchDouble(1);
 		return cents/100.0 + reference;
 	}
 
-	// Check if only a frequency:
+	// Check if only a frequency (not allowed have expressions yet):
 	if (hre.search(cleaned, "^([+]?\\d+\\.?\\d*)z$")) {
 		double frequency = hre.getMatchDouble(1);
 		if (frequency <= 0.0) {
@@ -1373,58 +1382,34 @@ double getPitchAsMidi(HTp token, double reference) {
 		return midi;
 	}
 
-	// Reduce "#^#" (has priority over #*# and #/#)
-	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\^(-?\\d+\\.?\\d*)")) {
-		double number1 = hre.getMatchDouble(1);
-		double number2 = hre.getMatchDouble(2);
-		double value = pow(number1, number2);
-		stringstream sstr;
-		sstr.str("");
-		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\^(-?\\d+\\.?\\d*)");
+	if (m_debugQ) {
+		cerr << "\tINITIAL ROUND OF SIMPLIFICATION: " << cleaned << endl;
 	}
 
-	// Reduce "#*#" (considering only integers, at least for now)
-	// Maybe allow long long ints for large values
-	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\*(\\d+\\.?\\d*)")) {
-		double number1 = hre.getMatchDouble(1);
-		double number2 = hre.getMatchDouble(2);
-		double value = number1 * number2;
-		stringstream sstr;
-		sstr.str("");
-		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\*(\\d+\\.?\\d*)");
+	simplifyOperations(cleaned);
+
+	if (m_debugQ) {
+		cerr << "\tAFTER FIRST ROUND OF CLEANING: " << cleaned << endl;
 	}
 
-	// Reduce "(#/#)" (considering only integers)
-	while (hre.search(cleaned, "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)")) {
-		double number1 = hre.getMatchDouble(1);
-		double number2 = hre.getMatchDouble(2);
-		double value = number1 / number2;
-		stringstream sstr;
-		sstr.str("");
-		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)");
+	if (hre.search(cleaned, "[^0-9\\.-]")) {
+		// do a second round of cleaning
+		simplifyOperations(cleaned);
 	}
 
-	// Remove parentheses "(#)"
-	while (hre.search(cleaned, "\\((\\d+\\.?\\d*)\\)")) {
-		double number = hre.getMatchDouble(1);
-		stringstream sstr;
-		sstr.str("");
-		sstr << number;
-		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+\\.?\\d*)\\)");
+	if (m_debugQ) {
+		cerr << "\tAFTER SECOND ROUND OF CLEANING: " << cleaned << endl;
 	}
 
+	// check if finally reduced:
 	if (hre.search(cleaned, "^(\\d+\\.?\\d*)$")) {
 		// floading-point ratio
 		double value = hre.getMatchDouble(1);
 		double mvalue = log2(value) * 12;
 		return reference + mvalue;
 	}
-
 	if (hre.search(cleaned, "^(\\d*\\.?\\d+)$")) {
-		// floading-point ratio
+		// floating-point ratio
 		double value = hre.getMatchDouble(1);
 		double mvalue = log2(value) * 12;
 		return reference + mvalue;
@@ -1456,14 +1441,14 @@ double getPitchAsMidi(HTp token, double reference) {
 	}
 
 	// Reduce "(#/#)" (considering only integers)
-	while (hre.search(cleaned, "\\((\\d+)/(\\d+)\\)")) {
+	while (hre.search(cleaned, "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)")) {
 		double number1 = hre.getMatchDouble(1);
 		double number2 = hre.getMatchDouble(2);
 		double value = number1 / number2;
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+)/(\\d+)\\)");
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)");
 	}
 
 	// Remove parentheses "(#)"
@@ -1543,6 +1528,96 @@ double getPitchAsMidi(HTp token, double reference) {
 	}
 	double pitch = reference + mvalue + pcents / 100.0;
 	return pitch;
+}
+
+
+void simplifyOperations(string &cleaned) {
+	HumRegex hre;
+
+	// Reduce "#^#" (has priority over #*# and #/#)
+	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\^(-?\\d+\\.?\\d*)")) {
+		double number1 = hre.getMatchDouble(1);
+		double number2 = hre.getMatchDouble(2);
+		double value = pow(number1, number2);
+		if (m_debugQ) {
+			cerr << "\t\tREDUCING " << cleaned << " WITH " << number1 << "^" << number2 << " = " << value << endl;
+		}
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\^(-?\\d+\\.?\\d*)");
+	}
+
+	// Reduce "#*#" (considering only integers, at least for now)
+	// Maybe allow long long ints for large values
+	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\*(\\d+\\.?\\d*)")) {
+		double number1 = hre.getMatchDouble(1);
+		double number2 = hre.getMatchDouble(2);
+		double value = number1 * number2;
+		if (m_debugQ) {
+			cerr << "\t\tREDUCING " << cleaned << " WITH " << number1 << "*" << number2 << " = " << value << endl;
+		}
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\*(\\d+\\.?\\d*)");
+	}
+
+	// Reduce "(#/#)"
+	while (hre.search(cleaned, "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)")) {
+		double number1 = hre.getMatchDouble(1);
+		double number2 = hre.getMatchDouble(2);
+		double value = number1 / number2;
+		if (m_debugQ) {
+			cerr << "\t\tREDUCING " << cleaned << " WITH " << number1 << "/" << number2 << " = " << value << endl;
+		}
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)");
+	}
+
+	// Remove parentheses "(#)"
+	while (hre.search(cleaned, "\\((\\d+\\.?\\d*)\\)")) {
+		double number = hre.getMatchDouble(1);
+		if (m_debugQ) {
+			cerr << "\t\tREMOVING PAREN " << number << endl;
+		}
+		stringstream sstr;
+		sstr.str("");
+		sstr << number;
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+\\.?\\d*)\\)");
+	}
+	while (hre.search(cleaned, "\\((\\d*\\.?\\d+)\\)")) {
+		double number = hre.getMatchDouble(1);
+		if (m_debugQ) {
+			cerr << "\t\tREMOVING PARENB " << number << endl;
+		}
+		stringstream sstr;
+		sstr.str("");
+		sstr << number;
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d*\\.?\\d+)\\)");
+	}
+
+
+	// Reduce "#/#" if that is all that is in the string:
+	if (hre.search(cleaned, "^\\(?(\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)?$")) {
+		double number1 = hre.getMatchDouble(1);
+		double number2 = hre.getMatchDouble(2);
+		double value = number1 / number2;
+		if (m_debugQ) {
+			cerr << "\t\tREDUCING " << cleaned << " WITH " << number1 << "/" << number2 << " = " << value << endl;
+		}
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "^\\(?(\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)?$");
+	}
+
+
+	
+
+
 }
 
 
