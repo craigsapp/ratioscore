@@ -613,7 +613,7 @@ The duration of the grace note is fixed at 100ms, regardless of the tempo:
 {% include ratioscore.html id="grace-tempo-fast" %}
 <script type="application/x-ratioscore" id="grace-tempo-fast">
 **dtime	**ratio
-*MM320	*I#25
+*MM160	*I#25
 *	*ref:G3
 1	1
 0	9/4

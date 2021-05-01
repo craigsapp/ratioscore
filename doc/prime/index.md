@@ -115,17 +115,16 @@ grouped together:
 {% include ratioscore.html id="f25" tabsize="12" %}
 <script type="application/x-ratioscore" id="f25">
 !! prime factors of 2 and 5 only
-
 **dtime	**ratio	**ratio	**rational	**cents
 *MM60	*Iclars	*Iclars	*Iclars	*Iclars
 *	*ref:C4	*ref:C4	*ref:C4	*ref:C4
-1	1	2^7 : 5^3	128/125	41.06c
-1	1	5   : 2^2	5/4	386.31c
-1	1	2^5 : 5^2	32/25	427.37c
-1	1	5^2 : 2^4	25/16	772.63c
-1	1	2^3 : 5	8/5	813.69c
+1	1	2^ 7 * 5^-3	128/125	41.06c
+1	1	2^-2 * 5^ 1	5/4	386.31c
+1	1	2^ 5 * 5^-2	32/25	427.37c
+1	1	2^-4 * 5^ 2	25/16	772.63c
+1	1	2^ 3 * 5^-1	8/5	813.69c
+1	1	2^-6 * 5^ 3	125/64	1158.94c
 *-	*-	*-	*-	*-
-
 </script>
 
 
