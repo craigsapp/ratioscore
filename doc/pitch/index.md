@@ -279,10 +279,12 @@ factored form for clarity:
 1	9:8
 1	3*3:2*2*2
 1	3^2:2^3
-!! Spaces ared ignored and can be used for alignment within a column:
+!! Spaces are ignored and can be used for alignment within a column:
 1	9   : 8
 1	3*3 : 2*2*2
 1	3^2 : 2^3
+!! Negative exponents:
+1	2^-3 * 3^2
 *-	*-
 </script>
 
