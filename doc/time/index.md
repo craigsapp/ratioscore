@@ -592,5 +592,56 @@ q	7/5
 </script>
 
 
+The duration of the grace note is fixed at 100ms, regardless of the tempo:
+
+
+{% include ratioscore.html id="grace-tempo-slow" %}
+<script type="application/x-ratioscore" id="grace-tempo-slow">
+**dtime	**ratio
+*MM20	*I#25
+*	*ref:G3
+1	1
+0	9/4
+1	2
+0	7/5
+1	3/2
+1	1
+*-	*-
+</script>
+
+
+{% include ratioscore.html id="grace-tempo-fast" %}
+<script type="application/x-ratioscore" id="grace-tempo-fast">
+**dtime	**ratio
+*MM320	*I#25
+*	*ref:G3
+1	1
+0	9/4
+1	2
+0	7/5
+1	3/2
+1	1
+*-	*-
+</script>
+
+To change the duration of grace notes, set the millisecond duration
+of gracenotes such as adding `*grace:500` to the timeline for a duration
+of 500 ms.
+
+{% include ratioscore.html id="grace-duration-change" %}
+<script type="application/x-ratioscore" id="grace-duration-change">
+**dtime	**ratio
+*MM20	*I#25
+*	*ref:G3
+1	1
+0	9/4
+1	2
+*grace:500	*
+0	7/5
+1	3/2
+1	1
+*-	*-
+</script>
+
 
 
