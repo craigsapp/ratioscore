@@ -500,8 +500,8 @@ segment, or the start of each segment can be started with
 **dtime	**ratio
 !!!filter: myank -m 0,1,2,3,2,1*5,3*3,2*4,1,2,1,2,3*2,4
 =0	=0
-*	*ref:C2
-*	*I#70
+*	*ref:C3
+*	*I#57
 =1	=1
 1	5
 0.4	4

@@ -267,33 +267,65 @@ above list of General MIDI instruments.
 </script>
 
 
-<h2 style="margin-top:90px; margin-bottom:50px;"> Tag </h2>
+<h2 style="margin-top:90px; margin-bottom:50px;"> Name </h2>
 
-Text-based tags can be used to select an instrument:
+Text-based codenames can be used to select an instrument:
 
-<ul>
-<li> clars = [soprano] clarinet </li>
-<li> koto = koto </li>
-<li> violn = violin </li>
-<li> cello = cello </li>
+<div class="container">
+<ul class="humlist">
+
+	<li> <span class="code">accor</span><span class="iname">accordion</span></li>
+	<li> <span class="code">armon</span><span class="iname">harmonica</span></li>
+	<li> <span class="code">banjo</span><span class="iname">banjo</span></li>
+	<li> <span class="code">cello</span><span class="iname">violoncello</span></li>
+	<li> <span class="code">cemba</span><span class="iname">harpsichord</span></li>
+	<li> <span class="code">clars</span><span class="iname">clarinet</span></li>
+	<li> <span class="code">clavi</span><span class="iname">clavichord</span></li>
+	<li> <span class="code">cor</span><span class="iname">French horn</span></li>
+	<li> <span class="code">dulc</span><span class="iname">dulcimer</span></li>
+	<li> <span class="code">eguit</span><span class="iname">electric guitar</span></li>
+	<li> <span class="code">fagot</span><span class="iname">bassoon</span></li>
+	<li> <span class="code">flt</span><span class="iname">flute</span></li>
+	<li> <span class="code">glock</span><span class="iname">glockenspiel</span></li>
+	<li> <span class="code">guitr</span><span class="iname">guitar</span></li>
+	<li> <span class="code">koto</span><span class="iname">koto</span>&nbsp;&nbsp;&nbsp;</li>
+	<li> <span class="code">marim</span><span class="iname">marimba</span></li>
+	<li> <span class="code">oboe</span><span class="iname">oboe</span></li>
+	<li> <span class="code">ocari</span><span class="iname">ocarina</span></li>
+	<li> <span class="code">organ</span><span class="iname">pipe organ</span></li>
+	<li> <span class="code">piano</span><span class="iname">piano</span></li>
+	<li> <span class="code">picco</span><span class="iname">piccolo</span></li>
+	<li> <span class="code">reedo</span><span class="iname">reed organ</span></li>
+	<li> <span class="code">shaku</span><span class="iname">shakuhachi</span></li>
+	<li> <span class="code">shami</span><span class="iname">shamisen</span></li>
+	<li> <span class="code">sitar</span><span class="iname">sitar</span></li>
+	<li> <span class="code">steel</span><span class="iname">steel drums</span></li>
+	<li> <span class="code">tromp</span><span class="iname">trumpet</span></li>
+	<li> <span class="code">tuba</span><span class="iname">tuba</span></li>
+	<li> <span class="code">vibra</span><span class="iname">vibraphone</span></li>
+	<li> <span class="code">viola</span><span class="iname">viola</span></li>
+	<li> <span class="code">violn</span><span class="iname">violin</span></li>
+	<li> <span class="code">vox</span><span class="iname">generic voice</span></li>
+	<li> <span class="code">xylo</span><span class="iname">xylophone</span></li>
+
 </ul>
+</div>
 
+Try the instrument names in the following test score:
 
 {% include ratioscore.html id="humdrum-instrument" %}
 <script type="application/x-ratioscore" id="humdrum-instrument">
-**time	**ratio	**midi	**name
-*	*ref:C4	*	*
-*	*Ivioln	*	*
-1	1	40	violin
-*	*Iclars	*	*
-1	1	71	soprano clarinet
-*	*Iflt	*	*
-1	1	73	flute
-*	*Iorgan	*	*
-1	1	19	organ
-*	*Ivioln	*	*
-1	1	42	cello
-*-	*-	*-	*-
+
+**recip	**ratio
+*	*Ipiano
+*	*ref:C4
+8	1
+16	7/5
+16	16/7
+4	7/4
+2	1
+*-	*-
+
 </script>
 
 

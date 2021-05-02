@@ -73,60 +73,63 @@ Unlike ratio tracks, drum tracks can contain multiple notes at one time:
 </script>
 
 
+<h2 data-sidebar="Names"> Percussion names </h2>
+
 Here are the names of the instruments in a drum track
 
 {% include ratioscore.html id="drum-list" %}
 <script type="application/x-ratioscore" id="drum-list">
-!!!OTL: General MIDI Drum List
-**dtime	**drum	**name
-1	35	acoustic bass drum
-1	36	electric bass drum
-1	37	side stick
-1	38	acoustic snare
-1	39	hand clap
-1	40	electric snare
-1	41	low floor tom
-1	42	closed hi-hat
-1	43	high floor tom
-1	44	pedal hi-hat
-1	45	low tom
-1	46	open hi-hat
-1	47	low-mid tom
-1	48	hi-mid tom
-1	49	crash cymbal 1
-1	50	high tom
-1	51	ride cymbal 1
-1	52	chinese cymbal
-1	53	ride bell
-1	54	tambourine
-1	55	slpash cymbal
-1	56	cowbell
-1	57	crash cymbal 2
-1	58	vibra slap
-1	59	ride cymbal 2
-1	60	high bongo
-1	61	low bongo
-1	62	mute high conga
-1	63	open high conga
-1	64	low conga
-1	65	high timbale
-1	66	low timbale
-1	67	high agogo
-1	68	low agogo
-1	69	cabasa
-1	70	maracas
-1	71	short whistle
-1	72	long whistle
-1	73	short guiro
-1	74	long guiro
-1	75	claves
-1	76	high woodblock
-1	77	low woodblock
-1	78	mute cuica
-1	79	open cuica
-1	80	mute triangle
-1	81	open triangle
-*-	*-	*-
+!!!OTL: General MIDI Percussion timbre list
+**drum	**name
+*MM120	*
+35	acoustic bass drum
+36	electric bass drum
+37	side stick
+38	acoustic snare
+39	hand clap
+40	electric snare
+41	low floor tom
+42	closed hi-hat
+43	high floor tom
+44	pedal hi-hat
+45	low tom
+46	open hi-hat
+47	low-mid tom
+48	hi-mid tom
+49	crash cymbal 1
+50	high tom
+51	ride cymbal 1
+52	chinese cymbal
+53	ride bell
+54	tambourine
+55	slpash cymbal
+56	cowbell
+57	crash cymbal 2
+58	vibra slap
+59	ride cymbal 2
+60	high bongo
+61	low bongo
+62	mute high conga
+63	open high conga
+64	low conga
+65	high timbale
+66	low timbale
+67	high agogo
+68	low agogo
+69	cabasa
+70	maracas
+71	short whistle
+72	long whistle
+73	short guiro
+74	long guiro
+75	claves
+76	high woodblock
+77	low woodblock
+78	mute cuica
+79	open cuica
+80	mute triangle
+81	open triangle
+*-	*-
 </script>
 
 
@@ -136,11 +139,14 @@ The letters `v` and `V` are deaccent and accent marks respectively.
 
 {% include ratioscore.html id="ocelot-on-the-hunt" tabsize="12" %}
 <script type="application/x-ratioscore" id="ocelot-on-the-hunt">
+!!!OTL: Ocelot on the Hunt
+!!!COM: Sapp, Craig Stuart
+!!!ODT: 2021/04/21
 !!!RDF**drum: triangle = 81
-!!!RDF**drum: clap = 39
-!!!RDF**drum: bongo = 61
-!!!RDF**drum: bell = 56
-!!!RDF**drum: ocelot = 76
+!!!RDF**drum: clap     = 39
+!!!RDF**drum: bongo    = 61
+!!!RDF**drum: bell     = 56
+!!!RDF**drum: ocelot   = 76
 **dtime	**drum	**drum	**drum	**drum
 =0	=0	=0	=0	=0
 *MM380	*vel:40	*vel:50	*vel:60	*vel:60
@@ -184,9 +190,6 @@ The letters `v` and `V` are deaccent and accent marks respectively.
 *MM390	*	*	*	*
 *-	*-	*-	*-	*-
 !!!filter: myank -m 0,1-7,6-1,1*3,2*4,3*5,4*6,5*7,6*8,7*9,8*3,1,2,1,3,1,4,1,5,1,6,1,7,6,7,5,7,4,7,3,7,2,7,1*8,2*7,3*6,4*5,5*4,6*3,7*2,8*5
-!!!OTL: Ocelot on the Hunt
-!!!COM: Sapp, Craig Stuart
-!!!ODT: 2021/04/21
 </script>
 
 
@@ -267,6 +270,8 @@ Polyrhythm example:
 
 See the <a href="/polyrhythm">Polyrhythm generator</a> page.
 
+<h2 data-sidebar="**drum + **ratio"> Mixing pitched and percussive instruments </h2>
+
 Drum and ratio tracks may occur in the same score and can
 be interleaved in any order.  Any number of drum tracks can
 be present in the score, but ratio tracks are limited to 
@@ -314,4 +319,9 @@ be present in the score, but ratio tracks are limited to
 4	0	.	.
 =	=	=	=
 *-	*-	*-	*-
+</script>
+
+Unlike `**ratio` spines which are limited to 15, any number of `**drum` tracks can be
+added to a Ratioscore.  However, since all percussion insturments are played on the same
+MIDI channel, independent panning of parallel `**drum` tracks is not possible.
 

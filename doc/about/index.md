@@ -227,5 +227,9 @@ table.command tr td {
      <td> print to standard output </td></tr>
 </table>
 
+<h2 data-sidebar="Bug reports"> Bug reports and feature requests </h2>
+
+Bug reports and feature requests can be submitted to the <a
+target="_blank" href="https://github.com/craigsapp/ratioscore/issues">Ratioscore repository</a> on Github.
 
 
