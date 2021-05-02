@@ -134,8 +134,8 @@ Below is an example of giving instrument names to the note numbers.
 The letters `v` and `V` are deaccent and accent marks respectively.
 
 
-{% include ratioscore.html id="drum-names" tabsize="12" %}
-<script type="application/x-ratioscore" id="drum-names">
+{% include ratioscore.html id="ocelot-on-the-hunt" tabsize="12" %}
+<script type="application/x-ratioscore" id="ocelot-on-the-hunt">
 !!!RDF**drum: triangle = 81
 !!!RDF**drum: clap = 39
 !!!RDF**drum: bongo = 61
@@ -184,6 +184,9 @@ The letters `v` and `V` are deaccent and accent marks respectively.
 *MM390	*	*	*	*
 *-	*-	*-	*-	*-
 !!!filter: myank -m 0,1-7,6-1,1*3,2*4,3*5,4*6,5*7,6*8,7*9,8*3,1,2,1,3,1,4,1,5,1,6,1,7,6,7,5,7,4,7,3,7,2,7,1*8,2*7,3*6,4*5,5*4,6*3,7*2,8*5
+!!!OTL: Ocelot on the Hunt
+!!!COM: Sapp, Craig Stuart
+!!!ODT: 2021/04/21
 </script>
 
 
