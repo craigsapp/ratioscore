@@ -13,7 +13,7 @@ substitutions will be applied in the order they occur in the file.
 <script type="application/x-ratioscore" id="rdf">
 !!!OTL: Just major scale
 **recip	**ratio
-*MM144	*I#75
+*MM184	*Ixylo
 *	*ref:C4
 4	do
 4	re
@@ -23,18 +23,24 @@ substitutions will be applied in the order they occur in the file.
 4	la
 4	ti
 4	do*2
+4	ti
+4	la
+4	sol
+4	fa
+4	mi
+4	re
+4	do
+4	ti/2
+2	do
 *-	*-
-!!!RDF**ratio: do  = (1/1)
-!!!RDF**ratio: re  = (9/8)
-!!!RDF**ratio: mi  = (5/4)
-!!!RDF**ratio: fa  = (4/3)
-!!!RDF**ratio: sol = (3/2)
-!!!RDF**ratio: la  = (5/3)
-!!!RDF**ratio: ti  = (15/8)
+!!!RDF**ratio: do  = 1/1
+!!!RDF**ratio: re  = 9/8
+!!!RDF**ratio: mi  = 5/4
+!!!RDF**ratio: fa  = 4/3
+!!!RDF**ratio: sol = 3/2
+!!!RDF**ratio: la  = 5/3
+!!!RDF**ratio: ti  = 15/8
 </script>
-
-In general parentheses should be used in the substitutions to make 
-mathematical operations with symbols to behave as expected, such as `do*2`.
 
 
 
@@ -63,49 +69,143 @@ mathematical operations with symbols to behave as expected, such as `do*2`.
 Quarter-comma meantone temperament:
 
 
-
 {% include ratioscore.html id="qcmean" %}
 <script type="application/x-ratioscore" id="qcmean">
 !!!OTL: 1/4-comma meantone
 **dtime	**ratio	**ratio	**ratio
-*MM60	*Iclars	*Iclars	*Iclars
+*MM60	*Icemba	*Icemba	*Icemba
 *	*ref:D3	*ref:D3	*ref:D3
-1	p00	.	.
-1	p02	.	.
-1	p04	.	.
-1	p05	.	.
-1	p07	.	.
-1	p09	.	.
-1	p11	.	.
-2	p12	.	.
+1	m00	.	.
+1	m02	.	.
+1	m04	.	.
+1	m05	.	.
+1	m07	.	.
+1	m09	.	.
+1	m11	.	.
+2	m00*2	.	.
 1	0	.	.
-1	p00	p04	p07
-1	p02	p05	p09
-1	p04	p07	p11
-1	p05	p09	p12
-1	p07	p11	p14
-2	p08	p12	p15
+1	m00	m04	m07
+1	m02	m05	m09
+1	m04	m07	m11
+1	m05	m09	m00*2
+!! out of tune:
+2	m06	m10	m01*2
 *-	*-	*-	*-
-!!!RDF**ratio: p00 = 1
-!!!RDF**ratio: p01 = 76.0c
-!!!RDF**ratio: p02 = 193.2c
-!!!RDF**ratio: p03 = 310.3c
-!!!RDF**ratio: p04 = 5/4
-!!!RDF**ratio: p05 = 503.4c
-!!!RDF**ratio: p06 = 579.5c
-!!!RDF**ratio: p07 = 696.6c
-!!!RDF**ratio: p08 = 25/16
-!!!RDF**ratio: p09 = 889.7c
-!!!RDF**ratio: p10 = 1006.8c
-!!!RDF**ratio: p11 = 1082.9c
-!!!RDF**ratio: p12 = 1200.0c
-!!!RDF**ratio: p13 = 1276.0c
-!!!RDF**ratio: p14 = 1393.2c
-!!!RDF**ratio: p15 = 1510.3c
-!!!RDF**
+!!!RDF**ratio: m00 = 0c
+!!!RDF**ratio: m01 = 117.1c
+!!!RDF**ratio: m02 = 193.2c
+!!!RDF**ratio: m03 = 310.3c
+!!!RDF**ratio: m04 = 386.3c
+!!!RDF**ratio: m05 = 503.4c
+!!!RDF**ratio: m06 = 579.5c
+!!!RDF**ratio: m07 = 696.6c
+!!!RDF**ratio: m08 = 813.7c
+!!!RDF**ratio: m09 = 889.7c
+!!!RDF**ratio: m10 = 1006.8c
+!!!RDF**ratio: m11 = 1082.9c
+</script>
+
+Here is the same music showing the meantone calculations:
+
+{% include ratioscore.html id="qcmean-ratio" %}
+<script type="application/x-ratioscore" id="qcmean-ratio">
+!!!OTL: 1/4-comma meantone
+**dtime	**ratio	**ratio	**ratio
+*MM60	*Icemba	*Icemba	*Icemba
+*	*ref:D3	*ref:D3	*ref:D3
+1	m00	.	.
+1	m02	.	.
+1	m04	.	.
+1	m05	.	.
+1	m07	.	.
+1	m09	.	.
+1	m11	.	.
+2	m00*2	.	.
+1	0	.	.
+1	m00	m04	m07
+1	m02	m05	m09
+1	m04	m07	m11
+1	m05	m09	m00*2
+!! out of tune:
+2	m06	m10	m01*2
+*-	*-	*-	*-
+!!!RDF**ratio: x   = 5^(1/4)
+!!!RDF**ratio: m00 = 1
+!!!RDF**ratio: m01 = 8*5^(1/2)*x/5^2
+!!!RDF**ratio: m02 = 5^(1/2)/2
+!!!RDF**ratio: m03 = 4*x/5
+!!!RDF**ratio: m04 = 5/4
+!!!RDF**ratio: m05 = (2*5^(1/2)*x)/5
+!!!RDF**ratio: m06 = 5*5^(1/2)/8
+!!!RDF**ratio: m07 = x
+!!!RDF**ratio: m08 = 8/5
+!!!RDF**ratio: m09 = 5^(1/2)*x/2
+!!!RDF**ratio: m10 = 4*5^(1/2)/5
+!!!RDF**ratio: m11 = 5*x/4
 </script>
 
 
+
+{% include ratioscore.html id="mean-equal-compare" %}
+<script type="application/x-ratioscore" id="mean-equal-compare">
+!!!OTL: Comparing meantone and equal temperament chords
+**dtime	**ratio	**ratio	**ratio
+*MM50	*Icemba	*Icemba	*Icemba
+*	*ref:D3	*ref:D3	*ref:D3
+!! Meantone triads:
+1	m00	m04	m07
+1	m02	m05	m09
+1	m04	m07	m11
+1	m05	m09	m00*2
+2	m06	m10	m01*2
+1	0	0	0
+!! Equal-tempered triads:
+1	e00	e04	e07
+1	e02	e05	e09
+1	e04	e07	e11
+1	e05	e09	e00*2
+2	e06	e10	e01*2
+1	0	0	0
+!! Alternating between meantone and EQ triads:
+1	m00	m04	m07
+1	e00	e04	e07
+1	m02	m05	m09
+1	e02	e05	e09
+1	m04	m07	m11
+1	e04	e07	e11
+1	m05	m09	m00*2
+1	e05	e09	e00*2
+1	m06	m10	m01*2
+1	e06	e10	e01*2
+*-	*-	*-	*-
+!! 1/4-comma meantone temperament:
+!!!RDF**ratio: x   = 5^(1/4)
+!!!RDF**ratio: m00 = 1
+!!!RDF**ratio: m01 = 8*5^(1/2)*x/5^2
+!!!RDF**ratio: m02 = 5^(1/2)/2
+!!!RDF**ratio: m03 = 4*x/5
+!!!RDF**ratio: m04 = 5/4
+!!!RDF**ratio: m05 = (2*5^(1/2)*x)/5
+!!!RDF**ratio: m06 = 5*5^(1/2)/8
+!!!RDF**ratio: m07 = x
+!!!RDF**ratio: m08 = 8/5
+!!!RDF**ratio: m09 = 5^(1/2)*x/2
+!!!RDF**ratio: m10 = 4*5^(1/2)/5
+!!!RDF**ratio: m11 = 5*x/4
+!! Equal temperament:
+!!!RDF**ratio: e00 = 2^(0/12)
+!!!RDF**ratio: e01 = 2^(1/12)
+!!!RDF**ratio: e02 = 2^(2/12)
+!!!RDF**ratio: e03 = 2^(3/12)
+!!!RDF**ratio: e04 = 2^(4/12)
+!!!RDF**ratio: e05 = 2^(5/12)
+!!!RDF**ratio: e06 = 2^(6/12)
+!!!RDF**ratio: e07 = 2^(7/12)
+!!!RDF**ratio: e08 = 2^(8/12)
+!!!RDF**ratio: e09 = 2^(9/12)
+!!!RDF**ratio: e10 = 2^(10/12)
+!!!RDF**ratio: e11 = 2^(11/12)
+</script>
 
 
 
