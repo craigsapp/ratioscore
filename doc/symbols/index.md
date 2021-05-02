@@ -6,8 +6,9 @@ vim: ts=8:ft=html
 ---
 
 Here are examples of using symbols to give names to ratios.
-Substitutions will be applied before interpreting the note, and
-substitutions will be applied in the order they occur in the file.
+Substitutions will be applied before interpreting the notes.
+Substitutions will be applied in the order of longer strings first (such
+as `sol` in the following example), then shorter strings.
 
 {% include ratioscore.html id="rdf" %}
 <script type="application/x-ratioscore" id="rdf">
