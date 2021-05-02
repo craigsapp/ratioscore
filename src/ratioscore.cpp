@@ -82,6 +82,7 @@ void    getSubstitutions  (HumdrumFile& infile);
 string  applyRatioSubstitutions(const string& input);
 string  applyDrumSubstitutions(const string& input);
 void    simplifyOperations(string &cleaned);
+void    sortLongestToShortest(vector<pair<string, string>>& subs);
 
 
 // variables:
@@ -433,7 +434,31 @@ void getSubstitutions(HumdrumFile& infile) {
 		}
 	}
 
+	sortLongestToShortest(m_ratioSubs);
+	sortLongestToShortest(m_drumSubs);
 }
+
+
+
+//////////////////////////////
+//
+// sortLongestToShortest -- For substitutions, apply the longest
+//      substitutions first then the shortest to avoid overlaps
+//      in the substitution patterns from interfering with each other.
+//
+
+void sortLongestToShortest(vector<pair<string, string>>& subs) {
+	sort(subs.begin(), subs.end(),
+		[](const pair<string, string> &a, 
+		   const pair<string, string> &b)
+		{
+			int sizea = (int)a.first.size();
+			int sizeb = (int)b.first.size();
+			return sizea > sizeb;
+		}
+	);
+}
+
 
 
 //////////////////////////////
@@ -1395,10 +1420,17 @@ double getPitchAsMidi(HTp token, double reference) {
 	if (hre.search(cleaned, "[^0-9\\.-]")) {
 		// do a second round of cleaning
 		simplifyOperations(cleaned);
+		if (m_debugQ) {
+			cerr << "\tAFTER SECOND ROUND OF CLEANING: " << cleaned << endl;
+		}
 	}
 
-	if (m_debugQ) {
-		cerr << "\tAFTER SECOND ROUND OF CLEANING: " << cleaned << endl;
+	if (hre.search(cleaned, "[^0-9\\.-]")) {
+		// do a third round of cleaning
+		simplifyOperations(cleaned);
+		if (m_debugQ) {
+			cerr << "\tAFTER THIRD ROUND OF CLEANING: " << cleaned << endl;
+		}
 	}
 
 	// check if finally reduced:
@@ -1534,6 +1566,19 @@ double getPitchAsMidi(HTp token, double reference) {
 void simplifyOperations(string &cleaned) {
 	HumRegex hre;
 
+	// Convert cents to a floating-point ratio:
+	while (hre.search(cleaned, "(-?\\d+\\.?\\d*)c")) {
+		double number = hre.getMatchDouble(1);
+		double value = pow(2.0, number/1200.0);
+		if (m_debugQ) {
+			cerr << "\t\tREDUCING " << number << " TO " << value << endl;
+		}
+		stringstream sstr;
+		sstr.str("");
+		sstr << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "(-?\\d+\\.?\\d*)c");
+	}
+
 	// Reduce "#^#" (has priority over #*# and #/#)
 	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\^(-?\\d+\\.?\\d*)")) {
 		double number1 = hre.getMatchDouble(1);
@@ -1614,10 +1659,6 @@ void simplifyOperations(string &cleaned) {
 		hre.replaceDestructive(cleaned, sstr.str(), "^\\(?(\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)?$");
 	}
 
-
-	
-
-
 }
 
 
@@ -1635,7 +1676,9 @@ string applyRatioSubstitutions(const string& input) {
 	string output = input;
 	for (int i=0; i<(int)m_ratioSubs.size(); i++) {
 		string symbol = m_ratioSubs[i].first;
-		string replacement = m_ratioSubs[i].second;
+		string replacement = "(";
+		replacement += m_ratioSubs[i].second;
+		replacement += ")";
 		hre.replaceDestructive(output, replacement, symbol, "g");
 	}
 	return output;
