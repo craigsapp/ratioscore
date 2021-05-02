@@ -87,3 +87,151 @@ See <a target="_blank" href="https://en.wikipedia.org/wiki/Bohlen%E2%80%93Pierce
 
 
 
+
+
+<h2> &lambda; scale </h2>
+
+
+{% include ratioscore.html id="lambda-scale-just" tabsize="12" %}
+<script type="application/x-ratioscore" id="lambda-scale-just">
+!!!OTL: &lambda; scale
+**dtime	**ratio
+*MM144	*Iclars
+*	*ref:C3
+1	C
+1	D
+1	E
+1	F
+1	G
+1	H
+1	J
+1	A
+1	B
+1	C*3
+*-	*-
+!!!RDF**ratio: C = 1:1
+!!!RDF**ratio: D = 25:21
+!!!RDF**ratio: E = 9:7
+!!!RDF**ratio: F = 7:5
+!!!RDF**ratio: G = 5:3
+!!!RDF**ratio: H = 9:5
+!!!RDF**ratio: J = 15:7
+!!!RDF**ratio: A = 7:3
+!!!RDF**ratio: B = 25:9
+</script>
+
+Equal-tempered version:
+
+{% include ratioscore.html id="lambda-scale-eq" tabsize="12" %}
+<script type="application/x-ratioscore" id="lambda-scale-eq">
+!!!OTL: &lambda; scale (equal temperament)
+**dtime	**ratio
+*MM144	*Iclars
+*	*ref:C3
+1	C
+1	D
+1	E
+1	F
+1	G
+1	H
+1	J
+1	A
+1	B
+1	C*3
+*-	*-
+!!!RDF**ratio: C = 0c
+!!!RDF**ratio: D = 301.85c
+!!!RDF**ratio: E = 435.08c
+!!!RDF**ratio: F = 582.51c
+!!!RDF**ratio: G = 884.36c
+!!!RDF**ratio: H = 1017.60c
+!!!RDF**ratio: J = 1319.44c
+!!!RDF**ratio: A = 1466.87c
+!!!RDF**ratio: B = 1768.72c
+</script>
+
+
+Composition using lambda scale:
+
+{% include ratioscore.html id="lambda-comp" tabsize="12" %}
+<script type="application/x-ratioscore" id="lambda-comp">
+!!!OTL: ໃບຂາວ
+!!!COM: Sapp, Craig Stuart
+!!!ODT: 2021/05/02
+**dtime	**ratio	**ratio	**ratio
+*MM144	*I#14	*Ixylo	*I#70
+*	*ref:C3	*ref:C3	*ref:C3
+*	*	*	*vel:50
+1	C	.	.
+1	.	E	.
+1	.	.	G*3
+1	.	.	.
+1	0	0	.
+1	.	.	H*3
+1	.	.	J*3
+1	.	.	H*3
+1	C	J	G*3
+1	.	.	0
+1	.	A	.
+1	B/3	B	.
+1	A/3	C*3	.
+1	0	.	.
+1	.	.	E*3
+1	.	.	F*3
+1	.	.	E*3
+1	.	.	D*3
+1	G/3	B/3	.
+1	.	.	.
+1	.	.	F*3
+1	A/3	C	E*3
+1	.	.	.
+1	.	.	.
+1	A/3	C	E*3
+1	A/3	C	E*3
+1	.	.	.
+1	A/3	F	A*3
+1	.	.	.
+1	C	F	B*3
+1	.	.	.
+1	C	E	A*3
+1	.	.	.
+1	C	E	G*3
+1	.	.	.
+1	0	0	.
+1	.	.	H*3
+1	.	.	J*3
+1	.	.	H*3
+1	.	B/3	G*3
+1	.	C	F*3
+1	.	B/3	.
+1	.	A/3	E*3
+1	.	J/3	.
+1	.	.	.
+1	F	.	F*3
+1	G	.	.
+1	F	.	G*3
+1	E	.	.
+1	D	F	.
+1	C	G	H*3
+1	A/3	F	.
+1	B/3	E	.
+1	A/3	D	J*3
+1	D	E	.
+1	E	F	A*3
+1	D	G	.
+1	F	A	B*3
+1	.	.	.
+4	E	G	C*9
+*-	*-	*-	*-
+!!!RDF**ratio: C = 1:1
+!!!RDF**ratio: D = 25:21
+!!!RDF**ratio: E = 9:7
+!!!RDF**ratio: F = 7:5
+!!!RDF**ratio: G = 5:3
+!!!RDF**ratio: H = 9:5
+!!!RDF**ratio: J = 15:7
+!!!RDF**ratio: A = 7:3
+!!!RDF**ratio: B = 25:9
+</script>
+
+
