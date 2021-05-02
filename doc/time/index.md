@@ -536,16 +536,19 @@ segment, or the start of each segment can be started with
 4	76	77	.
 =2	=2	=2	=2
 *-	*-	*-	*-
+!!!OTL: Reveille of the Irregulars
+!!!COM: Sapp, Craig Stuart
+!!!ODT: 2021/04/26
 </script>
 
 
 <h2> Gracenotes </h2>
 
-If timeline entry has zero duration, it will be interpreted as a gracenote.  
+If a timeline entry has zero duration, it will be interpreted as a gracenote.  
 The previous note will be shortened by 100ms and the grace note start time
 moved back 100ms.  If the previous note is less than 200ms, the grace note
 start time will be 1/2 of the duration between the onset times of its
-neighboring pitches.  Only one gracenote in a sequece can currently be handled.
+neighboring pitches.  Only one gracenote in a sequence can currently be handled.
 
 {% include ratioscore.html id="grace-dtime" %}
 <script type="application/x-ratioscore" id="grace-dtime">

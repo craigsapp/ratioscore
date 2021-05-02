@@ -5,10 +5,42 @@ layout: page
 vim: ts=3:ft=html
 ---
 
+Ratioscores are designed to explore and test tunings for music
+composition.  This website allows online editing and rendering of
+the scores into MIDI and MP3 files, but you can also use the <a
+target="_blank" href="https://github.com/craigsapp/ratioscore">command-line
+converter<a/> for batch processing on your own computer.
+
+The structure of a ratioscore is based on the <a target="_blank"
+href="https://www.humdrum.org/guide/ch05">Humdrum file format<a/>:
+time progresses downwards in the file, and columns (called <i>spines</i>
+in Humdrum terminology) are used to encode multiple streams of
+time-sequenced data in parallel, with each row representing a
+simultaneity across all spines.  All <a href="/pitch">pitch</a>
+data is stored in up to 15 `**ratio` spines, while the <a
+href="/time">timeline</a> can be expressed in multiple formats
+depending on the best one for your application.  <a
+href="/drum">Percussion</a> can also be added to the score using
+one or more `**drum` spines.  Other spine types will be ignored,
+and can be used for general comments for example.
+
+To get started, read the <a href="/pitch">pitch</a> and <a
+href="/time">time</a> pages to observe how to represent time and
+pitch.  Visit the <a href="/generator">Score generator</a> page to
+create an empty score to fill in with your own notes and timings.
+
+For fun visit the <a href="/turkish">Turkish Music</a> page, from
+which you can listen to 2200 melodies, with links to their graphical
+scores.
+
+
+
+<h2> Motivation </h2>
+
 Ratioscore was designed as a composition prototyping system for
 <i>The Answers</i> by Julie Zhu.  Here is a performance of it
 by the <a target="_blank" href="https://jackquartet.com">JACK
-Quartet</a>:
+Quartet in December 2020</a>:
 
 <style>
 	iframe {
@@ -30,8 +62,8 @@ Quartet</a>:
 
 Below is the prototype for the final score (first minute of the
 piece before dynamics, glissandos and articulations were added).
-A clarinet sound was used since it has less vibratio than the string
-instruments in the MIDI player used to create the synthetic
+A clarinet sound is used below since it has less vibratio than the
+string instruments in the MIDI player used to create the synthetic
 performance.
 
 {% include ratioscore.html id="quick-answers" height="600px" %}
@@ -111,7 +143,9 @@ performance.
 </script>
 
 The Ratioscore was first converted into MIDI and then loaded into
-Sibelius to quantize note durations into notatable rhythms.
+Sibelius to quantize note durations into notatable rhythms and to
+add <a target="_blank" href="https://www.plainsound.org/HEJI">HEJI
+accidentals</a>.
 
 
 <h2> Conference </h2>

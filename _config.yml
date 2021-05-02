@@ -18,7 +18,7 @@ paginate:         5
 
 #content_background:                "#b9936a"
 content_background:                 "#fcc637cc"
-hyperlink_color:                    "#7b622c"
+hyperlink_color:                    "#8b520c"
 hyperlink_hover_color:              "#bd7072"
 ratioscore_light:                   "#bfa571"
 header_color:                       "#8a7e00"
