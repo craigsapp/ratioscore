@@ -83,6 +83,7 @@ string  applyRatioSubstitutions(const string& input);
 string  applyDrumSubstitutions(const string& input);
 void    simplifyOperations(string &cleaned);
 void    sortLongestToShortest(vector<pair<string, string>>& subs);
+bool    reallyHasGliss    (HTp token);
 
 
 // variables:
@@ -422,12 +423,12 @@ void getSubstitutions(HumdrumFile& infile) {
 			continue;
 		}
 		HTp token = infile.token(i, 0);
-		if (hre.search(token, "^!!!RDF\\*\\*ratio\\s*:\\s*([^\\s]+)\\s*=\\s*([^\\s]+)")) {
+		if (hre.search(token, "^!!!RDF\\*\\*ratio\\s*:\\s*([^\\s]+)\\s*=\\s*(.*)\\s*")) {
 			string symbol = hre.getMatch(1);
 			string replacement = hre.getMatch(2);
 			m_ratioSubs.push_back(make_pair(symbol, replacement));
 		}
-		if (hre.search(token, "^!!!RDF\\*\\*drum\\s*:\\s*([^\\s]+)\\s*=\\s*([^\\s]+)")) {
+		if (hre.search(token, "^!!!RDF\\*\\*drum\\s*:\\s*([^\\s]+)\\s*=\\s*(.*)\\s*")) {
 			string symbol = hre.getMatch(1);
 			string replacement = hre.getMatch(2);
 			m_drumSubs.push_back(make_pair(symbol, replacement));
@@ -1048,11 +1049,29 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 			}
 
 			if (current->find(GLISS_START) != string::npos) {
-				addGlissando(outfile, track, current, pitch, reference, channel);
+				if (reallyHasGliss(current)) {
+					addGlissando(outfile, track, current, pitch, reference, channel);
+				}
 			}
 		}
 		current = current->getNextToken();
 		continue;
+	}
+}
+
+
+
+//////////////////////////////
+//
+// reallyHasGliss --
+//
+
+bool reallyHasGliss(HTp token) {
+	string subvalue = applyRatioSubstitutions(*token);
+	if (subvalue.find(GLISS_START) != string::npos) {
+		return true;
+	} else {
+		return false;
 	}
 }
 
@@ -1385,24 +1404,25 @@ double getPitchAsMidi(HTp token, double reference) {
 	// Convert ":" to "/"
 	hre.replaceDestructive(cleaned, "/", ":", "g");
 
+	string tempclean = cleaned;
 	// Remove non-pitch information from token, including whitespace:
-	hre.replaceDestructive(cleaned, "", "[ Hh_]", "g");
+	hre.replaceDestructive(tempclean, "", "[ Hh_]", "g");
 
 	// Check if only a cent interval (not allowed have expressions yet)::
-	if (hre.search(cleaned, "^([+-]?\\d+\\.?\\d*)c$")) {
+	if (hre.search(tempclean, "^([+-]?\\d+\\.?\\d*)c$")) {
 		double cents = hre.getMatchDouble(1);
 		return cents/100.0 + reference;
 	}
 
 	// Check if only a frequency (not allowed have expressions yet):
-	if (hre.search(cleaned, "^([+]?\\d+\\.?\\d*)z$")) {
+	if (hre.search(tempclean, "^([+]?\\d+\\.?\\d*)z$")) {
 		double frequency = hre.getMatchDouble(1);
 		if (frequency <= 0.0) {
 			return 0.0;
 		}
 		double midi = 12.0 * log2(frequency / 440.0) + 69.0;
 		return midi;
-	} else if (hre.search(cleaned, "^([+]?\\d+\\.?\\d*)m$")) {
+	} else if (hre.search(tempclean, "^([+]?\\d+\\.?\\d*)m$")) {
 		double midi = hre.getMatchDouble(1);
 		return midi;
 	}
@@ -1412,6 +1432,9 @@ double getPitchAsMidi(HTp token, double reference) {
 	}
 
 	simplifyOperations(cleaned);
+
+	// Remove non-pitch information from token, including whitespace:
+	hre.replaceDestructive(cleaned, "", "[ Hh_]", "g");
 
 	if (m_debugQ) {
 		cerr << "\tAFTER FIRST ROUND OF CLEANING: " << cleaned << endl;
@@ -1423,13 +1446,29 @@ double getPitchAsMidi(HTp token, double reference) {
 		if (m_debugQ) {
 			cerr << "\tAFTER SECOND ROUND OF CLEANING: " << cleaned << endl;
 		}
-	}
 
-	if (hre.search(cleaned, "[^0-9\\.-]")) {
-		// do a third round of cleaning
-		simplifyOperations(cleaned);
-		if (m_debugQ) {
-			cerr << "\tAFTER THIRD ROUND OF CLEANING: " << cleaned << endl;
+		if (hre.search(cleaned, "[^0-9\\.-]")) {
+			// do a third round of cleaning
+			simplifyOperations(cleaned);
+			if (m_debugQ) {
+				cerr << "\tAFTER THIRD ROUND OF CLEANING: " << cleaned << endl;
+			}
+
+			if (hre.search(cleaned, "[^0-9\\.-]")) {
+				// do a third round of cleaning
+				simplifyOperations(cleaned);
+				if (m_debugQ) {
+					cerr << "\tAFTER FOURTH ROUND OF CLEANING: " << cleaned << endl;
+				}
+
+				if (hre.search(cleaned, "[^0-9\\.-]")) {
+					// do a third round of cleaning
+					simplifyOperations(cleaned);
+					if (m_debugQ) {
+						cerr << "\tAFTER FIFTH ROUND OF CLEANING: " << cleaned << endl;
+					}
+				}
+			}
 		}
 	}
 
@@ -1563,6 +1602,11 @@ double getPitchAsMidi(HTp token, double reference) {
 }
 
 
+//////////////////////////////
+//
+// simplifyOperations --
+//
+
 void simplifyOperations(string &cleaned) {
 	HumRegex hre;
 
@@ -1595,17 +1639,18 @@ void simplifyOperations(string &cleaned) {
 
 	// Reduce "#*#" (considering only integers, at least for now)
 	// Maybe allow long long ints for large values
-	while (hre.search(cleaned, "(\\d+\\.?\\d*)\\*(\\d+\\.?\\d*)")) {
-		double number1 = hre.getMatchDouble(1);
-		double number2 = hre.getMatchDouble(2);
+	while (hre.search(cleaned, "(^|[^^-])(\\d+\\.?\\d*)\\*(\\d+\\.?\\d*)(?!\\^)")) {
+		string starting = hre.getMatch(1);
+		double number1 = hre.getMatchDouble(2);
+		double number2 = hre.getMatchDouble(3);
 		double value = number1 * number2;
 		if (m_debugQ) {
 			cerr << "\t\tREDUCING " << cleaned << " WITH " << number1 << "*" << number2 << " = " << value << endl;
 		}
 		stringstream sstr;
 		sstr.str("");
-		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "(\\d+\\.?\\d*)\\*(\\d+\\.?\\d*)");
+		sstr << starting << value;
+		hre.replaceDestructive(cleaned, sstr.str(), "(^|[^^-])(\\d+\\.?\\d*)\\*(\\d+\\.?\\d*)(?!\\^)");
 	}
 
 	// Reduce "(#/#)"
@@ -2248,12 +2293,14 @@ double getMaxGlissRange(HTp pstart) {
 			ingliss = false;
 		}
 		if (current->find(GLISS_START) != string::npos) {
-				//start of glissando
-			glisses.resize(glisses.size()+1);
-			ingliss = true;
-			double pitch = getPitchAsMidi(current, reference);
-			if (pitch > 0.0) {
-				glisses.back().push_back(pitch);
+			//start of glissando
+			if (reallyHasGliss(current)) {
+				glisses.resize(glisses.size()+1);
+				ingliss = true;
+				double pitch = getPitchAsMidi(current, reference);
+				if (pitch > 0.0) {
+					glisses.back().push_back(pitch);
+				}
 			}
 		}
 		if (!ingliss) {
