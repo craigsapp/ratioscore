@@ -274,6 +274,7 @@ factored form for clarity:
 1	9/8
 1	3*3/2*2*2
 1	3^2/2^3
+!! equal-tempered approximation to 9/8:
 1	2^(2/12)
 !! The colon is equivalent to a slash:
 1	9:8

@@ -1,0 +1,32 @@
+
+
+<script>
+// vim: ts=3:ft=javascript
+
+document.addEventListener("click", function(event) {
+	let target = event.target;
+	if (!target.classList.contains("code")) {
+		return;
+	}
+	let contents = target.textContent;
+	let element = document.querySelector("#humdrum-instrument");
+	if (!element) {
+		return;
+	}
+	let element2 = document.querySelector("#inputdata-humdrum-instrument");
+	if (!element2) {
+		return;
+	}
+	let text = element.textContent;
+	text = text.replace(/\*I[^\s]*/g, "*I" + contents);
+	text = text.replace(/^\s*/, "");
+	element.textContent = text;
+	element2.textContent = text;
+	PlayAudioFile('humdrum-instrument');
+});
+
+
+</script>
+
+
+

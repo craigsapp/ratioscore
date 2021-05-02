@@ -5,6 +5,7 @@ layout: page
 vim: ts=3:ft=html
 ---
 
+{% include_relative listeners.html %}
 {% include_relative style-local.html %}
 
 Instruments for each ratio column can be specified either as <a
@@ -274,7 +275,6 @@ Text-based codenames can be used to select an instrument:
 <div class="container">
 <ul class="humlist">
 
-	<li> <span class="code">accor</span><span class="iname">accordion</span></li>
 	<li> <span class="code">armon</span><span class="iname">harmonica</span></li>
 	<li> <span class="code">banjo</span><span class="iname">banjo</span></li>
 	<li> <span class="code">cello</span><span class="iname">violoncello</span></li>
@@ -290,7 +290,6 @@ Text-based codenames can be used to select an instrument:
 	<li> <span class="code">guitr</span><span class="iname">guitar</span></li>
 	<li> <span class="code">koto</span><span class="iname">koto</span>&nbsp;&nbsp;&nbsp;</li>
 	<li> <span class="code">marim</span><span class="iname">marimba</span></li>
-	<li> <span class="code">oboe</span><span class="iname">oboe</span></li>
 	<li> <span class="code">ocari</span><span class="iname">ocarina</span></li>
 	<li> <span class="code">organ</span><span class="iname">pipe organ</span></li>
 	<li> <span class="code">piano</span><span class="iname">piano</span></li>
@@ -303,7 +302,7 @@ Text-based codenames can be used to select an instrument:
 	<li> <span class="code">tromp</span><span class="iname">trumpet</span></li>
 	<li> <span class="code">tuba</span><span class="iname">tuba</span></li>
 	<li> <span class="code">vibra</span><span class="iname">vibraphone</span></li>
-	<li> <span class="code">viola</span><span class="iname">viola</span></li>
+	<li> <span class="code">viola</span><span class="iname">viola</span>&nbsp;&nbsp;&nbsp;</li>
 	<li> <span class="code">violn</span><span class="iname">violin</span></li>
 	<li> <span class="code">vox</span><span class="iname">generic voice</span></li>
 	<li> <span class="code">xylo</span><span class="iname">xylophone</span></li>
