@@ -1514,14 +1514,14 @@ double getPitchAsMidi(HTp token, double reference) {
 	}
 
 	// Reduce "(#/#)" (considering only integers)
-	while (hre.search(cleaned, "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)")) {
+	while (hre.search(cleaned, "\\((-?\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)")) {
 		double number1 = hre.getMatchDouble(1);
 		double number2 = hre.getMatchDouble(2);
 		double value = number1 / number2;
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)");
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((-?\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)");
 	}
 
 	// Remove parentheses "(#)"
@@ -1656,7 +1656,7 @@ void simplifyOperations(string &cleaned) {
 	}
 
 	// Reduce "(#/#)"
-	while (hre.search(cleaned, "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)")) {
+	while (hre.search(cleaned, "\\((-?\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)")) {
 		double number1 = hre.getMatchDouble(1);
 		double number2 = hre.getMatchDouble(2);
 		double value = number1 / number2;
@@ -1666,7 +1666,7 @@ void simplifyOperations(string &cleaned) {
 		stringstream sstr;
 		sstr.str("");
 		sstr << value;
-		hre.replaceDestructive(cleaned, sstr.str(), "\\((\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)");
+		hre.replaceDestructive(cleaned, sstr.str(), "\\((-?\\d+\\.?\\d*)/(\\d+\\.?\\d*)\\)");
 	}
 
 	// Remove parentheses "(#)"
