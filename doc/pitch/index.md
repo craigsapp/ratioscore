@@ -5,19 +5,41 @@ layout: page
 vim: ts=8:ft=html
 ---
 
-Notes are created in a Ratioscore by adding integers, fractions,
-basic mathematical expressions, midi key numbers, cents, or frequencies
-in `**ratio` spines (columns) to a <a href="/timeline">timeline</a>.
-The fractions are used to calculate the pitch of the note by
-multiplying the frequency of the reference pitch.  For example, if
-the reference pitch is A4 (=440Hz), then the fraction `3/2` will
-generate the frequency 660 Hz.
+Pitches are stored in `**ratio` spines (columns).  Each `**ratio`
+spine will be converted into a track when converting the score into
+a Standard MIDI File, and only one note can be active in the
+spine/track at any given time.  Pitches remain active in a spine
+until another one is given further down in the spine, or if `0` is
+used to turn off a pitch.  The duration of the pitch is controlled
+by a <a href="/time">timeline</a> found in another separate spine.
+
+Pitches can be represented in various units.  The basic representation
+is as a rational number, such as `3/2`, which represents a just
+perfect fifth above the reference pitch.  This can alternatively
+be given as the floating-point number `1.5`, or as `701.955c` in
+cent units. Mathematical expressions such as `(3/2)*(80/81)^(1/4)`
+can be used to describe the ratios, which in this case means a
+just perfect fifth flattened by 1/4th of the syntonic comma.
+Irrational numbers for equal-temperament can use exponentiation, such
+as `2^(7/12)`, which is equivalent to `700c` (700 cents) for an
+equal-tempered perfect fifth).
+
+Usually pitches are described as intervals compared
+to a reference pitch, but they can also be given as a specific
+frequency, such as `300z` for 300 Hz, or `60.5m` for an equal-tempered
+quarter-tone sharp of middle C (using A-440Hz as a reference).
 
 
 <h2 data-sidebar="Reference"> Reference pitch </h2>
 
 The reference pitch is specified in the form   `*ref:A4`, where
-`A4` is the A above middle C.  Here is an example:
+`A4` is the A above middle C.  A reference pitch is required for
+pitches described as ratios (fractions, real numbers, including
+mathematical expressions).  Frequency and MIDI number pitches do
+not use a reference pitch.  
+
+Below is an example of playing harmonics of three different 
+references:
 
 
 {% include ratioscore.html id="reference" %}
@@ -229,8 +251,41 @@ reference pitch. Also: `5/10` is an octave lower than the reference,
 !!!filter: myank -m 0,1*2,3,4,2,3,1,2,3,2,1,4*2,5,4,3*2,2,1,2,3,4,5,4,5,6
 </script>
 
-See the <a href="/intervals">interval dictionary</a> for a list of
-various named ratios.
+<ul>
+<li> See the <a href="/intervals">interval dictionary</a> for a list of various named ratios.</li>
+<li> See the <a href="/grid">interval grid</a> page for uses of interval fractions.</a>
+</ul>
+
+<h2 data-sidebar="Floating-point"> Floating-point numbers </h2>
+
+Ratios can be simplified into numbers containing fractional values after
+a decimal point.
+
+
+{% include ratioscore.html id="float" %}
+<script type="application/x-ratioscore" id="float">
+**dtime	**ratio	**ratio
+*MM120	*Iclars	*Ivibra
+*	*ref:C4	*ref:C4
+1	1	.
+1	0	1.0
+1	9/8	0
+1	0	1.125
+1	5/4	0
+1	0	1.25
+1	4/3	0
+1	0	1.333333
+1	3/2	0
+1	0	1.5
+1	5/3	.
+1	0	1.666667
+1	15/8	0
+1	0	1.875
+1	2	0
+2	0	2.0
+*-	*-	*-
+</script>
+
 
 <h2> Exponents </h2>
 
@@ -257,7 +312,9 @@ Here is an example of exponent notation to generate 12-TET:
 *-	*-
 </script>
 
-See the <a href="/equal-temperament">Equal-temperament calculator</a> page.
+<ul>
+<li> See the <a href="/equal-temperament">Equal-temperament calculator</a> page.</li>
+</ul>
 
 <h2 data-sidebar="Expressions"> Mathematical expressions </h2>
 
