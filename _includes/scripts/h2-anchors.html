@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
+
 //////////////////////////////
 //
 // copyHeadingUrl --
@@ -143,6 +144,7 @@ function insertHeadingsIntoSidebar() {
 	}
 
 	let pagelink = getPageLink();
+console.log("PAGELINK", pagelink);
 	if (!pagelink) {
 		return;
 	}
@@ -191,7 +193,10 @@ function getPageLink() {
 			return list[i];
 		}
 	}
+	return list[0];
 }
+
+
 
 //////////////////////////////
 //

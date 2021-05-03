@@ -10,24 +10,24 @@ vim: ts=8:ft=html
 {% include ratioscore.html id="bohlen-pierce-scale" %}
 <script type="application/x-ratioscore" id="bohlen-pierce-scale">
 !!!OTL: Equal-tempered Bohlen-Pierce scale
-**dtime	**ratio
-*MM144	*Iclars
-*	*ref:C3
-1	3^(0/13)
-1	3^(1/13)
-1	3^(2/13)
-1	3^(3/13)
-1	3^(4/13)
-1	3^(5/13)
-1	3^(6/13)
-1	3^(7/13)
-1	3^(8/13)
-1	3^(9/13)
-1	3^(10/13)
-1	3^(11/13)
-1	3^(12/13)
-2	3^(13/13)
-*-	*-
+**dtime	**ratio	**cents
+*MM120	*I#71	*I#71
+*	*ref:C4	*ref:C4
+1	3^(0/13)	0c
+1	3^(1/13)	146.3c
+1	3^(2/13)	292.61c
+1	3^(3/13)	438.91c
+1	3^(4/13)	585.22c
+1	3^(5/13)	731.52c
+1	3^(6/13)	877.83c
+1	3^(7/13)	1024.13c
+1	3^(8/13)	1170.43c
+1	3^(9/13)	1316.74c
+1	3^(10/13)	1463.04c
+1	3^(11/13)	1609.35c
+1	3^(12/13)	1755.65c
+1	3^(13/13)	1901.96c
+*-	*-	*-
 </script>
 
 Just intonation variant:
@@ -81,8 +81,6 @@ tuning differences (as beats):
 *-	*-	*-	*-
 
 </script>
-
-See <a target="_blank" href="https://en.wikipedia.org/wiki/Bohlen%E2%80%93Pierce_scale">Wikipedia entry for the Bohlen-Pierce</a> scale.
 
 
 
@@ -233,5 +231,13 @@ Composition using lambda scale:
 !!!RDF**ratio: A = 7:3
 !!!RDF**ratio: B = 25:9
 </script>
+
+
+<h2> References </h2>
+
+<ul>
+<li> <a target="_blank" href="https://en.wikipedia.org/wiki/Bohlen%E2%80%93Pierce_scale">Bohlen-Pierce scale</a> Wikipedia entry. </li>
+</ul>
+
 
 
