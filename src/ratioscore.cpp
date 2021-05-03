@@ -426,11 +426,13 @@ void getSubstitutions(HumdrumFile& infile) {
 		if (hre.search(token, "^!!!RDF\\*\\*ratio\\s*:\\s*([^\\s]+)\\s*=\\s*(.*)\\s*")) {
 			string symbol = hre.getMatch(1);
 			string replacement = hre.getMatch(2);
+			hre.replaceDestructive(replacement, " ", "\t", "g");
 			m_ratioSubs.push_back(make_pair(symbol, replacement));
 		}
 		if (hre.search(token, "^!!!RDF\\*\\*drum\\s*:\\s*([^\\s]+)\\s*=\\s*(.*)\\s*")) {
 			string symbol = hre.getMatch(1);
 			string replacement = hre.getMatch(2);
+			hre.replaceDestructive(replacement, " ", "\t", "g");
 			m_drumSubs.push_back(make_pair(symbol, replacement));
 		}
 	}
