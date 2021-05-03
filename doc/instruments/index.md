@@ -252,7 +252,8 @@ Here is a list of General MIDI instruments numbers that can be used in Ratioscor
 
 The instrument number 14 in the following example is prefixed with the 
 text `*I#`.  Try changing the instrument number to another one in the
-above list of General MIDI instruments.
+above list of General MIDI instruments (or click on an instrument in the
+above list to change the instrument number and play the score).
 
 {% include ratioscore.html id="gm-instrument" %}
 <script type="application/x-ratioscore" id="gm-instrument">

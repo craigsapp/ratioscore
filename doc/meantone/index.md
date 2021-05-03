@@ -7,9 +7,12 @@ vim: ts=8:ft=html
 
 <h2 data-sidebar="1/4-comma"> 1/4-comma meantone </h2>
 
-The perfect fifth is reduced by 1/4 of a syntonic comma so that the major third
-is pure (5/4) as well as its complement the minor 6th (8/5).  Here is an example
-of 1/4-comma meantone by defining the notes using cents:
+The 1/4-comma meantone temperament was the most commonly used
+meantone temperament (prior to well-temperaments).  The perfect
+fifth is reduced by 1/4 of a syntonic comma so that the major third
+is pure (5/4) as well as its complement the minor 6th (8/5).  Here
+is an example of 1/4-comma meantone by defining the chromatic notes
+with cents:
 
 {% include ratioscore.html id="qcmean" %}
 <script type="application/x-ratioscore" id="qcmean">
@@ -89,7 +92,10 @@ make pure major thirds (5/4):
 </script>
 
 
-Not reducing the fifth calculations:
+Below is an example where the calculation to reduce the fifth by
+1/4 of a syntonic comma are not reduced.  The comma is `81/80`, and
+the expression `(3/2)*(80/81)^(1/4)` takes the perfect fifth `(3/2)`
+and reduces it by 1/4 of a syntonic comma.
 
 {% include ratioscore.html id="qcmean-expanded" %}
 <script type="application/x-ratioscore" id="qcmean-expanded">
@@ -113,7 +119,6 @@ Not reducing the fifth calculations:
 !! out of tune:
 2	m06	m10	m01*2
 *-	*-	*-	*-
-
 !!!RDF**ratio: x   = (3/2)*(80/81)^(1/4)
 !!!RDF**ratio: m01 = x^-5 * 2^ 3
 !!!RDF**ratio: m08 = x^-4 * 2^ 3
@@ -242,5 +247,59 @@ Comparing 1/4-comma and 1/3-comma:
 !!!RDF**ratio: m311 = y^ 5 * 2^-2
 !!!RDF**ratio: m306 = y^ 6 * 2^-3
 </script>
+
+<h2 data-sidebar="1/2-comma"> 1/2-comma meantone </h2>
+
+1/2-comma meantone creates 9/5 minor sevenths, and inversely 10/9
+major seconds).  The major thirds are 100/81, or 385 cents (compared
+to 386 cents for 5/4 major thirds, or 400 cents for equal-tempered
+major thirds).
+
+{% include ratioscore.html id="half-comma-ratio" %}
+<script type="application/x-ratioscore" id="half-comma-ratio">
+!!!OTL: 1/3-comma meantone
+**dtime	**ratio	**ratio	**ratio
+*MM60	*Icemba	*Icemba	*Icemba
+*	*ref:D3	*ref:D3	*ref:D3
+1	m00	.	.
+1	m02	.	.
+1	m04	.	.
+1	m05	.	.
+1	m07	.	.
+1	m09	.	.
+1	m11	.	.
+2	m00*2	.	.
+1	0	.	.
+1	m00	m04	m07
+1	m02	m06	m09
+1	m04	m08	m11
+1	m05	m09	m00*2
+2	m06	m10	m01*2
+*-	*-	*-	*-
+!!!RDF**ratio: x   = (3/2)*(80/81)^(1/2)
+!!!RDF**ratio: m01 = x^-5 * 2^ 3
+!!!RDF**ratio: m08 = x^-4 * 2^ 3
+!!!RDF**ratio: m03 = x^-3 * 2^ 2
+!!!RDF**ratio: m10 = x^-2 * 2^ 2
+!!!RDF**ratio: m05 = x^-1 * 2^ 1
+!!!RDF**ratio: m00 = x^ 0 * 2^ 0
+!!!RDF**ratio: m07 = x^ 1 * 2^ 0
+!!!RDF**ratio: m02 = x^ 2 * 2^-1
+!!!RDF**ratio: m09 = x^ 3 * 2^-1
+!!!RDF**ratio: m04 = x^ 4 * 2^-2
+!!!RDF**ratio: m11 = x^ 5 * 2^-2
+!!!RDF**ratio: m06 = x^ 6 * 2^-3
+</script>
+
+
+
+<h2> References </h2>
+
+<ul>
+<li> <a target="_blank" href="https://en.wikipedia.org/wiki/Meantone_temperament">Wikipedia article on meantone</a> </li>
+<li> <a target="_blank" href="https://en.xen.wiki/w/Meantone">Meantone articla on Xenharmonic Wiki</a></li>
+</ul>
+
+
 
 

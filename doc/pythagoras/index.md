@@ -10,39 +10,41 @@ vim: ts=8:ft=html
 {% include ratioscore.html id="pythagorean12" %}
 <script type="application/x-ratioscore" id="pythagorean12">
 !!!OTL: 12-note Pythagorean temperament
-**dtime	**ratio	**ratio	**name
-*MM60	*Ipiano	*Ipiano	*
-*	*ref:C4	*ref:C4	*
-1	P1	.	C
-1	m2	.	D♭
-1	M2	.	D
-1	m3	.	E♭
-1	M3	.	E
-1	P4	.	F
-1	A4	.	F♯
-1	P5	.	G
-1	m6	.	A♭
-1	M6	.	A
-1	m7	.	B♭
-1	M7	.	B
-2	P1*2	.	C
-1	0	.	.
-!! Pure Perfect fifths:
-*MM40	*	*	*
-1	P1	P5	C/G
-1	m2	m6	D♭/A♭
-1	M2	M6	D/A
-1	m3	m7	E♭/B♭
-1	M3	M7	E/B
-1	P4	P1*2	F/C
-1	P5	M2*2	G/D
-1	m6	m3*2	A♭/E♭
-1	M6	M3*2	A/E
-1	m7	P4*2	B♭/F
-2	M7	A4*2	B/F♯
+
+**dtime	**ratio	**ratio	**pitch	**cents
+*MM60	*Ipiano	*Ipiano	*	*Ipiano
+*	*ref:C4	*ref:C4	*	*ref:C4
+1	P1	.	C	0c
+1	m2	.	D♭	90.22c
+1	M2	.	D	203.91c
+1	m3	.	E♭	294.13c
+1	M3	.	E	407.82c
+1	P4	.	F	498.04c
+1	A4	.	F♯	611.73c
+1	P5	.	G	701.96c
+1	m6	.	A♭	792.18c
+1	M6	.	A	905.87c
+1	m7	.	B♭	996.09c
+1	M7	.	B	1109.78c
+2	P1*2	.	C	1200c
+1	0	.	.	.
+!! Just Perfect fifths:
+*MM40	*	*	*	*
+1	P1	P5	C/G	.
+1	m2	m6	D♭/A♭	.
+1	M2	M6	D/A	.
+1	m3	m7	E♭/B♭	.
+1	M3	M7	E/B	.
+1	P4	P1*2	F/C	.
+1	P5	M2*2	G/D	.
+1	m6	m3*2	A♭/E♭	.
+1	M6	M3*2	A/E	.
+1	m7	P4*2	B♭/F	.
+2	M7	A4*2	B/F♯	.
 !! Wolf fifth:
-2	A4	m2*2	F♯/D♭
-*-	*-	*-	*-
+2	A4	m2*2	F♯/D♭	.
+*-	*-	*-	*-	*-
+
 !!!RDF**ratio: x  = 3/2
 !!!RDF**ratio: m2 = x^-5 * 2^ 3
 !!!RDF**ratio: m6 = x^-4 * 2^ 3
@@ -64,7 +66,7 @@ vim: ts=8:ft=html
 {% include ratioscore.html id="pythagorean25" %}
 <script type="application/x-ratioscore" id="pythagorean25">
 !!!OTL: 12-note Pythagorean temperament
-**dtime	**ratio	**ratio	**ratio	**name
+**dtime	**ratio	**ratio	**ratio	**pitch
 *MM80	*Ipiano	*Ipiano	*Ipiano	*
 *	*ref:C4	*ref:C4	*ref:C4	*
 1	d1	.	.	C♭

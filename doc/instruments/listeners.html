@@ -3,6 +3,7 @@
 <script>
 // vim: ts=3:ft=javascript
 
+
 document.addEventListener("click", function(event) {
 	let target = event.target;
 	if (!target.classList.contains("code")) {
@@ -23,6 +24,45 @@ document.addEventListener("click", function(event) {
 	element.textContent = text;
 	element2.textContent = text;
 	PlayAudioFile('humdrum-instrument');
+});
+
+document.addEventListener("click", function(event) {
+	let target = event.target;
+	if (target.nodeName !== "TD") {
+		return;
+	}
+	let contents = target.textContent;
+	let matches = contents.match(/^\s*(\d+)\s*$/);
+	if (!matches) {
+		let newtarget = target.previousSibling;
+		if (!newtarget) {
+			return;
+		}
+		contents = newtarget.textContent;
+		matches = contents.match(/^\s*(\d+)\s*$/);
+		if (!matches) {
+			return;
+		} else {
+			contents = matches[1];
+		}
+	} else {
+		contents = matches[1];
+	}
+
+	let element = document.querySelector("#gm-instrument");
+	if (!element) {
+		return;
+	}
+	let element2 = document.querySelector("#inputdata-gm-instrument");
+	if (!element2) {
+		return;
+	}
+	let text = element.textContent;
+	text = text.replace(/\*I[^\s]*/g, "*I#" + contents);
+	text = text.replace(/^\s*/, "");
+	element.textContent = text;
+	element2.textContent = text;
+	PlayAudioFile('gm-instrument');
 });
 
 

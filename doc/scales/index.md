@@ -2,15 +2,19 @@
 title: "Temperaments and scales"
 permalink: /scales/index.html
 layout: page
-vim: ts=8:ft=html
+vim: ts=3:ft=html
 ---
 
 
 <h2> Temperaments </h2>
 
 <ul>
-	<li> <a href="/meantone">Meantone temperaments </a></li>
 	<li> <a href="/pythagorean">Pythagorean tuning </a></li>
+	<li> <a href="/meantone">Meantone temperaments </a></li>
+	<li> <a href="/well-temperaments">Well temperaments </a></li>
+	<ul style="margin-bottom:0">
+		<li> <a href="/vallotti">Vallotti temperament</a> </li>
+	</ul>
 	<li> <a href="/equal-temperament">Equal-temperament calculator</a></li>
 </ul>
 
