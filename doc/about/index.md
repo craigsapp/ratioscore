@@ -26,11 +26,11 @@ and can be used for general comments for example.
 
 To get started, read the <a href="/pitch">pitch</a> and <a
 href="/time">time</a> pages to observe how to represent time and
-pitch.  Visit the <a href="/generator">Score generator</a> page to
+pitch.  Visit the <a href="/generator">score generator</a> page to
 create an empty score to fill in with your own notes and timings.
 
-For fun visit the <a href="/turkish">Turkish Music</a> page, from
-which you can listen to 2200 melodies, with links to their graphical
+For fun visit the <a href="/turkish">Turkish Music</a> page, where
+you can listen to 2200 melodies, with links to their graphical
 scores.
 
 
@@ -38,7 +38,8 @@ scores.
 <h2> Motivation </h2>
 
 Ratioscore was designed as a composition prototyping system for
-<i>The Answers</i> by Julie Zhu.  Here is a performance of it
+<i>The Answers</i> by <a target="_blank" href="https://juliezhu.net">Julie Zhu</a>.
+Here is a performance of it
 by the <a target="_blank" href="https://jackquartet.com">JACK
 Quartet in December 2020</a>:
 
@@ -227,7 +228,7 @@ table.command tr td {
      <td> print to standard output </td></tr>
 </table>
 
-<h2 data-sidebar="Bug reports"> Bug reports and feature requests </h2>
+<h2 data-sidebar="Bug&nbsp;reports"> Bug reports and feature requests </h2>
 
 Bug reports and feature requests can be submitted to the <a
 target="_blank" href="https://github.com/craigsapp/ratioscore/issues">Ratioscore repository</a> on Github.
