@@ -82,7 +82,7 @@ function loadMu2File(urlbase, pdfbase, filebase) {
 	request.onload = function () {
 		if (request.readyState == request.DONE) {
 			if (request.status == 200) {
-				let ratioscore = convertMu2FileToRatioscore(request.responseText);
+				let ratioscore = convertMu2FileToRatioscore(request.responseText, filebase);
 				let target = document.querySelector("#main");
 				if (!target) {
 					console.log("PROBLEM FINDING #main");
@@ -136,12 +136,12 @@ function buildSongSelect(songlist) {
 	}
 	let output = "<select id='songselect' onchange='playSong(event)'>";
 	for (let i=0; i<songlist.length; i++) {
-		output += "<option value='" + i + "'";
+		output += "<option value='" + (i+1) + "'";
 		if (i == 1943) {
 			output += " selected";
 		}
 		output += ">";
-		output += i + ". ";
+		output += (i+1) + ". ";
 		if (songlist[i].TITLE) {
 			output += songlist[i].TITLE;
 		}
@@ -167,7 +167,8 @@ function playSong(event) {
 	if (!target) {	
 		target = event.target;
 	}
-	let songnumber = target.value;
+	let songnumber = parseInt(target.value);
+	songnumber--;
 	loadMu2File(WORKLIST.MU2URLBASE, WORKLIST.PDFURLBASE, WORKLIST.SONGLIST.SONG[songnumber].FILE);
 }
 

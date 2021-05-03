@@ -31,16 +31,24 @@
 //  23 = mordent on note
 //
 
-function convertMu2FileToRatioscore(mu2file) {
+function convertMu2FileToRatioscore(mu2file, filename) {
 	if (!mu2file) {
 		return "";
 	}
+
+	let fileinfo = FILEINFO[filename];
+console.log("FILEINFO", fileinfo);
+
 	let lines = mu2file.split("\n");
 	let composer = getNumberContent(lines, 58);
 	let lyricist = getNumberContent(lines, 59);
 	let title    = getNumberContent(lines, 60);
 	let meter    = getMeter(lines);
 	let tempo    = getTempo(lines);
+
+	let makam    = fileinfo.MAKAM || "";
+	let form     = fileinfo.FORM  || "";
+	let usul     = fileinfo.USUL  || "";
 
 	let events = [];
 	// skip the first few lines, since the time signature
@@ -110,6 +118,7 @@ function convertMu2FileToRatioscore(mu2file) {
 	console.log("EVENTS", events);
 	// console.log("PITCHES", pitches);
 
+
 	let output = "";
 	if (title) {
 		output += "!!!OTL: " + title + "\n";
@@ -119,6 +128,15 @@ function convertMu2FileToRatioscore(mu2file) {
 	}
 	if (lyricist) {
 		output += "!!!LYR: " + lyricist + "\n";
+	}
+	if (makam) {
+		output += "!!!makam: " + makam + "\n";
+	}
+	if (form) {
+		output += "!!!form: " + form + "\n";
+	}
+	if (makam) {
+		output += "!!!usul: " + usul + "\n";
 	}
 
 	output += "**recip\t**ratio\n";
@@ -190,7 +208,6 @@ function addBarlines(events, meter) {
 
 function printPitchRdf(pitches) {
 	let tuning = {% include_relative tuning.json %};
-	console.log("TUNING", tuning);
 	let keys = Object.keys(pitches);
 	let output      = "";
 	let naturals    = [];

@@ -5,7 +5,7 @@ layout: default
 vim: ts=8:ft=html
 ---
 
-Thirteen divisions of the third harmonic.
+<a href="/equal-temperament/?o=3&d=13&t=120&r=C4&i=71">Thirteen divisions of the third harmonic</a>.
 
 {% include ratioscore.html id="bohlen-pierce-scale" %}
 <script type="application/x-ratioscore" id="bohlen-pierce-scale">

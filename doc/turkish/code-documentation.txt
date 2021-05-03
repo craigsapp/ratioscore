@@ -1,0 +1,81 @@
+Code	Code2	Name	Symbol	Yalniz Baskiyla Ilgili	Explanation	
+0	sus	Rest (-)		FALSE	Rest Symbol. Pay (numerator), Payda (denumerator) and LNS=100 is used	
+1	kcn	Little Note		FALSE	Generally used to show embellishments which are not originally on the piece but added in the performance. They are typically played softer than the other notes.	
+2		Rest on the first occurence (-)		FALSE	Acts as a normal note, however a rest with the same duration is given in the first occurence of this note. 	
+3		Rest on the second occurence (-)		FALSE	Acts as a normal note, however a rest with the same duration is given in the second occurence of this note. 	
+4	gls	Glissando		FALSE	Slides from this note and the next note.	
+5		Attenuating Tremolo (-)	163	FALSE	Note is performed as an tremolo getting softer by time.	
+6		Amplifying Tremolo (-)		FALSE	Note is performed as an tremolo getting louder by time.	
+7	trm	Tremolo		FALSE	Note is not performed as a single onset but rather many onset. The total duration of all the onset would be equal to the duration of the note. In pieces where the tempo is less than 4th note = 90 bpm, a tremolo typically corresponds to eight 32nd notes. For faster pieces it corresponds to four 16th notes.	
+8	crp	Gracenote	227	FALSE	A short and soft note which takes a its duration from the next note. For pieces slower than 4th note = 90bpm, it is a 64th note. For faster pieces it is a 32nd note. This duration is subtracted from the duration of the next note.	
+9	nta	Note/Rest		FALSE	"Normal note or rest if silence.
+Repeat signs:
+If there is ""+"" and ""X"" in the Söz-2 (Second lyrics column) field:
+   If LNS is 1, Dal Segno (D.S.), 
+   If LNS is 4, to the [Start] (to below),
+   If LNS is 5, to the (Start) (above the portrait); 
+If there is ""]"" or ""}"" in the Söz-2 field: 
+   LNS = 0 ise [SON], 
+   LNS = 1 ise [KA"	
+10	acn	Note Followed by a Gracenote		FALSE	Normal note. Gives some of its duration to the following grace note.	
+11	ssc	Silent Gracenote	218	FALSE	Normal note. Gives some of its duration to the following grace note with a pitch one degree sharper. This grace note is not shown and performed very softly.	
+12	trl	Trill	164	FALSE	The note is divided into four and played like silent gracenotes. If multiple trills are desired, it should be written to the Pay and Payda values. For example a 4th note is generally divided into four 16th notes; however if the Pay and Payda are 8 and 3, respectively XX	Missing the ending
+13		Natural Trill (-)		FALSE	If the note with the higher pitch in the scale has a flat or sharp, they are played as a natural.	
+14	obk	Öbekleme, Usul/Tempo Değişimi		FALSE	Bu kodu taşıyan kaydın Söz-1 ve/veya Söz-2 alanlarında yazılı sayılar, baskı esnasında notaların öbeklenme biçimini belirler. Söz-1/Söz-2 alanları boşsa, usulün normal bölünme şekli esas alınır. Örneğin 4/4`lük Sofyan usulündeki bir eserde Söz-1/Söz-2 ala	
+15		Artan - Sönen Tremolo (-)		FALSE	Tek bir nota için, hafiften başlayıp değerinin yarısına kadar gürleşerek, sonraki yarısında ise sönerek yapılan tremolodur.	
+16		Sönen - Artan Tremolo (-)		FALSE	Tek bir nota için, gürden başlayıp değerinin yarısına kadar hafifleyerek, sonraki yarısında ise tekrar gürleşerek yapılan tremolodur.	
+17		Normal Ardçarpma (-)	129	FALSE	Çarpmadır. Fakat, değerini kendisinden önce gelen notadan alır.	
+18		Porteyi Bu Hizada Bitir (-)		TRUE	Kısa bir nota satırında notaların arasını açmayıp bitirme çizgisini bu işareti koyunca çizer.	
+19	syb	New page (-)		TRUE	The printed score starts a new page with this code.	
+20		Forbid New page / Carriage return (-)		TRUE	Line break or new page is not allowed at this point.	
+21	stb	Carriage Return		TRUE	Makes a line break. If LNS is equal to 1, the break happens inside a measure (st2).	
+22		Silent natural gracenote (-)		FALSE	The next higher-pitched natural note is played as a silent gracenote.	
+23	mrd	Mordan	116	FALSE	Önce üzerine konulduğu nota ve onun bir derece tizi, notanın asıl değerinin dörtte biri süresince seslendirilir, geriye kalan süre yine asıl notayla tamamlanır. Örneğin 1/4 değerinde bir Do`nun üzerine mordan işareti konmuşsa icra şöyle olur: Do (1/16), R	
+24	mra	Lower Mordent	115	FALSE	Önce üzerine konulduğu nota ve onun bir derece pesti, notanın asıl değerinin dörtte biri süresince seslendirilir, geriye kalan süre yine asıl notayla tamamlanır. Örneğin 1/4 değerinde bir Do`nun üzerine mordan işareti konmuşsa icra şöyle olur: Do (1/16), 	
+25		Natural Mordent (-)		FALSE		
+26		Natural Lower Mordent (-)		FALSE		
+27	ptm	Portamento		FALSE	Slides from this note and the next note but does not connect the notes.	
+28	grp	Grupetto	170	FALSE	Önce üzerine konulduğu nota süre olarak dörde bölünür, ilk birim süresince nokanın tizi - kendisi ve pesti triole şeklinde seslendirilir, geriye kalan süre yine asıl notayla tamamlanır. Örneğin 1/2 değerinde bir Do`nun üzerine grupetto işareti konmuşsa ic	
+29	gra	Lower Grupetto	168	FALSE	Önce üzerine konulduğu nota süre olarak dörde bölünür, ilk birim süresince nokanın pesti - kendisi ve tizi triole şeklinde seslendirilir, geriye kalan süre yine asıl notayla tamamlanır. Örneğin 1/2 değerinde bir Do`nun üzerine grupetto işareti konmuşsa ic	
+30		Natural Grupetto (-)		FALSE		
+31		Natural Lower Grupetto (-)		FALSE		
+32	tra	Lower Trill	165	FALSE	Nota dörde bölünür ve bunlar alt sessiz çarpmalı gibi seslendirilir. Daha çok sayıda tril yapılmak istenirse bu Pay ve Payda değerinde yazılmalıdır. Örneğin 1/4`lük bir nota normalde 1/16`lik dört alt sessiz çarpmalı notaya bölünür. Fakat Pay/Payda alanla	
+33		Triole with Gracenote (-)		FALSE		
+34		Triole with Soft Gracenote (-)		FALSE		
+35	oot	Repeat the previous measure  (%)	212	FALSE	When this symbol is encountered, the previous measure is repeated.	
+36		D.C. (-)		FALSE	Eserin başına dönülmesini sağlar.	
+37		(1)		FALSE	Eserin belli bir pasajı birçok kez tekrarlanıyorsa, her bir tekrardan sonra hangi noktaya dönüleceğini işaret eder.	
+38		(2)		FALSE		
+39		(3)		FALSE		
+40		(4)		FALSE		
+41		(5)		FALSE		
+42		(6)		FALSE		
+43	mtr	Ters Mordan	194	FALSE	Önce üzerine konulduğu nota, asıl değerinin yarısı süresince seslendirilir; geriye kalan süre ikiye bölünüp önce asıl notanın bir derece tizi, sonra da kendisi ile tamamlanır. Örneğin 1/4 değerinde bir Do`nun üzerine ters mordan işareti konmuşsa icra şöyl	
+44	mta	Ters Aşağı Mordan	188	FALSE	Önce üzerine konulduğu nota, asıl değerinin yarısı süresince seslendirilir; geriye kalan süre ikiye bölünüp önce asıl notanın bir derece pesti, sonra da kendisi ile tamamlanır. Örneğin 1/4 değerinde bir Do`nun üzerine ters aşağı mordan işareti konmuşsa ic	
+45		Ters Bekar Mordan (-)		FALSE		
+46		Ters Bekar Aşağı Mordan (-)		FALSE		
+47		Vibrato (Vib) (-)		FALSE		
+48		Portenin Altına Serbest Yazı (-)		TRUE		
+49		Portenin Üstüne Serbest Yazı (-)		TRUE		
+50	mkm	Makam/Change (-)		FALSE	Makam name is written to Söz1 field and the notes in the key signature  ("B4b1, F5#4",…) are written to Söz2 field	
+51	usl	Usul/Change		FALSE	Usul değişimlerini belirtmekte kullanılır. Legato% alanındaki sayı (ya da, numarası 127`den büyük olanlar için, o sayı ile birlikte [Basış] ve [Bırakış] alanlarındaki değerlerin toplamı), bu eserin o noktasında yazılı no`lu usule geçki yapılıyor anlamına 	
+52	tmd	Tempo/Change		FALSE	Used to indicate a tempo change. The value in the Legato% field indicates the tempo starting from this point now on. If the value is greater than 127, the sum of this value, and the values in the Basış and Bırakış fields indicate the tempo. In the Pay, Payda fields, XX 	
+53	cms	Phrase Boundary		TRUE	The boundary of a phrase/sentence/motif … Naturally one should assume a boundary at the start and end of the score.	
+54	gcb	Modulation/Flavor Start	0	TRUE	The modulated note (Söz-1) and makam flavor (Söz-2) are written.	
+55	gcs	Modulation/Flavor End	0	TRUE	Additional information such as "İnici"/"Çıkıcı" ("Ascending"/"Descending") may be written to the Söz-2 field.	
+56	trt	Measure change (Rhythm)	0	TRUE	Used when switched to a different number of  pulses (zaman) or unit pulset (mertebe) without indicating a usul name.The new values are written to the Pay and Payda fields. It is used to notate the subdivisions of big usuls such as 32/4.	
+57	frm	Form	0	TRUE	Written to the Söz1 field, e.g. "Şarkı, Peşrev"	
+58	bst	Composer	0	TRUE	Name - Surname of the composer (or explanation such as "Anonim" to indicate anonymous) is written to the Söz1 field. The birth and death dates are written to the Söz2 field.	
+59	gfy	Lyricist	0	TRUE	Name - Surname of the composer (or explanation such as "Anonim" to indicate anonymous) is written to the Söz1 field. The birth and death dates are written to the Söz2 field.	
+60	szb	Starting Lyrics	0	TRUE	The first words of the lyrics, written to the Söz1 field	
+61		Transposition (Ahenk)	0	TRUE	The transposition of the performance, given in Holderian commas. 9: Kızneyi nısfiyesi, 0: Mansur nısfiyesi (Default), -9: Şah nısfiyesi, -13: Davud nısfiyesi, -22: Bolahenk neyi, -31: Sipürde neyi, -35: Müstahzen neyi, -44: Kızneyi, -53: Mansur neyi	
+62	kol	Folkloric	0	TRUE	1 if the a folk music piece, 0 else	
+63	nts	Notation	0	TRUE	The value is written to the Soz1 field and indicates the accidentals to be used in the prnt. If it is "THM" Turkish folk music accidentals are used (indiced accidentals; b1, b2 etc.), whereas if the value is "TSM" Turkish art music accidentals are printed (Arel – Ezgi accidentals). In case the value is Karma the method in Mus2-Alpha is selected.	
+64	gfa	Güfte Adı	0	TRUE	Entered to the Söz1 field, If the lyrics has a title as a poem (e.g. Dönülmez Akşamın -> Rindlerin Ölümü)	
+65	bsy	Composition Date	0	TRUE	The date of composition written on the Söz1 field	
+66	esu	Duration of the Composition	0	TRUE	The duration of the composition written in "x Dk y Sn" (Dk: minutes, Sn: seconds) to the Söz1 field	
+71	byt	Paper Size	0	TRUE	Pay field: Width, Payda field: Height (mm)	
+72	mrj	Margins	0	TRUE	Pay field: Top, Payda field: Bottom; Bas field: Left, Çek field: Right (mm)	
+73	dzn	Vertical - Horizontal Layout	0	TRUE	Pay field: The smallest interval, Payda field: Highest note in the line; Bas field: Line spacing, Çek: Punto	
+89		Gracenote to Note	0	TRUE	A normal gracenote is turned into a note. The duration is taken from the next note.	
+108		Ardçarpmadan Notaya	0	TRUE	Ardçarpma notaya dönüştürülmüş. Değerinin bir kısmını sonraki notaya vermiş.
