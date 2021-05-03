@@ -6,37 +6,39 @@ vim: ts=8:ft=html
 ---
 
 Pitches are stored in `**ratio` spines (columns).  Each `**ratio`
-spine will be converted into a track when converting the score into
-a Standard MIDI File, and only one note can be active in the
-spine/track at any given time.  Pitches remain active in a spine
-until another one is given further down in the spine, or if `0` is
-used to turn off a pitch.  The duration of the pitch is controlled
-by a <a href="/time">timeline</a> found in another separate spine.
+spine will be converted into a track when outputting to a Standard
+MIDI File, and only one note can be active in the spine/track at
+any given time.  Pitches remain active in a spine until another one
+is given further down in the spine, or if `0` is used to turn off
+a pitch.  The duration of the pitch is controlled by a <a
+href="/time">timeline</a> found in a separate spine.
 
 Pitches can be represented in various units.  The basic representation
-is as a rational number, such as `3/2`, which represents a just
-perfect fifth above the reference pitch.  This can alternatively
+is a rational number, such as `3/2`, representing a just perfect
+fifth above the reference pitch for the spine.  This can alternatively
 be given as the floating-point number `1.5`, or as `701.955c` in
 cent units. Mathematical expressions such as `(3/2)*(80/81)^(1/4)`
-can be used to describe the ratios, which in this case means a
-just perfect fifth flattened by 1/4th of the syntonic comma.
-Irrational numbers for equal-temperament can use exponentiation, such
-as `2^(7/12)`, which is equivalent to `700c` (700 cents) for an
+can be used to describe ratios, which in this case means a just
+perfect fifth flattened by 1/4th of the syntonic comma.  Irrational
+numbers for equal-temperament can use exponentiation, such as
+`2^(7/12)`, which is equivalent to `700c` (700 cents) for an
 equal-tempered perfect fifth).
 
-Usually pitches are described as intervals compared
-to a reference pitch, but they can also be given as a specific
-frequency, such as `300z` for 300 Hz, or `60.5m` for an equal-tempered
-quarter-tone sharp of middle C (using A-440Hz as a reference).
+Usually pitches are described as intervals compared to a reference
+pitch, but they can also be given as specific frequencies, such as
+`300z` for 300 Hz, or as a fractional MIDI note number, such as
+`60.5m`, which represents an equal-tempered quarter-tone sharp above
+middle C (using A-440Hz and equal-temperament as a an implicit
+tuning reference for MIDI pitches).
 
 
 <h2 data-sidebar="Reference"> Reference pitch </h2>
 
 The reference pitch is specified in the form   `*ref:A4`, where
 `A4` is the A above middle C.  A reference pitch is required for
-pitches described as ratios (fractions, real numbers, including
+pitches described as intervals (fractions, real numbers, including
 mathematical expressions).  Frequency and MIDI number pitches do
-not use a reference pitch.  
+not rely on a reference pitch.  
 
 Below is an example of playing harmonics of three different 
 references:
