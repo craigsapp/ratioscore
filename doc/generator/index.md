@@ -9,7 +9,7 @@ vim: ts=3:ft=html
 {% include_relative styles-local.html %}
 {% include_relative scripts-local.html %}
 
-This page can be used to create a Ratioscore template:
+Use the following form to create a blank Ratioscore.
 
 <nobr>
 	Timeline:
@@ -20,7 +20,7 @@ This page can be used to create a Ratioscore template:
 		<option value="ms">    absolute time (milliseconds) </option>
 		<option value="recip"> musical rhythms              </option>
 	</select>
-</nobr><nobr>Time increment: <input id="timeval" value="1"></nobr><nobr>Tempo: <input id="tempo" value="120"></nobr><nobr>Ratio spines: <select id="spines">
+&nbsp;&nbsp;&nbsp;</nobr><nobr>Time increment: <input id="timeval" value="1">&nbsp;&nbsp;&nbsp;</nobr><nobr>Tempo: <input id="tempo" value="120">&nbsp;&nbsp;&nbsp;</nobr><nobr>Ratio spines: <select id="spines">
 	<option value="1">1</option>
 	<option value="2">2</option>
 	<option value="3">3</option>
@@ -41,7 +41,7 @@ This page can be used to create a Ratioscore template:
 	<option value="18">18</option>
 	<option value="19">19</option>
 	<option value="20">20</option>
-</select></nobr><nobr>Data lines: <input id="lines" value="10"></nobr><nobr>Reference pitch: <input id="reference" value="C4"></nobr><nobr>Instrument: {% include_relative instrument-select.html %}</nobr>
+</select>&nbsp;&nbsp;&nbsp;</nobr><nobr>Data lines: <input id="lines" value="10">&nbsp;&nbsp;&nbsp;</nobr><nobr>Reference pitch: <input id="reference" value="C4">&nbsp;&nbsp;&nbsp;</nobr><nobr>Instrument: {% include_relative instrument-select.html %}</nobr>
 
 <span class="link" onclick="copyUrl(); alert('Link copied to clipboard');">copy page link with settings</span>
 {% include ratioscore.html id="generated" %}

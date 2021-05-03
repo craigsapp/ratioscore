@@ -29,10 +29,6 @@ href="/time">time</a> pages to observe how to represent time and
 pitch.  Visit the <a href="/generator">score generator</a> page to
 create an empty score to fill in with your own notes and timings.
 
-For fun visit the <a href="/turkish">Turkish Music</a> page, where
-you can listen to 2200 melodies, with links to their graphical
-scores.
-
 
 
 <h2> Motivation </h2>

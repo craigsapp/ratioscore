@@ -8,7 +8,7 @@ vim: ts=3
 {% include ratioscore.html id="example" tabsize="12" minheight="500px" %}
 <script type="application/x-ratioscore" id="example">
 **dtime	**ratio
-*	*Iclars
+*MM60	*Iclars
 *	*ref:G3
 1	1
 0.75	3

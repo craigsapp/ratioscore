@@ -10,11 +10,11 @@ vim: ts=3:ft=html
 {% include_relative scripts-local.html %}
 
 <div style="line-height:34px;">
-	<nobr><label for="octave">Octave:</label><input id="octave" value="2"></nobr>
-	<nobr><label for="divisions">Divisions:</label><input id="divisions" value="12"></nobr>
-	<nobr><label for="tempo">Tempo:</label><input id="tempo" value="120"></nobr>
-	<nobr><label for="reference">Reference:</label>{% include_relative reference-pitch.html %}</nobr>
-	<nobr><label for="instrument">Instrument:</label>{% include_relative instrument.html %}</nobr>
+	<nobr><label for="octave">Octave:</label><input id="octave" value="2">&nbsp;&nbsp;&nbsp;</nobr>
+	<nobr><label for="divisions">Divisions:</label><input id="divisions" value="12">&nbsp;&nbsp;&nbsp;</nobr>
+	<nobr><label for="tempo">Tempo:</label><input id="tempo" value="120">&nbsp;&nbsp;&nbsp;</nobr>
+	<nobr><label for="reference">Reference:</label>{% include_relative reference-pitch.html %}&nbsp;&nbsp;&nbsp;</nobr>
+	<nobr><label for="instrument">Instrument:</label>{% include_relative instrument.html %}&nbsp;&nbsp;&nbsp;</nobr>
 </div>
 
 <!--

@@ -10,19 +10,23 @@ vim: ts=8:ft=html
 {% include_relative styles-local.html %}
 
 <p>
-	Click on a ratio or cents/MIDI/Hz value in the sorted table
-below the grid to listen to the note/interval.
+
+Click on ratios in the grid or cents/MIDI/Hz equlvalents in the
+sorted table below the grid to listen to the note/interval.  Selecting
+"Odd rows/cols only" and "Within octave" will list odd-limit intervals
+based on the square grid dimension.
+
 </p>
 
-<nobr><label for="rows">Rows:&nbsp;</label><input id="rows" value="10" size="3"></nobr>
-<nobr><label for="columns">Columns:&nbsp;</label><input id="columns" value="10" size="3"></nobr>
-<nobr><label for="reference">Reference&nbsp;pitch:&nbsp;</label>{% include_relative reference-pitch.html %}</nobr>
-<nobr><label for="instrument">Instrument:</label>{% include_relative instrument.html %}</nobr>
-<nobr><label for="reduce">Reduce&nbsp;fractions:</label><input id="reduce" type="checkbox"></nobr>
-<nobr><label for="octave">Within&nbsp;octave:</label><input id="octave" type="checkbox"></nobr>
-<nobr><label for="odd">Odd&nbsp;rows/cols&nbsp;only:</label><input id="odd" type="checkbox"></nobr>
-<nobr><label for="dupe">Mark&nbsp;duplicates:</label><input id="dupe" type="checkbox"></nobr>
-<nobr><label for="playref">Play&nbsp;reference:</label><input id="playref" checked type="checkbox"></nobr>
+<nobr><label for="rows">Rows:&nbsp;</label><input id="rows" value="10" size="3">&nbsp;&nbsp;&nbsp;</nobr>
+<nobr><label for="columns">Columns:&nbsp;</label><input id="columns" value="10" size="3">&nbsp;&nbsp;&nbsp;</nobr>
+<nobr><label for="reference">Reference&nbsp;pitch:&nbsp;</label>{% include_relative reference-pitch.html %}&nbsp;&nbsp;&nbsp;</nobr>
+<nobr><label for="instrument">Instrument:</label>{% include_relative instrument.html %}&nbsp;&nbsp;&nbsp;</nobr>
+<nobr><label for="reduce">Reduce&nbsp;fractions:</label><input id="reduce" type="checkbox">&nbsp;&nbsp;&nbsp;</nobr>
+<nobr><label for="octave">Within&nbsp;octave:</label><input id="octave" type="checkbox">&nbsp;&nbsp;&nbsp;</nobr>
+<nobr><label for="odd">Odd&nbsp;rows/cols&nbsp;only:</label><input id="odd" type="checkbox">&nbsp;&nbsp;&nbsp;</nobr>
+<nobr><label for="dupe">Mark&nbsp;duplicates:</label><input id="dupe" type="checkbox">&nbsp;&nbsp;&nbsp;</nobr>
+<nobr><label for="playref">Play&nbsp;reference:</label><input id="playref" checked type="checkbox">&nbsp;&nbsp;&nbsp;</nobr>
 
 <div id="grid"></div>
 
