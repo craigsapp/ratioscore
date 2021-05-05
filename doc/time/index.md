@@ -544,11 +544,12 @@ segment, or the start of each segment can be started with
 
 <h2> Gracenotes </h2>
 
-If a timeline entry has zero duration, it will be interpreted as a gracenote.  
-The previous note will be shortened by 100ms and the grace note start time
-moved back 100ms.  If the previous note is less than 200ms, the grace note
-start time will be 1/2 of the duration between the onset times of its
-neighboring pitches.  Only one gracenote in a sequence can currently be handled.
+If a timeline entry has zero duration, it will be interpreted as a
+grace note.  The previous note will be shortened by 100ms and the
+grace note start time moved back 100ms.  If the previous note is
+less than 200ms, the grace note start time will be 1/2 of the
+duration between the onset times of its neighboring pitches.  Only
+one grace note in a melodic sequence can currently be handled.
 
 {% include ratioscore.html id="grace-dtime" %}
 <script type="application/x-ratioscore" id="grace-dtime">
@@ -563,6 +564,9 @@ neighboring pitches.  Only one gracenote in a sequence can currently be handled.
 1	1
 *-	*-
 </script>
+
+With `**time` data, a repeated time value means that the first
+entry is a grace note:
 
 {% include ratioscore.html id="grace-time" %}
 <script type="application/x-ratioscore" id="grace-time">
@@ -612,11 +616,14 @@ The duration of the grace note is fixed at 100ms, regardless of the tempo:
 *-	*-
 </script>
 
+If the duration of the grace note would bring it closer to the 
+previous note than to the note after it, the grace note is 
+shortened to fit half-way between the two notes.
 
 {% include ratioscore.html id="grace-tempo-fast" %}
 <script type="application/x-ratioscore" id="grace-tempo-fast">
 **dtime	**ratio
-*MM160	*I#25
+*MM260	*I#25
 *	*ref:G3
 1	1
 0	9/4
@@ -627,9 +634,8 @@ The duration of the grace note is fixed at 100ms, regardless of the tempo:
 *-	*-
 </script>
 
-To change the duration of grace notes, set the millisecond duration
-of gracenotes such as adding `*grace:500` to the timeline for a duration
-of 500 ms.
+To change the duration of grace notes the interpretation `*grace:500`
+means to set the grace note duration to 500 ms:
 
 {% include ratioscore.html id="grace-duration-change" %}
 <script type="application/x-ratioscore" id="grace-duration-change">
@@ -645,6 +651,11 @@ of 500 ms.
 1	1
 *-	*-
 </script>
+
+
+<a href="/turkish/?autoplay=1944">Here</a> is an example Turkish music score using grace notes.
+
+
 
 
 

@@ -11,8 +11,10 @@
 let WORKLIST = [];
 let COMPOSERLIST = [];
 let FILEINFO = {};
+let CGI = {};
 
 document.addEventListener("DOMContentLoaded", function () {
+	CGI = GetCgiParameters();
 	WORKLIST = getAtonContent("worklist");
 	COMPOSERLIST = getComposerList(WORKLIST.SONGLIST.SONG);
 	FILEINFO = getFileInfo(WORKLIST.SONGLIST.SONG);

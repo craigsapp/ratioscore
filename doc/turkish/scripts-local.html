@@ -95,6 +95,10 @@ function loadMu2File(urlbase, pdfbase, filebase) {
 				}
 				target.textContent = ratioscore;
 				target2.textContent = ratioscore;
+				if (CGI.autoplay) {
+					delete CGI.autoplay;
+					PlayAudioFile('main');
+				}
 			}
 		}
 	};
@@ -127,6 +131,17 @@ function loadMu2File(urlbase, pdfbase, filebase) {
 //
 
 function buildSongSelect(songlist) {
+	let songindex = 1943
+	if (CGI.autoplay) {
+		if (CGI.autoplay.match(/^\d+$/)) {
+			songindex = parseInt(CGI.autoplay) - 1;
+		}
+	} else if (CGI.n) {
+		if (CGI.n.match(/^\d+$/)) {
+			songindex = parseInt(CGI.n) - 1;
+		}
+	}
+
 	if (!songlist) {
 		songlist = WORKLIST.SONGLIST.SONG;
 	}
@@ -137,7 +152,7 @@ function buildSongSelect(songlist) {
 	let output = "<select id='songselect' onchange='playSong(event)'>";
 	for (let i=0; i<songlist.length; i++) {
 		output += "<option value='" + (i+1) + "'";
-		if (i == 1943) {
+		if (i == songindex) {
 			output += " selected";
 		}
 		output += ">";
@@ -153,6 +168,9 @@ function buildSongSelect(songlist) {
 	output += "</select>\n";
 
 	element.innerHTML = output;
+	if (CGI.autoplay) {
+		playSong();
+	}
 }
 
 
