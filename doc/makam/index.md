@@ -18,6 +18,21 @@ for folkmusic on the left, 24 for classical music on the right,
 with the 12 common pitch classes between them highlighted.  Click
 on a row in the list to play the pitch it represents.
 
+Meaning of the columns:
+
+<ol>
+<li> <span class="header">Folk</span> &mdash; 17 chromatic notes 
+of <a target="_blank" href="https://en.wikipedia.org/wiki/Turkish_folk_music">Turkish folk music</a>.</li>
+<li> <span class="header"></span> &ndash; Diatonic name with accidental followed by comman size of accidental.</li> 
+<li> <span class="header">JI</span> &ndash; A just interval approximation of the 53TET pitch (relative to C/Do). </li>
+<li> <span class="header">Commas</span> &ndash; <a target="_blank" href="https://en.wikipedia.org/wiki/Holdrian_comma">Holdrian commas</a> above C/Do. </li>
+<li> <span class="header">Cents</span> &ndash; Pitch interval in cents above C/Do. </li>
+<li> <span class="header">Classical (high/LOW)</span> &ndash; 24 chromatic notes of <a target="_blank" href="https://en.wikipedia.org/wiki/Ottoman_music">Turkish classical music</a>. </li>
+</ol>
+
+
+
+
 
 <table style="width:500px !important" id="pitchlist">
 <tr><th style="width:200px;">Folk</th><th></th><th style="text-align:center">JI</th><th style="letter-spacing:-1px;">Commas</th><th>Cents</th><th><i style="white-space:pre;">Classical (high/LOW)</i></th></tr>
@@ -75,6 +90,89 @@ on a row in the list to play the pitch it represents.
 <tr><td>	</td><td>C#1	</td><td class="ji">81/80</td><td>1</td><td>22.64</td><td>	</td></tr>
 <tr class="share"><td>Do	</td><td>C	</td><td class="ji">1</td><td>0</td><td>0</td><td class="deg">çârgâh	</td></tr>
 </table>
+
+<h2> Makams </h2>
+
+<h3> Çârgâh makam (TTBT)(TTB)
+
+<img src="https://upload.wikimedia.org/wikipedia/en/d/d3/Cargahmakam.jpg">
+
+{% include ratioscore.html id="cargah" %}
+<script type="application/x-ratioscore" id="cargah">
+!!!OTL: Çârgâh makam (TTBT)(TTB)
+**dtime	**ratio	**interval
+*MM120	*I#25	*
+*	*ref:C5	*
+1	2^(-4/53)	.
+4	2^(0/53)	T
+1	2^(9/53)	T
+1	2^(18/53)	B
+1	2^(22/53)	T
+2	2^(31/53)	T
+1	2^(40/53)	T
+1	2^(49/53)	B
+4	2^(53/53)	.
+*-	*-	*-
+</script>
+
+<h3> Bûselik makam (TBTT)(BTT)
+
+<img src="https://upload.wikimedia.org/wikipedia/en/1/10/Buselikmakam-1.jpg">
+
+{% include ratioscore.html id="buselik1" %}
+<script type="application/x-ratioscore" id="buselik1">
+!!!OTL: Bûselik makam (TBTT)(BTT), form 1
+**dtime	**ratio	**interval
+*MM120	*I#25	*
+*	*ref:A4	*
+1	2^(-5/53)	.
+4	2^(0/53)	T
+1	2^(9/53)	B
+1	2^(13/53)	T
+1	2^(22/53)	T
+2	2^(31/53)	B
+1	2^(35/53)	T
+1	2^(44/53)	T
+4	2^(53/53)	.
+*-	*-	*-
+</script>
+
+<img src="https://upload.wikimedia.org/wikipedia/en/d/d6/Buselikmakam-2.jpg">
+
+{% include ratioscore.html id="buselik2" %}
+<script type="application/x-ratioscore" id="buselik2">
+!!!OTL: Bûselik makam (TBTT)(BTT), form 2
+**dtime	**ratio	**interval
+*MM120	*I#25	*
+*	*ref:A4	*
+1	2^(-5/53)	.
+4	2^(0/53)	T
+1	2^(9/53)	B
+1	2^(13/53)	T
+1	2^(22/53)	T
+2	2^(31/53)	B
+1	2^(35/53)	A
+1	2^(48/53)	S
+4	2^(53/53)	.
+*-	*-	*-
+</script>
+
+<img src="https://upload.wikimedia.org/wikipedia/en/3/39/Buselikmakam-3.jpg">
+
+{% include ratioscore.html id="buselik1a" %}
+<script type="application/x-ratioscore" id="buselik1a">
+!!!OTL: Bûselik makam, alternate descending form
+**dtime	**ratio	**interval
+*MM120	*I#25	*
+*	*ref:A4	*
+1	2^(44/53)	S
+1	2^(39/53)	A
+1	2^(27/53)	S
+1	2^(22/53)	T
+1	2^(13/53)	.
+*-	*-	*-
+</script>
+
 
 <h2> See also </h2>
 

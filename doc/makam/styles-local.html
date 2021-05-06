@@ -7,14 +7,13 @@
 */
 
 table#pitchlist {
-	cursor: pointer;
 	padding: 26px;
 	margin: 26px;
 	border: 20px;
 	/* width: 600px !important; */
 }
 
-table#pitchlist th {
+table#pitchlist th, .header {
 	font-weight: bold;
 	font-style: italic;
 }
@@ -26,6 +25,7 @@ table#pitchlist tr:hover {
 table#pitchlist td {
 	padding: 0;
 	margin: 0;
+	cursor: pointer;
 }
 
 
@@ -62,6 +62,11 @@ table#pitchlist td.ji:hover {
 
 table#pitchlist td:nth-child(2) {
 	text-align: left;
+}
+
+img {
+	mix-blend-mode: darken;
+	margin: auto;
 }
 
 </style>
