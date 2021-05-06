@@ -76,7 +76,7 @@ function getFileInfo(songlist) {
 // loadMu2File --
 //
 
-function loadMu2File(urlbase, pdfbase, filebase) {
+function loadMu2File(urlbase, pdfbase, filebase, urlbase2) {
 	let url = urlbase + "/" + filebase + ".mu2";
 	let request = new XMLHttpRequest();
 	request.onload = function () {
@@ -116,7 +116,7 @@ function loadMu2File(urlbase, pdfbase, filebase) {
 	output += "</a>";
 	output += " | ";
 	output += "<a target='symbtr-mu2' href='";
-	output += urlbase + "/" + filebase + ".mu2";
+	output += urlbase2 + "/" + filebase + ".mu2";
 	output += "'>";
 	output += "Mu2 digital score";
 	output += "</a>";
@@ -187,10 +187,30 @@ function playSong(event) {
 	}
 	let songnumber = parseInt(target.value);
 	songnumber--;
-	loadMu2File(WORKLIST.MU2URLBASE, WORKLIST.PDFURLBASE, WORKLIST.SONGLIST.SONG[songnumber].FILE);
+	loadMu2File(WORKLIST.MU2URLBASE, WORKLIST.PDFURLBASE, WORKLIST.SONGLIST.SONG[songnumber].FILE, WORKLIST.MU2URLBASE2);
 }
 
 
+
+//////////////////////////////
+//
+// addComposerInfoToComposerList --
+//
+
+function	addComposerInfoToComposerList(list, info) {
+	for (let i=0; i<info.length; i++) {
+		let entry = info[i];
+		let composer = entry.COMPOSER;
+		let cdt = entry.CDT;
+		let wikipedia = entry.WIKIPEDIA;
+		if (cdt) {
+			list[composer].CDT = cdt;
+		}
+		if (wikipedia) {
+			list[composer].WIKIPEDIA = wikipedia;
+		}
+	}
+}
 
 
 

@@ -37,12 +37,11 @@ function convertMu2FileToRatioscore(mu2file, filename) {
 	}
 
 	let fileinfo = FILEINFO[filename];
-console.log("FILEINFO", fileinfo);
 
 	let lines = mu2file.split("\n");
-	let composer = getNumberContent(lines, 58);
-	let lyricist = getNumberContent(lines, 59);
-	let title    = getNumberContent(lines, 60);
+	let composer = getNumberContent(lines, 58).replace(/\s*$/, "");
+	let lyricist = getNumberContent(lines, 59).replace(/\s*$/, "");
+	let title    = getNumberContent(lines, 60).replace(/\s*$/, "");
 	let meter    = getMeter(lines);
 	let tempo    = getTempo(lines);
 
@@ -115,16 +114,23 @@ console.log("FILEINFO", fileinfo);
 
 	let pitches = getPitches(events);
 
-	console.log("EVENTS", events);
-	// console.log("PITCHES", pitches);
-
-
 	let output = "";
 	if (title) {
 		output += "!!!OTL@@TR: " + title + "\n";
 	}
 	if (composer) {
 		output += "!!!COM: " + composer + "\n";
+		let entry = COMPOSERLIST[composer];
+		if (entry) {
+			if (entry.CDT) {
+				output += "!!!CDT: " + entry.CDT + "\n";
+			}
+			if (entry.WIKIPEDIA) {
+				output += "!!!URL-COM: " + entry.WIKIPEDIA + "\n";
+			}
+		} else {
+			console.log("NO ENTRY FOR "+ composer, COMPOSERLIST[composer]);
+		}
 	}
 	if (lyricist) {
 		output += "!!!LYR: " + lyricist + "\n";
@@ -148,9 +154,9 @@ console.log("FILEINFO", fileinfo);
 	}
 
 	if (tempo) {
-		output += "*MM" + tempo + "\t*ref:C4\n";
+		output += "*MM" + tempo + "\t*ref:C-1\n";
 	} else {
-		output += "*\t*ref:C4\n";
+		output += "*\t*ref:C-1\n";
 	}
 
 	for (let i=0; i<events.length; i++) {
@@ -203,7 +209,7 @@ function addBarlines(events, meter) {
 
 //////////////////////////////
 //
-// printPitchRdf -- Using C4 as the reference for cents.
+// printPitchRdf -- Using C0 as the reference for cents.
 //
 
 function printPitchRdf(pitches) {
@@ -212,6 +218,7 @@ function printPitchRdf(pitches) {
 	let output      = "";
 	let naturals    = [];
 	let nonnaturals = [];
+	let allnotes    = [];
 
 	for (let i=0; i<keys.length; i++) {
 		let key = keys[i];
@@ -233,7 +240,7 @@ function printPitchRdf(pitches) {
 				eq53 += accsize;
 			}
 		}
-		let diff53 = eq53 - 4 * 53;
+		let diff53 = eq53 - (-1) * 53;
 
 		let uelement = document.querySelector("select#rdf");
 		let units = "";
@@ -247,6 +254,7 @@ function printPitchRdf(pitches) {
 			} else {
 				cents = -(parseInt(-cents * 100.0 + 0.5) / 100.0);
 			}
+			allnotes[key] = cents + "c";
 			if (accidental) {
 				nonnaturals[key] = cents + "c";
 			} else {
@@ -254,6 +262,7 @@ function printPitchRdf(pitches) {
 			}
 		} else {
 			let ratio = "2^(" + diff53 + "/53)";
+			allnotes[key] = ratio;
 			if (accidental) {
 				nonnaturals[key] = ratio;
 			} else {
@@ -263,6 +272,52 @@ function printPitchRdf(pitches) {
 
 	}
 
+	let list = [];
+	let nkeys = Object.keys(allnotes);
+	for (let i=0; i<nkeys.length; i++) {
+		let obj = {};
+		obj.key = nkeys[i];
+		obj.value = allnotes[nkeys[i]];
+		list.push(obj);
+	}
+
+	list.sort(function(a, b) {
+		let valuea = a.value;
+		let valueb = b.value;
+		let comparea = 0;
+		let compareb = 0;
+		let matches = valuea.match(/(-?\d+\.?\d*)c/);
+		if (matches) {
+			comparea = parseFloat(matches[1]);
+			let matches = valueb.match(/(-?\d+\.?\d*)c/);
+			compareb = parseFloat(matches[1]);
+		} else {
+			matches = valuea.match(/2\^\((\d+)\/53\)/);
+			if (!matches) {
+				return 0;
+			} 
+			comparea = parseInt(matches[1]);
+			matches = valueb.match(/2\^\((\d+)\/53\)/);
+			compareb = parseInt(matches[1]);
+		}
+		return compareb - comparea;
+	});
+
+	// Order of accidentals/non-accidentals no longer matters
+	// (longer substitution strings will be applied first.
+	for (let i=0; i<list.length; i++) {
+		output += "!!!RDF**ratio: ";
+		output += list[i].key;
+		let keylen = list[i].key.length;
+		for (let j=keylen; j<6; j++) {
+			output += " ";
+		}
+		output += " = ";
+		output += list[i].value;
+		output += "\n";
+	}
+
+/*
 	// accidental substitutions need to go first:
 	let nkeys = Object.keys(nonnaturals);
 	for (let i=0; i<nkeys.length; i++) {
@@ -281,6 +336,7 @@ function printPitchRdf(pitches) {
 		output += naturals[nkeys[i]];
 		output += "\n";
 	}
+*/
 
 	return output;
 }
@@ -406,7 +462,6 @@ function createDurationEvent(line) {
 	if (o.dur.getNumerator() != o.top) {
 		// tremolo repeats
 		o.repeat = parseInt(o.top / o.dur.getNumerator());
-console.log("REPEAT SET TO ", o.repeat);
 	}
 
 	if (o.dur.getNumerator() == 1) {

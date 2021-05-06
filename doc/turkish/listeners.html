@@ -4,6 +4,10 @@
 {% include_relative worklist.aton %};
 </script>
 
+<script id="composerinfo" type="text/plain">
+{% include_relative composers.aton %};
+</script>
+
 
 <script>
 // vim: ts=3
@@ -16,9 +20,11 @@ let CGI = {};
 document.addEventListener("DOMContentLoaded", function () {
 	CGI = GetCgiParameters();
 	WORKLIST = getAtonContent("worklist");
+	COMPOSERINFO = getAtonContent("composerinfo").PERSON;
 	COMPOSERLIST = getComposerList(WORKLIST.SONGLIST.SONG);
+	addComposerInfoToComposerList(COMPOSERLIST, COMPOSERINFO);
 	FILEINFO = getFileInfo(WORKLIST.SONGLIST.SONG);
-	loadMu2File(WORKLIST.MU2URLBASE, WORKLIST.PDFURLBASE, WORKLIST.SONGLIST.SONG[1943].FILE);
+	loadMu2File(WORKLIST.MU2URLBASE, WORKLIST.PDFURLBASE, WORKLIST.SONGLIST.SONG[1943].FILE, WORKLIST.MU2URLBASE2);
 	buildSongSelect(WORKLIST.SONGLIST.SONG);
 });
 
