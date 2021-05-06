@@ -14,6 +14,7 @@ vim: ts=3:ft=html
 	<li> <a href="/well-temperaments">Well temperaments </a></li>
 	<ul style="margin-bottom:0">
 		<li> <a href="/vallotti">Vallotti temperament</a> </li>
+		<li> <a href="/kirnberger">Kirnberger temperaments</a> </li>
 	</ul>
 	<li> <a href="/equal-temperament">Equal-temperament calculator</a></li>
 </ul>
