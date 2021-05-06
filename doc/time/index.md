@@ -554,7 +554,7 @@ one grace note in a melodic sequence can currently be handled.
 {% include ratioscore.html id="grace-dtime" %}
 <script type="application/x-ratioscore" id="grace-dtime">
 **dtime	**ratio
-*	*I#25
+*	*I#23
 *	*ref:G3
 1	1
 0	9/4
@@ -571,7 +571,7 @@ entry is a grace note:
 {% include ratioscore.html id="grace-time" %}
 <script type="application/x-ratioscore" id="grace-time">
 **time	**ratio
-*	*I#25
+*	*I#23
 *	*ref:G3
 0	1
 1	9/4
@@ -587,7 +587,7 @@ In `**recip` data, use `q` to represent a grace note:
 {% include ratioscore.html id="grace-recip" %}
 <script type="application/x-ratioscore" id="grace-recip">
 **recip	**ratio
-*	*I#25
+*	*I#23
 *	*ref:G3
 4	1
 q	9/4
@@ -605,7 +605,7 @@ The duration of the grace note is fixed at 100ms, regardless of the tempo:
 {% include ratioscore.html id="grace-tempo-slow" %}
 <script type="application/x-ratioscore" id="grace-tempo-slow">
 **dtime	**ratio
-*MM20	*I#25
+*MM20	*I#23
 *	*ref:G3
 1	1
 0	9/4
@@ -623,7 +623,7 @@ shortened to fit half-way between the two notes.
 {% include ratioscore.html id="grace-tempo-fast" %}
 <script type="application/x-ratioscore" id="grace-tempo-fast">
 **dtime	**ratio
-*MM260	*I#25
+*MM260	*I#23
 *	*ref:G3
 1	1
 0	9/4
@@ -640,7 +640,7 @@ means to set the grace note duration to 500 ms:
 {% include ratioscore.html id="grace-duration-change" %}
 <script type="application/x-ratioscore" id="grace-duration-change">
 **dtime	**ratio
-*MM20	*I#25
+*MM20	*I#23
 *	*ref:G3
 1	1
 0	9/4
