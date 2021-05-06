@@ -1,0 +1,31 @@
+
+
+<script>
+// vim: ts=3
+
+let AUDIOcache       = {};
+
+document.addEventListener("click", function (event) {
+	let target = event.target;
+	if (target.nodeName !== "TD") {
+		return;
+	}
+	if (target.classList.contains("ji")) {
+		let ratio = target.textContent;
+		if (!ratio) {
+			return;
+		}
+		playInterval(ratio);
+	} else {
+		let row = target.parentNode;
+		let cells = row.querySelectorAll("td");
+		if (cells.length < 5) {
+			return;
+		}
+		let cents = cells[4].textContent;
+		playCents(cents);
+	}
+});
+
+
+</script>

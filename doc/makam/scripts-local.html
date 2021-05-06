@@ -1,0 +1,151 @@
+
+
+<script>
+// vim: ts=3:ft=javascript
+
+
+
+//////////////////////////////
+//
+// playCents --
+//
+
+function playCents(cents) {
+	let ratioscore = createRatioscoreCents(cents);
+	if (AUDIOcache[ratioscore]) {
+		AUDIOurl = AUDIOcache[ratioscore];
+		playMp3();
+		return;
+	}
+	let formdata = new FormData();
+	formdata.append("inputdata", ratioscore);
+	formdata.append("outputformat", "mp3");
+	let request = new XMLHttpRequest();
+	request.open("POST", "https://data.ratioscore.humdrum.org");
+	request.responseType = "blob";
+	request.onload = function () {
+		let myblob = this.response;
+		let audiourl = window.URL.createObjectURL(myblob);
+		AUDIOcache[ratioscore] = audiourl;
+		AUDIOurl = audiourl;;
+		playMp3();
+	};
+	request.send(formdata);
+}
+
+
+
+//////////////////////////////
+//
+// createRatioscoreCents --
+//
+
+function createRatioscoreCents(cents) {
+	let reference = "*ref:" + "C4";
+	let instrument = "25";
+	if (instrument.match(/^\d/)) {
+		instrument = "*I#" + instrument;
+	} else {
+		instrument = "*I" + instrument;
+	}
+	let refsound = "0";
+	let output = "";
+	output += "**dtime\t**ratio\t**ratio\n";
+	output += "*MM60\t" + instrument + "\t" + instrument + "\n";
+	output += "*\t" + reference + "\t" + reference + "\n";
+	output += "1\t" + cents + "c\t" + refsound + "\n";
+	output += "*-\t*-\t*-\n";
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// playMp3 --
+//
+
+function playMp3() {
+	if (!AUDIO) {
+	   AUDIO = document.getElementById('audio');
+  	}
+	if (!AUDIO) {
+		AUDIO = document.createElement("AUDIO");
+		AUDIO.id = "audio";
+		document.body.appendChild(AUDIO);
+	}
+   if (!AUDIO) {
+		console.log('Error: could not set up audio interface\n');
+		return false;
+   }
+
+	AUDIO.style.display = "none";
+	let source = AUDIO.querySelector("source");
+	if (!source) {
+		source = document.createElement("SOURCE");
+		AUDIO.appendChild(source);
+	}
+	source.src = AUDIOurl;
+	AUDIO.load();
+	AUDIO.currentTime = 0;
+	AUDIO.play();
+}
+
+
+
+//////////////////////////////
+//
+// playInterval --
+//
+
+function playInterval(interval) {
+	let ratioscore = createRatioscore(interval);
+	if (AUDIOcache[ratioscore]) {
+		AUDIOurl = AUDIOcache[ratioscore];
+		playMp3();
+		return;
+	}
+
+	let formdata = new FormData();
+	formdata.append("inputdata", ratioscore);
+	formdata.append("outputformat", "mp3");
+	let request = new XMLHttpRequest();
+	request.open("POST", "https://data.ratioscore.humdrum.org");
+	request.responseType = "blob";
+	request.onload = function () {
+		let myblob = this.response;
+		let audiourl = window.URL.createObjectURL(myblob);
+		AUDIOcache[ratioscore] = audiourl;
+		AUDIOurl = audiourl;
+		playMp3();
+	};
+	request.send(formdata);
+}
+
+
+
+//////////////////////////////
+//
+// createRatioscore --
+//
+
+function createRatioscore(interval) {
+	let reference = "*ref:" + "C4";
+	let instrument = "25"
+	if (instrument.match(/^\d/)) {
+		instrument = "*I#" + instrument;
+	} else {
+		instrument = "*I" + instrument;
+	}
+	let refsound = "0";
+	let output = "";
+	output += "**dtime\t**ratio\t**ratio\n";
+	output += "*MM60\t" + instrument + "\t" + instrument + "\n";
+	output += "*\t" + reference + "\t" + reference + "\n";
+	output += "1\t" + interval + "\t" + refsound + "\n";
+	output += "*-\t*-\t*-\n";
+	return output;
+}
+
+</script>
+

@@ -2,14 +2,25 @@
 
 
 <style>
-// vim: ts=3
+/* 
+	vim: ts=3
+*/
 
 table#pitchlist {
-	background: red !important;
+	cursor: pointer;
 	padding: 26px;
 	margin: 26px;
-	width: 400px !important;
 	border: 20px;
+	/* width: 600px !important; */
+}
+
+table#pitchlist th {
+	font-weight: bold;
+	font-style: italic;
+}
+
+table#pitchlist tr:hover {
+	background: #ffa50066 !important;
 }
 
 table#pitchlist td {
@@ -17,18 +28,36 @@ table#pitchlist td {
 	margin: 0;
 }
 
+
 .share td {
 	background: #44440033 !important;
 	color: #333300;
 }
 
-table#pitchlist td:nth-child(5) {
+td.deg {
+	background: #44440033 !important;
+	color: #333300;
+}
+
+table#pitchlist td:nth-child(6) {
 	text-align: right;
 }
 
+table#pitchlist td:nth-child(1) {
+	padding-right: 40px;
+}
 
-table#pitchlist td:nth-child(3) {
+table#pitchlist td:nth-child(4) {
 	text-align: center;
+}
+
+table#pitchlist td.ji {
+	text-align: center;
+	padding-left: 10px;
+}
+
+table#pitchlist td.ji:hover {
+	background: skyblue !important;
 }
 
 table#pitchlist td:nth-child(2) {
