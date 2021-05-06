@@ -1211,7 +1211,7 @@ double getReferencePitchAsMidi(const string& token) {
 	}
 
 	// Read reference as note name:
-	else if (hre.search(token, "^\\*ref[:=]?([A-G][#-b]?\\d+)([+-]\\d+\\.?\\d*c)?")) {
+	else if (hre.search(token, "^\\*ref[:=]?([A-G][#sbf+]?-?\\d+)([+-]\\d+\\.?\\d*c)?")) {
 		reference = 60.0;  // default reference
 		string refpitch = hre.getMatch(1);
 		reference = getMidiNoteNumber(refpitch);
@@ -1226,12 +1226,6 @@ double getReferencePitchAsMidi(const string& token) {
 					reference += rcents / 100.0;
 				}
 			}
-		}
-		if (reference <= 0) {
-			reference = 60.0;
-		}
-		if (reference > 127.0) {
-			reference = 60.0;
 		}
 	}
 	return reference;
@@ -1884,7 +1878,7 @@ string getOutputFilename(const string& filename) {
 /////////////////////////////
 //
 // getMidiNoteNumber -- Input:
-//     [A-G][-bf#s+]*\d+
+//     [A-G][-bf#s+]*-?\d+
 //
 
 double getMidiNoteNumber(string refpitch) {
@@ -1892,7 +1886,7 @@ double getMidiNoteNumber(string refpitch) {
 	string accid;
 	string octave;
 	HumRegex hre;
-	if (!hre.search(refpitch, "([A-G])([-bf#s+]*)(\\d+)")) {
+	if (!hre.search(refpitch, "([A-G])([bf#s+]*)(-?\\d+)")) {
 		return 0.0;
 	}
 	diatonic = hre.getMatch(1);
@@ -1925,7 +1919,7 @@ double getMidiNoteNumber(string refpitch) {
 		case 'B': output = 11; break;
 	}
 	output += alter;
-	// octave must be 1 or higher for now.
+
 	int oct = stoi(octave);
 	output += 12 * (oct + 1);
 	return output;
