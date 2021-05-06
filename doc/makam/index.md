@@ -15,8 +15,8 @@ vim: ts=8:ft=html
 
 The following table lists pitch classes for Turkish music, 17 notes
 for folkmusic on the left, 24 for classical music on the right,
-with the 12 common pitch classes between them highlighted.  Click
-on a row in the list to play the pitch it represents.
+with the 12 common pitch classes between them highlighted.  
+
 
 Meaning of the columns:
 
@@ -31,8 +31,7 @@ of <a target="_blank" href="https://en.wikipedia.org/wiki/Turkish_folk_music">Tu
 </ol>
 
 
-
-
+Click on a row in the list to play the pitch it represents.
 
 <table style="width:500px !important" id="pitchlist">
 <tr><th style="width:200px;">Folk</th><th></th><th style="text-align:center">JI</th><th style="letter-spacing:-1px;">Commas</th><th>Cents</th><th><i style="white-space:pre;">Classical (high/LOW)</i></th></tr>
