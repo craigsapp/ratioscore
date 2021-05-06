@@ -30,5 +30,15 @@ Twelve equal divisions of the third harmonic.
 
 View in <a href="/equal-temperament/?o=3&d=12&t=120&r=C4&i=71">Equal-temperament calculator</a>.
 
-See the <a target="_blank" href="https://en.wikipedia.org/wiki/A12_scale">A12 Wikipedia entry</a>.
+
+
+<h2> References </h2>
+
+<ul>
+<li> <a target="_blank" href="https://en.wikipedia.org/wiki/A12_scale">A12</a>  Wikipedia entry </li>
+<li> <a target="_blank" href="https://searchworks.stanford.edu/view/3105195"> Embedding equal pitch spaces and the question of expanded chromas : an experimental approach</a>, by Enrique Moreno (Ph.D. dissertation 1995). </li>
+</ul>
+
+
+
 
