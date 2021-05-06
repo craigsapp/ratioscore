@@ -14,7 +14,7 @@ vim: ts=8:ft=html
 <h2> Chromatic scale </h2>
 
 The following table lists pitch classes for Turkish music, 17 notes
-for folkmusic on the left, 24 for classical music on the right,
+for folk music on the left, 24 for classical music on the right,
 with the 12 common pitch classes between them highlighted.  
 
 
