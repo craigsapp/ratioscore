@@ -94,7 +94,7 @@ make pure major thirds (5/4):
 
 Below is an example where the calculation to reduce the fifth by
 1/4 of a syntonic comma are not reduced.  The comma is `81/80`, and
-the expression `(3/2)*(80/81)^(1/4)` takes the perfect fifth `(3/2)`
+the expression `(3/2)*(81/80)^(-1/4)` takes the perfect fifth `(3/2)`
 and reduces it by 1/4 of a syntonic comma.
 
 {% include ratioscore.html id="qcmean-expanded" %}
@@ -119,7 +119,7 @@ and reduces it by 1/4 of a syntonic comma.
 !! out of tune:
 2	m06	m10	m01*2
 *-	*-	*-	*-
-!!!RDF**ratio: x   = (3/2)*(80/81)^(1/4)
+!!!RDF**ratio: x   = (3/2)*(81/80)^(-1/4)
 !!!RDF**ratio: m01 = x^-5 * 2^ 3
 !!!RDF**ratio: m08 = x^-4 * 2^ 3
 !!!RDF**ratio: m03 = x^-3 * 2^ 2
@@ -163,7 +163,7 @@ is pure (6/5) as well as its complement the major 6th (5/3).
 !! out of tune:
 2	m06	m09	m01*2
 *-	*-	*-	*-
-!!!RDF**ratio: x   = (3/2)*(80/81)^(1/3)
+!!!RDF**ratio: x   = (3/2)*(81/80)^(-1/3)
 !!!RDF**ratio: m01 = x^-5 * 2^ 3
 !!!RDF**ratio: m08 = x^-4 * 2^ 3
 !!!RDF**ratio: m03 = x^-3 * 2^ 2
@@ -219,7 +219,7 @@ Comparing 1/4-comma and 1/3-comma:
 2	m400*2	m300*2
 *-	*-	*-
 !! 1/4-comma meantone:
-!!!RDF**ratio: x   = (3/2)*(80/81)^(1/4)
+!!!RDF**ratio: x   = (3/2)*(81/80)^(-1/4)
 !!!RDF**ratio: m401 = x^-5 * 2^ 3
 !!!RDF**ratio: m408 = x^-4 * 2^ 3
 !!!RDF**ratio: m403 = x^-3 * 2^ 2
@@ -233,7 +233,7 @@ Comparing 1/4-comma and 1/3-comma:
 !!!RDF**ratio: m411 = x^ 5 * 2^-2
 !!!RDF**ratio: m406 = x^ 6 * 2^-3
 !! 1/3-comma meantone:
-!!!RDF**ratio: y   = (3/2)*(80/81)^(1/3)
+!!!RDF**ratio: y   = (3/2)*(81/80)^(-1/3)
 !!!RDF**ratio: m301 = y^-5 * 2^ 3
 !!!RDF**ratio: m308 = y^-4 * 2^ 3
 !!!RDF**ratio: m303 = y^-3 * 2^ 2
@@ -276,7 +276,85 @@ major thirds).
 1	m05	m09	m00*2
 2	m06	m10	m01*2
 *-	*-	*-	*-
-!!!RDF**ratio: x   = (3/2)*(80/81)^(1/2)
+!!!RDF**ratio: x   = (3/2)*(81/80)^(-1/2)
+!!!RDF**ratio: m01 = x^-5 * 2^ 3
+!!!RDF**ratio: m08 = x^-4 * 2^ 3
+!!!RDF**ratio: m03 = x^-3 * 2^ 2
+!!!RDF**ratio: m10 = x^-2 * 2^ 2
+!!!RDF**ratio: m05 = x^-1 * 2^ 1
+!!!RDF**ratio: m00 = x^ 0 * 2^ 0
+!!!RDF**ratio: m07 = x^ 1 * 2^ 0
+!!!RDF**ratio: m02 = x^ 2 * 2^-1
+!!!RDF**ratio: m09 = x^ 3 * 2^-1
+!!!RDF**ratio: m04 = x^ 4 * 2^-2
+!!!RDF**ratio: m11 = x^ 5 * 2^-2
+!!!RDF**ratio: m06 = x^ 6 * 2^-3
+</script>
+
+<h2> 1/5-comma meantone </h2>
+
+{% include ratioscore.html id="fifth-comma-ratio" %}
+<script type="application/x-ratioscore" id="fifth-comma-ratio">
+!!!OTL: 1/5-comma meantone
+**dtime	**ratio	**ratio	**ratio
+*MM60	*Icemba	*Icemba	*Icemba
+*	*ref:D3	*ref:D3	*ref:D3
+1	m00	.	.
+1	m02	.	.
+1	m03	.	.
+1	m05	.	.
+1	m07	.	.
+1	m08	.	.
+1	m11	.	.
+2	m00*2	.	.
+1	0	.	.
+1	m00	m03	m07
+1	m02	m05	m09
+1	m04	m07	m11
+1	m05	m08	m00*2
+!! out of tune:
+2	m06	m09	m01*2
+*-	*-	*-	*-
+!!!RDF**ratio: x   = (3/2)*(81/80)^(-1/5)
+!!!RDF**ratio: m01 = x^-5 * 2^ 3
+!!!RDF**ratio: m08 = x^-4 * 2^ 3
+!!!RDF**ratio: m03 = x^-3 * 2^ 2
+!!!RDF**ratio: m10 = x^-2 * 2^ 2
+!!!RDF**ratio: m05 = x^-1 * 2^ 1
+!!!RDF**ratio: m00 = x^ 0 * 2^ 0
+!!!RDF**ratio: m07 = x^ 1 * 2^ 0
+!!!RDF**ratio: m02 = x^ 2 * 2^-1
+!!!RDF**ratio: m09 = x^ 3 * 2^-1
+!!!RDF**ratio: m04 = x^ 4 * 2^-2
+!!!RDF**ratio: m11 = x^ 5 * 2^-2
+!!!RDF**ratio: m06 = x^ 6 * 2^-3
+</script>
+
+<h2> 1/6-comma meantone </h2>
+
+{% include ratioscore.html id="sixth-comma-ratio" %}
+<script type="application/x-ratioscore" id="sixth-comma-ratio">
+!!!OTL: 1/6-comma meantone
+**dtime	**ratio	**ratio	**ratio
+*MM60	*Icemba	*Icemba	*Icemba
+*	*ref:D3	*ref:D3	*ref:D3
+1	m00	.	.
+1	m02	.	.
+1	m03	.	.
+1	m05	.	.
+1	m07	.	.
+1	m08	.	.
+1	m11	.	.
+2	m00*2	.	.
+1	0	.	.
+1	m00	m03	m07
+1	m02	m05	m09
+1	m04	m07	m11
+1	m05	m08	m00*2
+!! out of tune:
+2	m06	m09	m01*2
+*-	*-	*-	*-
+!!!RDF**ratio: x   = (3/2)*(81/80)^(-1/6)
 !!!RDF**ratio: m01 = x^-5 * 2^ 3
 !!!RDF**ratio: m08 = x^-4 * 2^ 3
 !!!RDF**ratio: m03 = x^-3 * 2^ 2
@@ -292,12 +370,52 @@ major thirds).
 </script>
 
 
+<h2 data-sidebar="2/7-comma"> 2/7-comma meantone </h2>
+
+{% include ratioscore.html id="twoseven-meantone" %}
+<script type="application/x-ratioscore" id="twoseven-meantone">
+!!!OTL: 2/7-comma meantone
+**dtime	**ratio	**ratio	**ratio
+*MM60	*Icemba	*Icemba	*Icemba
+*	*ref:D3	*ref:D3	*ref:D3
+1	m00	.	.
+1	m02	.	.
+1	m04	.	.
+1	m05	.	.
+1	m07	.	.
+1	m09	.	.
+1	m11	.	.
+2	m00*2	.	.
+1	0	.	.
+1	m00	m04	m07
+1	m02	m05	m09
+1	m04	m07	m11
+1	m05	m09	m00*2
+!! out of tune:
+2	m06	m10	m01*2
+*-	*-	*-	*-
+!!!RDF**ratio: x   = (3/2)*(81/80)^(-2/7)
+!!!RDF**ratio: m01 = x^-5 * 2^ 3
+!!!RDF**ratio: m08 = x^-4 * 2^ 3
+!!!RDF**ratio: m03 = x^-3 * 2^ 2
+!!!RDF**ratio: m10 = x^-2 * 2^ 2
+!!!RDF**ratio: m05 = x^-1 * 2^ 1
+!!!RDF**ratio: m00 = x^ 0 * 2^ 0
+!!!RDF**ratio: m07 = x^ 1 * 2^ 0
+!!!RDF**ratio: m02 = x^ 2 * 2^-1
+!!!RDF**ratio: m09 = x^ 3 * 2^-1
+!!!RDF**ratio: m04 = x^ 4 * 2^-2
+!!!RDF**ratio: m11 = x^ 5 * 2^-2
+!!!RDF**ratio: m06 = x^ 6 * 2^-3
+</script>
+
 
 <h2> References </h2>
 
 <ul>
-<li> <a target="_blank" href="https://en.wikipedia.org/wiki/Meantone_temperament">Wikipedia article on meantone</a> </li>
-<li> <a target="_blank" href="https://en.xen.wiki/w/Meantone">Meantone articla on Xenharmonic Wiki</a></li>
+<li> <a target="_blank" href="https://en.wikipedia.org/wiki/Meantone_temperament">Meantone</a> article on Wikipedia </li>
+<li> <a target="_blank" href="https://en.xen.wiki/w/Meantone">Meantone</a> article on Xenharmonic Wiki </li>
+<li> <a target="_blank" href="http://www.tonalsoft.com/enc/number/2-7cmt.aspx"> 2/7 comma meantone</a> article at Tonalsoft encyclopedia of microtonal music theory. </li>
 </ul>
 
 

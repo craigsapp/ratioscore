@@ -5,6 +5,157 @@ layout: page
 vim: ts=8:ft=html
 ---
 
+<h2 data-sidebar="Kirnberger I"> Kirnberger I temperament </h2>
+
+Kirnberger I tunes D/A a syntonic comma flat, creating pure major thirds
+F/A, C/E, G/B, and pure minor third D/F.
+
+{% include ratioscore.html id="kirnberger1" %}
+<script type="application/x-ratioscore" id="kirnberger1">
+!!!OTL: Kirnberger I
+**dtime	**ratio
+*MM120	*Icemba
+*	*ref:D4
+1	k100
+1	k101
+1	k102
+1	k103
+1	k104
+1	k105
+1	k106
+1	k107
+1	k108
+1	k109
+1	k110
+1	k111
+2	k100*2
+*-	*-
+!!!RDF**ratio: x1 = (3/2)*(81/80)
+!!!RDF**ratio: x2 = 3/2
+!!!RDF**ratio: k106 = x1^ 0 * x2^-6 * 2^ 4
+!!!RDF**ratio: k101 = x1^ 0 * x2^-5 * 2^ 3
+!!!RDF**ratio: k108 = x1^ 0 * x2^-4 * 2^ 3
+!!!RDF**ratio: k103 = x1^ 0 * x2^-3 * 2^ 2
+!!!RDF**ratio: k110 = x1^ 0 * x2^-2 * 2^ 2
+!!!RDF**ratio: k105 = x1^ 0 * x2^-1 * 2^ 1
+!!!RDF**ratio: k100 = x1^ 0 * x2^ 0 * 2^ 0
+!!!RDF**ratio: k107 = x1^ 1 * x2^ 0 * 2^ 0
+!!!RDF**ratio: k102 = x1^ 1 * x2^ 1 * 2^-1
+!!!RDF**ratio: k109 = x1^ 1 * x2^ 2 * 2^-1
+!!!RDF**ratio: k104 = x1^ 1 * x2^ 3 * 2^-2
+!!!RDF**ratio: k111 = x1^ 1 * x2^ 4 * 2^-2
+</script>
+
+{% include ratioscore.html id="kirnberger1-cent" %}
+<script type="application/x-ratioscore" id="kirnberger1-cent">
+!!!OTL: Kirnberger I, in cents
+**dtime	**ratio
+*MM120	*Icemba
+*	*ref:D4
+1	k100
+1	k101
+1	k102
+1	k103
+1	k104
+1	k105
+1	k106
+1	k107
+1	k108
+1	k109
+1	k110
+1	k111
+2	k100*2
+*-	*-
+!!!RDF**ratio: k106 = 588.27c
+!!!RDF**ratio: k101 = 90.225c
+!!!RDF**ratio: k108 = 792.18c
+!!!RDF**ratio: k103 = 294.135c
+!!!RDF**ratio: k110 = 996.09c
+!!!RDF**ratio: k105 = 498.045c
+!!!RDF**ratio: k100 = 0c
+!!!RDF**ratio: k107 = 680.449c
+!!!RDF**ratio: k102 = 182.404c
+!!!RDF**ratio: k109 = 884.359c
+!!!RDF**ratio: k104 = 386.314c
+!!!RDF**ratio: k111 = 1088.27c
+</script>
+
+<h2 data-sidebar="Kirnberger II"> Kirnberger II temperament </h2>
+
+The syntonic comma is split in two and subtracted from the D/A and A/E fifths.
+
+{% include ratioscore.html id="kirnberger2" %}
+<script type="application/x-ratioscore" id="kirnberger2">
+!!!OTL: Kirnberger I
+**dtime	**ratio
+*MM120	*Icemba
+*	*ref:C4
+1	k200
+1	k201
+1	k202
+1	k203
+1	k204
+1	k205
+1	k206
+1	k207
+1	k208
+1	k209
+1	k210
+1	k211
+2	k200*2
+*-	*-
+!!!RDF**ratio: x1 = (3/2)*(81/80)^(-1/2)
+!!!RDF**ratio: x2 = 3/2
+!!!RDF**ratio: k201 = x1^ 0 * x2^-5 * 2^ 3
+!!!RDF**ratio: k208 = x1^ 0 * x2^-4 * 2^ 3
+!!!RDF**ratio: k203 = x1^ 0 * x2^-3 * 2^ 2
+!!!RDF**ratio: k210 = x1^ 0 * x2^-2 * 2^ 2
+!!!RDF**ratio: k205 = x1^ 0 * x2^-1 * 2^ 1
+!!!RDF**ratio: k200 = x1^ 0 * x2^ 0 * 2^ 0
+!!!RDF**ratio: k207 = x1^ 0 * x2^ 1 * 2^ 0
+!!!RDF**ratio: k202 = x1^ 0 * x2^ 2 * 2^-1
+!!!RDF**ratio: k209 = x1^ 1 * x2^ 2 * 2^-1
+!!!RDF**ratio: k204 = x1^ 2 * x2^ 2 * 2^-2
+!!!RDF**ratio: k211 = x1^ 2 * x2^ 3 * 2^-2
+!!!RDF**ratio: k206 = x1^ 2 * x2^ 4 * 2^-3
+</script>
+
+{% include ratioscore.html id="kirnberger2-cents" %}
+<script type="application/x-ratioscore" id="kirnberger2-cents">
+!!!OTL: Kirnberger I, in cents
+**dtime	**ratio
+*MM120	*Icemba
+*	*ref:C4
+1	k200
+1	k201
+1	k202
+1	k203
+1	k204
+1	k205
+1	k206
+1	k207
+1	k208
+1	k209
+1	k210
+1	k211
+2	k200*2
+*-	*-
+!!!RDF**ratio: k200 = 0c
+!!!RDF**ratio: k201 = 90.225c
+!!!RDF**ratio: k202 = 203.91c
+!!!RDF**ratio: k203 = 294.135c
+!!!RDF**ratio: k204 = 386.314c
+!!!RDF**ratio: k205 = 498.045c
+!!!RDF**ratio: k206 = 590.224c
+!!!RDF**ratio: k207 = 701.955c
+!!!RDF**ratio: k208 = 792.18c
+!!!RDF**ratio: k209 = 895.112c
+!!!RDF**ratio: k210 = 996.09c
+!!!RDF**ratio: k211 = 1088.27c
+</script>
+
+
+
 <h2 data-sidebar="Kirnberger III"> Kirnberger III temperament </h2>
 
 Kirnberger III tunes C/E as a pure major third and flattens the
@@ -33,7 +184,7 @@ placed at D-flat/F-sharp.
 1	k311
 2	k300*2
 *-	*-
-!!!RDF**ratio: x1 = (3/2)*(80/81)^(1/4)
+!!!RDF**ratio: x1 = (3/2)*(81/80)^(-1/4)
 !!!RDF**ratio: x2 = 3/2
 !!!RDF**ratio: k301 = x1^ 0 * x2^-5 * 2^3
 !!!RDF**ratio: k308 = x1^ 0 * x2^-4 * 2^3
@@ -144,7 +295,7 @@ between the notes):
 1	k311/2	kc311	kr311*2
 2	k300	kc300*2	kr300*4
 *-	*-	*-	*-
-!!!RDF**ratio: x1 = (3/2)*(80/81)^(1/4)
+!!!RDF**ratio: x1 = (3/2)*(81/80)^(-1/4)
 !!!RDF**ratio: x2 = 3/2
 !!!RDF**ratio: k301 = x1^ 0 * x2^-5 * 2^3
 !!!RDF**ratio: k308 = x1^ 0 * x2^-4 * 2^3
@@ -188,7 +339,7 @@ between the notes):
 References:
 
 <ul>
-<li> <a target="_blank" href="https://hpschd.nu/index.html?nav/nav-4.html&t/welcome.html&https://hpschd.nu/tech/tmp/kirnberger.html">Carey Beebe Harpsichords</a> </li>
+<li> <a target="_blank" href="https://hpschd.nu/index.html?nav/nav-4.html&t/welcome.html&https://hpschd.nu/tech/tmp/kirnberger.html">Kirnberger temperaments</a>, Carey Beebe Harpsichords </li>
 <li> <a target="_blank" href="https://en.wikipedia.org/wiki/Kirnberger_temperament">Kirnberger temperament</a> article on Wikipedia. </li>
 <li> <a target="_blank" href="http://www.tonalsoft.com/enc/k/kirnberger.aspx">Kirnberger III Well-Temperament</a> article in Tonalsoft encyclopedia of microtonal music theory. </li>
 </ul>
