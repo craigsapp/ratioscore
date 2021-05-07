@@ -214,6 +214,37 @@ function	addComposerInfoToComposerList(list, info) {
 
 
 
+//////////////////////////////
+//
+// changeInstrument --
+//
+
+function changeInstrument(event) {
+	let instrument = 0;
+	if (event && event.target) {
+		instrument = event.target.value;
+	} else if (event) {
+		if (typeof event === "string") {
+			instrumet = event;
+		}
+	} else {
+		let element = document.querySelector("#insturment");
+		if (element) {
+			instrument = element.value;
+		}
+	}
+	if (instrument.match(/^[0-9]/)) {
+		instrument = "#" + instrument;
+	}
+	var databoxes = document.querySelectorAll("script.databox");
+	for (let i=0; i<databoxes.length; i++) {
+		let text = databoxes[i].textContent;
+		text = text.replace(/\*I[^\t\n\r]*/gs, "*I" + instrument);
+		databoxes[i].textContent = text;
+	}
+}
+
+
 </script>
 
 

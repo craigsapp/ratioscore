@@ -147,10 +147,15 @@ function convertMu2FileToRatioscore(mu2file, filename) {
 
 	output += "**recip\t**ratio\n";
 
+	let ielement = document.querySelector("#instrument");
+	let instrument = 25;
+	if (ielement) {
+		instrument = ielement.value;
+	}
 	if (meter) {
-		output += "*M" + meter + "\t*I#25\n";
+		output += "*M" + meter + "\t*I#" + instrument + "\n";
 	} else {
-		output += "*\t*Iclars\n";
+		output += "*\t*I#" + instrument + "\n";
 	}
 
 	if (tempo) {

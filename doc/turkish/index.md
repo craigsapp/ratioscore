@@ -18,6 +18,9 @@ Music from the <a target="_blank" href="https://github.com/MTG/SymbTr">Turkish M
 	<option value="cents">cents</option>
 </select></nobr>
 <div style="display:inline-block;" id="pdf"></div>
+<nobr><label for="instrument">Instrument:</label>{% include_relative instrument.html %}&nbsp;&nbsp;&nbsp;</nobr>
+
+
 
 {% include ratioscore.html id="main" %}
 <script type="application/x-ratioscore" id="main">
