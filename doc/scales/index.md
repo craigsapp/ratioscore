@@ -10,11 +10,15 @@ vim: ts=3:ft=html
 
 <ul>
 	<li> <a href="/pythagorean">Pythagorean tuning </a></li>
+	<ul style="margin-bottom:0">
+		<li> <a href="/grammateus">Grammateus temperament</a> </li>
+	</ul>
 	<li> <a href="/meantone">Meantone temperaments </a></li>
 	<li> <a href="/well-temperaments">Well temperaments </a></li>
 	<ul style="margin-bottom:0">
 		<li> <a href="/vallotti">Vallotti temperament</a> </li>
 		<li> <a href="/kirnberger">Kirnberger temperaments</a> </li>
+		<li> <a href="/werckmeister">Werkmeister temperaments</a> </li>
 	</ul>
 	<li> <a href="/equal-temperament">Equal-temperament calculator</a></li>
 </ul>
