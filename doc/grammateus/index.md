@@ -48,7 +48,7 @@ and moving them to flatten A#/F and B/F# fifths.
 
 {% include ratioscore.html id="grammateus-cents" %}
 <script type="application/x-ratioscore" id="grammateus-cents">
-!!!OTL: Grammateus, expressed in cents
+!!!OTL: Grammateus temperament, expressed in cents
 **dtime	**ratio
 *MM120	*Icemba
 *	*ref:C4

@@ -1,0 +1,244 @@
+
+
+<script>
+// vim: ts=3
+
+var LIST = [];
+
+//////////////////////////////
+//
+// createTemperamentLayout --
+//
+
+function createTemperamentLayout() {
+	let element = document.querySelector("#display");
+	if (!element) {
+		console.log("ERROR: missing #display");
+		return;
+	}
+
+	let felement = document.querySelector("#fifths");
+	if (!felement) {
+		console.log("ERROR: missing #fifths");
+		return;
+	}
+	let fifths = parseInt(felement.value);
+
+	let telement = document.querySelector("#flatest");
+	if (!telement) {
+		console.log("ERROR: missing #flatest");
+		return;
+	}
+	let flatest = parseInt(telement.value);
+
+	let celement = document.querySelector("#center");
+	if (!celement) {
+		console.log("ERROR: missing #center");
+		return;
+	}
+	let center = parseInt(celement.value);
+	
+	LIST = makePitchEntries(fifths, flatest, center);
+	let text = makePitchText(LIST);
+	element.innerHTML = text;
+	calculateCents();
+}
+
+
+
+//////////////////////////////
+//
+// makePitchText --
+//
+
+function makePitchText(list) {
+	let output = "";
+	output += "<table class='fifthlist'>";
+	for (let i=0; i<list.length; i++) {
+		output += "<tr>";
+
+		output += "<td>";
+		output += "<span class='pitchname";
+		if (list[i].center) {
+			output += " center";
+		}
+		output += "'>";
+
+		output += list[i].pname;
+
+		output += "</span>"
+		output += "</td>";
+
+		output += "<td>";
+		if (i < list.length-1) {
+			output += "<input type='text' value='0'>";
+		} else {
+			output += "<input style='visibility:hidden;' type='text' value='0'>";
+		}
+		output += "<span class='cents'>x</span>";
+		output += "</td>";
+
+
+		output += "</tr>";
+	}
+	output += "</table>";
+	return output;
+}
+
+
+//////////////////////////////
+//
+// makePitchEntries --
+//
+
+function makePitchEntries(fifths, flatest, center) {
+	let output = [];
+	current = flatest;
+	for (let i=0; i<fifths; i++) {
+		let obj= {};
+		let pnum = current++;
+		obj.pnum = pnum;
+		obj.pname = numberToPitchName(pnum);
+		if (pnum === center) {
+			obj.center = 1;
+		}
+		output.push(obj);
+	}
+	return output;
+}
+
+
+
+//////////////////////////////
+//
+// numberToPitchName --
+//
+
+function numberToPitchName(number) {
+	switch (number) {
+		case -15: return "F𝄫";
+		case -14: return "C𝄫";
+		case -13: return "G𝄫";
+		case -12: return "D𝄫";
+		case -11: return "A𝄫";
+		case -10: return "E𝄫";
+		case -9: return "B𝄫";
+		case -8: return "F♭";
+		case -7: return "C♭";
+		case -6: return "G♭";
+		case -5: return "D♭";
+		case -4: return "A♭";
+		case -3: return "E♭";
+		case -2: return "B♭";
+		case -1: return "F";
+		case 0: return "C";
+		case 1: return "G";
+		case 2: return "D";
+		case 3: return "A";
+		case 4: return "E";
+		case 5: return "B";
+		case 6: return "F♯";
+		case 7: return "C♯";
+		case 8: return "G♯";
+		case 9: return "D♯";
+		case 10: return "A♯";
+		case 11: return "E♯";
+		case 12: return "B♯";
+		case 13: return "F𝄪";
+		case 14: return "C𝄪";
+		case 15: return "G𝄪";
+		case 16: return "D𝄪";
+		case 17: return "A𝄪";
+		case 18: return "E𝄪";
+		case 19: return "B𝄪";
+	}
+	return "X";
+}
+
+
+//////////////////////////////
+//
+// calculateCents --
+//
+
+function calculateCents() {
+	let entries = document.querySelectorAll("table.fifthlist td:nth-child(2)");
+	console.log("ENTRIES", entries);
+	delement = document.querySelector("#decimal");
+	let decimals = 3;
+	if (delement) {
+		decimals = parseInt(delement.value);
+	}
+	let comma = 81/80;
+	let comelement = document.querySelector("#comma");
+	if (comelement) {
+		if (comelement.value === "pythagorean") {
+			comma = Math.pow(3, 12) / Math.pow(2, 19);
+		}
+	}
+	console.log("COMMA", comma);
+
+	let centsum = 0;
+	for (let i=0; i<entries.length - 1; i++) {
+		let ielement = entries[i].querySelector("input");
+		let celement = entries[i].querySelector(".cents");
+		let factor = ielement.value;
+		// Assuming 0 for now:
+		factor = getFactorNumber(factor);
+		let multiplier = Math.pow(comma, factor);
+		let cents = Math.log2(1.5 * multiplier) * 1200;
+		centsum += cents;
+		let rcents = roundNumber(cents, decimals);
+		celement.innerHTML = rcents + " cents";
+	}
+	let celement = entries[entries.length - 1].querySelector(".cents");
+	let cvalue = entries.length * 700 - centsum;
+	celement.innerHTML = roundNumber(cvalue, decimals) + " cents";
+}
+
+
+//////////////////////////////
+//
+// getFactorNumber --
+//
+
+function getFactorNumber(sval) {
+	if (!sval) {
+		return 0;
+	}
+	let matches = sval.match(/^\s*(-?\d+\.?\d*)\s*$/);
+	if (matches) {
+		return parseFloat(sval);
+	}
+	if (matches = sval.match(/^\s*(-?\d+)\/(\d+)\d*$/)) {
+		let top = parseInt(matches[1]);
+		let bot = parseInt(matches[2]);
+		return top/bot;
+	}
+	return 0;
+	console.log("GOT HERE AAA");
+}
+
+
+
+
+
+//////////////////////////////
+//
+// roundNumber --
+//
+
+function roundNumber(number, decimals) {
+	if (!decimals) {
+		return parseInt(number);
+	}
+	let factor = Math.pow(10, decimals);
+	let output = parseInt(number * factor + 0.5) / factor;
+	return output;
+}
+
+
+</script>
+
+
+

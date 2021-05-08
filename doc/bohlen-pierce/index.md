@@ -237,6 +237,7 @@ Composition using lambda scale:
 
 <ul>
 <li> <a target="_blank" href="https://en.wikipedia.org/wiki/Bohlen%E2%80%93Pierce_scale">Bohlen-Pierce scale</a> Wikipedia entry. </li>
+<li> <a terget="_blank" href="http://www.huygens-fokker.org/bpsite/references2.html">The Bohlen-Pierce Site</a> <li>
 </ul>
 
 
