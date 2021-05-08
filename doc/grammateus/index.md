@@ -81,6 +81,12 @@ and moving them to flatten A#/F and B/F# fifths.
 </script>
 
 
+See also:
+<ul>
+<li> <a href="/temperament/index.html#grammateus">Grammateus temperament</a> in the temperament calculator </li>
+</ul>
+
+
 References:
 
 <ul>

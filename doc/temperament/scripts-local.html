@@ -1,7 +1,11 @@
 
 
 <script>
-// vim: ts=3
+{% include_relative aton.js %}
+</script>
+
+<script>
+// vim: ts=3:ft=javascript
 
 var LIST = [];
 
@@ -38,7 +42,7 @@ function createTemperamentLayout() {
 	}
 	let center = parseInt(celement.value);
 	
-	console.log("FIFTHS", fifths, "FLATEST", flatest, "CENTER", center);
+	// console.log("FIFTHS", fifths, "FLATEST", flatest, "CENTER", center);
 	if (fifths <= 0) {
 		return;
 	}
@@ -271,27 +275,26 @@ function numberToPitchNameUtf7(number) {
 
 function calculateCents() {
 	let entries = document.querySelectorAll("table.fifthlist td:nth-child(2)");
-	console.log("ENTRIES", entries);
 	delement = document.querySelector("#decimal");
 	let decimals = 3;
 	if (delement) {
 		decimals = parseInt(delement.value);
 	}
-	let comma = 81/80;
-	let comelement = document.querySelector("#comma");
-	if (comelement) {
-		if (comelement.value === "pythagorean") {
-			comma = Math.pow(3, 12) / Math.pow(2, 19);
-		}
-	}
-	console.log("COMMA", comma);
+	let commaS = 81/80;
+	let commaP = Math.pow(3, 12) / Math.pow(2, 19);
+	let commatype = "s"; // default comma is syntonic
+	let comma = commaS;
 
 	let centsum = 0;
 	for (let i=0; i<entries.length - 1; i++) {
 		let ielement = entries[i].querySelector("input");
 		let celement = entries[i].querySelector(".cents");
 		let factor = ielement.value;
-		// Assuming 0 for now:
+		if (factor.match(/s/)) {
+			comma = commaS;
+		} else if (factor.match(/p/)) {
+			comma = commaP;
+		}
 		factor = getFactorNumber(factor);
 		let multiplier = Math.pow(comma, factor);
 		let cents = Math.log2(1.5 * multiplier) * 1200;
@@ -316,17 +319,16 @@ function getFactorNumber(sval) {
 	if (!sval) {
 		return 0;
 	}
-	let matches = sval.match(/^\s*(-?\d+\.?\d*)\s*$/);
+	let matches = sval.match(/^\s*(-?\d+\.?\d*)\s*[ps]?\s*$/);
 	if (matches) {
 		return parseFloat(sval);
 	}
-	if (matches = sval.match(/^\s*(-?\d+)\/(\d+)\d*$/)) {
+	if (matches = sval.match(/^\s*(-?\d+)\/(\d+)\d*\s*[ps]?\s*$/)) {
 		let top = parseInt(matches[1]);
 		let bot = parseInt(matches[2]);
 		return top/bot;
 	}
 	return 0;
-	console.log("GOT HERE AAA");
 }
 
 
@@ -485,8 +487,6 @@ function createRatioscore() {
 
 	element.textContent = output;
 	element2.textContent = output;
-
-	console.log("LIST", LIST);
 }
 
 
@@ -531,6 +531,184 @@ function changeInstrument() {
 	text = text.replace(/^\s*/, "");
 	element.textContent = text;
 	element2.textContent = text;
+}
+
+
+
+//////////////////////////////
+//
+// loadTemperament --
+//
+//	<option value="-3,0;(2);8">Pythagorean (D)</option>
+//	<option value="-3,-1/4s;(2);8">1/4-comma (D)</option>
+//
+
+function loadTemperament(event) {
+	let tstring = "";
+	if (!event) {
+		tstring = "-3,0;(2);8";
+	} if (typeof event === "string") {
+		tstring = event;
+	} else if (event.target) {
+		// tstring = event.target.options[event.target.selectedIndex].value;
+		tstring = event.target.value;
+	}
+	let pieces = tstring.split(/\s*;\s*/);
+	let number;
+	let list = [];
+	let lastnum = "none";
+	let lastcomma = 0;
+	let lastcommaunit = "none";
+	let comma = 0;
+	let commaunit;
+	let centerindex = "none";
+	let center = 0;
+	for (let i=0; i<pieces.length; i++) {
+		console.log("PROCESSING ENTRY", pieces[i]);
+		center = 0;
+		if (pieces[i].match(/\(/)) {
+			center = 1;
+			pieces[i] = pieces[i].replace(/\(/g, "").replace(/\)/g, "");
+		}
+
+		let matches = pieces[i].match(/^\s*(-?\d+)/);
+		let number = "none";
+
+		if (matches) {
+			number = parseInt(matches[1]);
+
+			if (lastnum !== "none") {
+				for (let j=lastnum + 1; j<number; j++) {
+					let obj = {};
+					obj.pnum = i;
+					obj.comma = comma || 0;
+					obj.commaunit = commaunit;
+					list.push(obj);
+				}
+			}
+
+			matches = pieces[i].match(/,\s*(-?\d+\/?\d*)\s*([sp]?)/);
+			if (matches) {
+				comma = matches[1] || 0;
+				if (matches[2]) {
+					commaunit = matches[2];
+				}
+			}
+
+			let obj = {};
+			obj.pnum = number;
+			obj.comma = comma || 0;
+			obj.commaunit = commaunit;
+			if (center) {
+				obj.center = 1;
+				centerindex = i;
+			}
+			list.push(obj);
+			lastnum = number;
+
+		} else {
+			console.log("ERROR in temperament entry:", pieces[i]);
+			return;
+		}
+
+	}
+
+	console.log("list", list);
+
+	let felement = document.querySelector("#fifths");
+	if (felement) {
+		felement.value = list.length;
+	}
+
+	let telement = document.querySelector("#flatest");
+	if (telement) {
+		telement.value = list[0].pnum;
+	}
+
+	let celement = document.querySelector("#center");
+	if (celement) {
+		if (centerindex !== "none") {
+			celement.value = list[centerindex].pnum;
+		}
+	}
+
+	createTemperamentLayout();
+
+	lastunit = "";
+	let entries = document.querySelectorAll("table.fifthlist td:nth-child(2)");
+	for (let i=0; i<entries.length; i++) {
+		let ielement = entries[i].querySelector("input");
+		let value = list[i].comma || 0;
+		let unit = list[i].commaunit;
+		if (!value) {
+			unit = "";
+		}
+		if (!unit) {
+			unit = "";
+		}
+		if (unit && (unit === lastunit)) {
+			unit = "";
+		} else {
+			lastunit = unit;
+		}
+		ielement.value = value + unit;
+	}
+
+	calculateCents();
+	createRatioscore();
+}
+
+
+
+//////////////////////////////
+//
+// buildTemperamentSelect --
+//
+
+function buildTemperamentSelect () {
+	let select = document.querySelector("#temperament");
+	if (!select) {
+		return;
+	}
+	let output = "";
+	let index = 0;
+	for (let i=0; i<TEMPERAMENT.length; i++) {
+		let entry = TEMPERAMENT[i];
+		output += "<optgroup label='" + entry.NAME + "'>";
+		let grouplist = entry.TEMPERAMENT;
+		if (!Array.isArray(grouplist)) {
+			grouplist = [ grouplist ];
+		}
+		for (let j=0; j<grouplist.length; j++) {
+			output += "<option value='";
+			output += grouplist[j].DEFINITION;
+			output += "'>";
+			output += grouplist[j].NAME;
+			output += "</option>";
+			let hash = grouplist[j].HASH;
+			HASHINDEX[hash] = index++;
+		}
+		output += "</optgroup>";
+	}
+	select.innerHTML = output;
+}
+
+
+
+//////////////////////////////
+//
+// getAtonContent --
+//
+
+function getAtonContent(id) {
+	let element = document.querySelector("#" + id);
+	if (!element) {
+		console.log("CANNOT FIND ELEMENT WITH ID =", id);
+		return [];
+	}
+	let text = element.textContent;
+	let aton = new ATON;
+	return aton.parse(text);
 }
 
 

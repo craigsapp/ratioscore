@@ -1,8 +1,20 @@
 
-<script>
 
+<script id="temperament-list" type="text/plain">
+{% include_relative temperament.aton %};
+</script>
+
+<script>
+// vim: ts=3
+
+let TEMPERAMENT = [];
+let HASHINDEX = {};
 
 document.addEventListener("DOMContentLoaded", function () {
+
+	TEMPERAMENT = getAtonContent("temperament-list").GROUP;
+	buildTemperamentSelect();
+
 	createTemperamentLayout();
 
 	let felement = document.querySelector("#fifths");
@@ -18,6 +30,13 @@ document.addEventListener("DOMContentLoaded", function () {
 			createTemperamentLayout();
 		});
 	}
+
+	var hash = window.location.hash.replace(/^#/, "");;
+	let tselect = document.querySelector("#temperament");
+	let index = HASHINDEX[hash] || 0;
+	tselect.selectedIndex = index;
+console.log("HASH", hash, "INDEX", index);
+	createTemperamentLayout();
 
 });
 
