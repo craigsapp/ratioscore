@@ -311,7 +311,8 @@ Text-based codenames can be used to select an instrument:
 </ul>
 </div>
 
-Try the instrument names in the following test score:
+Try the instrument names in the following test score (you can also click on the instrument
+code to insert and play automatically):
 
 {% include ratioscore.html id="humdrum-instrument" %}
 <script type="application/x-ratioscore" id="humdrum-instrument">
