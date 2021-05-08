@@ -45,12 +45,6 @@
 @DEFINITION:	-3,-1/2s;(2);8
 @@END:		TEMPERAMENT
 
-@@BEGIN:	TEMPERAMENT
-@NAME:		1/2-comma (D)
-@HASH:		half-comma
-@DEFINITION:	-3,-1/2s;(2);8
-@@END:		TEMPERAMENT
-
 @@END: 		GROUP
 
 
