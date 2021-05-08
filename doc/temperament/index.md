@@ -19,9 +19,13 @@ vim: ts=3:ft=html
 
 <nobr><label for="decimal">Decimal&nbsp;places:</label>{% include_relative decimal.html %}&nbsp;&nbsp;&nbsp;</nobr>
 
+<nobr><label for="instrument">Instrument:</label>{% include_relative instrument.html %}&nbsp;&nbsp;&nbsp;</nobr>
 
 <div id="display"></div>
 
 
+{% include ratioscore.html id="tscore" tabsize="15" links="false" erase="false" %}
+<script type="application/x-ratioscore" id="tscore">
+</script>
 
 

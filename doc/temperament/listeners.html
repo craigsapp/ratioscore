@@ -4,7 +4,24 @@
 
 document.addEventListener("DOMContentLoaded", function () {
 	createTemperamentLayout();
+
+	let felement = document.querySelector("#fifths");
+	if (felement) {
+		felement.addEventListener("keyup", function () {
+			createTemperamentLayout();
+		});
+	}
+
+	let aelement = document.querySelector("#flatest");
+	if (aelement) {
+		aelement.addEventListener("change", function () {
+			createTemperamentLayout();
+		});
+	}
+
 });
+
+
 
 
 </script>

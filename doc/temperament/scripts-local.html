@@ -38,6 +38,10 @@ function createTemperamentLayout() {
 	}
 	let center = parseInt(celement.value);
 	
+	console.log("FIFTHS", fifths, "FLATEST", flatest, "CENTER", center);
+	if (fifths <= 0) {
+		return;
+	}
 	LIST = makePitchEntries(fifths, flatest, center);
 	let text = makePitchText(LIST);
 	element.innerHTML = text;
@@ -71,7 +75,7 @@ function makePitchText(list) {
 
 		output += "<td>";
 		if (i < list.length-1) {
-			output += "<input type='text' value='0'>";
+			output += "<input onkeyup='calculateCents()' type='text' value='0'>";
 		} else {
 			output += "<input style='visibility:hidden;' type='text' value='0'>";
 		}
@@ -116,6 +120,20 @@ function makePitchEntries(fifths, flatest, center) {
 
 function numberToPitchName(number) {
 	switch (number) {
+		case -29: return "F𝄫𝄫";
+		case -28: return "C𝄫𝄫";
+		case -27: return "G𝄫𝄫";
+		case -26: return "D𝄫𝄫";
+		case -25: return "A𝄫𝄫";
+		case -24: return "E𝄫𝄫";
+		case -23: return "B𝄫𝄫";
+		case -22: return "F𝄫♭";
+		case -21: return "C𝄫♭";
+		case -20: return "G𝄫♭";
+		case -19: return "D𝄫♭";
+		case -18: return "A𝄫♭";
+		case -17: return "E𝄫♭";
+		case -16: return "B𝄫♭";
 		case -15: return "F𝄫";
 		case -14: return "C𝄫";
 		case -13: return "G𝄫";
@@ -151,6 +169,96 @@ function numberToPitchName(number) {
 		case 17: return "A𝄪";
 		case 18: return "E𝄪";
 		case 19: return "B𝄪";
+		case 20: return "F𝄪♯";
+		case 20: return "C𝄪♯";
+		case 20: return "G𝄪♯";
+		case 20: return "D𝄪♯";
+		case 20: return "A𝄪♯";
+		case 20: return "E𝄪♯";
+		case 20: return "B𝄪♯";
+		case 20: return "F𝄪𝄪";
+		case 20: return "C𝄪𝄪";
+		case 20: return "G𝄪𝄪";
+		case 20: return "D𝄪𝄪";
+		case 20: return "A𝄪𝄪";
+		case 20: return "E𝄪𝄪";
+		case 20: return "B𝄪𝄪";
+	}
+	return "X";
+}
+
+
+
+//////////////////////////////
+//
+// numberToPitchNameUtf7 --
+//
+
+function numberToPitchNameUtf7(number) {
+	switch (number) {
+		case -29: return "Fffff";
+		case -28: return "Cffff";
+		case -27: return "Gffff";
+		case -26: return "Dffff";
+		case -25: return "Affff";
+		case -24: return "Effff";
+		case -23: return "Bffff";
+		case -22: return "Ffff";
+		case -21: return "Cfff";
+		case -20: return "Gfff";
+		case -19: return "Dfff";
+		case -18: return "Afff";
+		case -17: return "Efff";
+		case -16: return "Bfff";
+		case -15: return "Fff";
+		case -14: return "Cff";
+		case -13: return "Gff";
+		case -12: return "Dff";
+		case -11: return "Aff";
+		case -10: return "Eff";
+		case -9: return "Bff";
+		case -8: return "Ff";
+		case -7: return "Cf";
+		case -6: return "Gf";
+		case -5: return "Df";
+		case -4: return "Af";
+		case -3: return "Ef";
+		case -2: return "Bf";
+		case -1: return "F";
+		case 0: return "C";
+		case 1: return "G";
+		case 2: return "D";
+		case 3: return "A";
+		case 4: return "E";
+		case 5: return "B";
+		case 6: return "F#";
+		case 7: return "C#";
+		case 8: return "G#";
+		case 9: return "D#";
+		case 10: return "A#";
+		case 11: return "E#";
+		case 12: return "B#";
+		case 13: return "F##";
+		case 14: return "C##";
+		case 15: return "G##";
+		case 16: return "D##";
+		case 17: return "A##";
+		case 18: return "E##";
+		case 19: return "B##";
+		case 20: return "F###";
+		case 20: return "C###";
+		case 20: return "G###";
+		case 20: return "D###";
+		case 20: return "A###";
+		case 20: return "E###";
+		case 20: return "B###";
+		case 20: return "F####";
+		case 20: return "C####";
+		case 20: return "G####";
+		case 20: return "D####";
+		case 20: return "A####";
+		case 20: return "E####";
+		case 20: return "B####";
 	}
 	return "X";
 }
@@ -190,10 +298,12 @@ function calculateCents() {
 		centsum += cents;
 		let rcents = roundNumber(cents, decimals);
 		celement.innerHTML = rcents + " cents";
+		LIST[i].fifthup = cents;
 	}
 	let celement = entries[entries.length - 1].querySelector(".cents");
 	let cvalue = entries.length * 700 - centsum;
 	celement.innerHTML = roundNumber(cvalue, decimals) + " cents";
+	createRatioscore();
 }
 
 
@@ -236,6 +346,193 @@ function roundNumber(number, decimals) {
 	let output = parseInt(number * factor + 0.5) / factor;
 	return output;
 }
+
+
+
+//////////////////////////////
+//
+// createRatioscore --
+//
+
+function createRatioscore() {
+	let element = document.querySelector("#tscore");
+	let element2 = document.querySelector("#inputdata-tscore");
+	if (!element) {
+		return;
+	}
+	if (!element2) {
+		return;
+	}
+
+	let center = -1;
+	for (let i=0; i<LIST.length; i++) {
+		if (LIST[i].center) {
+			center = i;
+			break;
+		}
+	}
+	if (center < 0) {
+		return;
+	}
+	
+	LIST[center].cents = 0.0;
+
+	let sum = 0;
+	for (let i=center+1; i<LIST.length; i++) {
+		sum += LIST[i-1].fifthup;
+		if (sum >= 1200) {
+			sum -= 1200;
+		}
+		LIST[i].cents = sum;
+	}
+
+	sum = 0;
+	for (let i=center-1; i>=0; i--) {
+		sum -= LIST[i].fifthup;
+		if (sum <= 0) {
+			sum += 1200;
+		}
+		if (sum <= 0) {
+			sum += 1200;
+		}
+		LIST[i].cents = sum;
+	}
+
+	let chroma = [];
+	for (let i=0; i<LIST.length; i++) {
+		chroma.push(LIST[i]);
+	}
+	chroma.sort(function(a, b) {
+		return a.cents - b.cents;
+	});
+
+	let decimals = 3;
+	if (delement) {
+		decimals = parseInt(delement.value);
+	}
+
+	let instrument = 8;
+	let ielement = document.querySelector("#instrument");
+	if (ielement) {
+		instrument = ielement.value;
+	}
+
+	let output = "";
+	output += "**ratio\t**ratio\t**ratio\n";
+	output += "*I#" + instrument + "\t";
+	output += "*I#" + instrument + "\t";
+	output += "*I#" + instrument + "\n";
+	output += "*MM120\t*MM120\t*MM120\n";
+	output += "*ref:C4\t*ref:C4\t*ref:C4\n";
+	for (let i=0; i<chroma.length; i++) {
+		output += numberToPitchNameUtf7(chroma[i].pnum);
+		output += "\t.\t.";
+		output += "\n";
+	}
+	output += numberToPitchNameUtf7(chroma[0].pnum);
+	output += "*2";
+	output += "\t.\t.\n";
+
+	let len = chroma.length;
+
+	output += "*MM60\t*MM60\t*MM60\n";
+	output += "!! Major triads:\n";
+	for (let i=0; i<chroma.length; i++) {
+		output += numberToPitchNameUtf7(chroma[i].pnum);
+		output += "\t" + numberToPitchNameUtf7(chroma[(i+4)%len].pnum);
+		output += getOctave(chroma, i, i+4);
+		output += "\t " + numberToPitchNameUtf7(chroma[(i+7)%len].pnum);
+		output += getOctave(chroma, i, i+7);
+		output += "\n";
+	}
+
+	output += "!! Minor triads:\n";
+	for (let i=0; i<chroma.length; i++) {
+		output += numberToPitchNameUtf7(chroma[i].pnum);
+		output += "\t" + numberToPitchNameUtf7(chroma[(i+3)%len].pnum);
+		output += getOctave(chroma, i, i+3);
+		output += "\t " + numberToPitchNameUtf7(chroma[(i+7)%len].pnum);
+		output += getOctave(chroma, i, i+7);
+		output += "\n";
+	}
+
+	output += "*-\t*-\t*-\n";
+
+	for (let i=0; i<chroma.length; i++) {
+		output += "!!!RDF**ratio: ";
+		let name = numberToPitchNameUtf7(chroma[i].pnum);
+		output += name;
+		for (let i=name.length; i<5; i++) {
+			output += " ";
+		}
+		output += " = ";
+		value = roundNumber(chroma[i].cents, decimals);
+		if (value == 0) {
+			output += "   ";
+			if (decimals > 0) {
+				value += ".0";
+			}
+		} else if (value < 10) {
+			output += "   ";
+		} else if (value < 100) {
+			output += "  ";
+		} else if (value < 1000) {
+			output += " ";
+		}
+		output += value + "c";
+		output += "\n";
+	}
+
+	element.textContent = output;
+	element2.textContent = output;
+
+	console.log("LIST", LIST);
+}
+
+
+
+//////////////////////////////
+//
+// getOctave --
+//
+
+function getOctave(chroma, starti, endi) {
+	if (endi >= chroma.length) {
+		return "*2";
+	}
+	return "";
+}
+
+
+
+//////////////////////////////
+//
+// changeInstrument --
+//
+
+function changeInstrument() {
+	element = document.querySelector("#instrument");
+	if (!element) {
+		return;
+	}
+	let instrument = element.value;
+
+	let element = document.querySelector("#tscore");
+	if (!element) {
+		return;
+	}
+	let element2 = document.querySelector("#inputdata-tscore");
+	if (!element2) {
+		return;
+	}
+
+	let text = element.textContent;
+	text = text.replace(/\*I[^\s]*/g, "*I#" + instrument);
+	text = text.replace(/^\s*/, "");
+	element.textContent = text;
+	element2.textContent = text;
+}
+
 
 
 </script>
