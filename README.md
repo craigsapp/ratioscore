@@ -4,5 +4,7 @@ ratioscore
 Ratioscore is a program to convert a
 [Humdrum](https://www.humdrum.org)-based textual score representing
 musical intervals as ratios into a MIDI file to listen to the score.
-See https://ratio.humdrum.org for documentation on using the program.
+See https://ratio.humdrum.org for documentation on using the program,
+and see the source code for the ratioscore program [here](https://github.com/craigsapp/ratioscore).
+
 
