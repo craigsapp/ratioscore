@@ -21,7 +21,7 @@ vim: ts=3:ft=html
 <span class="link" onclick="copyUrl(); alert('Link copied to clipboard');">copy link</span>
 -->
 
-{% include ratioscore.html id="etscore" tabsize="15" %}
+{% include ratioscore.html id="etscore" tabsize="15" links="false" %}
 <script type="application/x-ratioscore" id="etscore">
 </script>
 
