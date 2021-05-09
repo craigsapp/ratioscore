@@ -51,7 +51,7 @@ Timidity and lame are used to create the MP3 files.  See the
 if you want to interface to your preferred MIDI rendering software,
 or to set up your own soundfonts with Timidity.  The website
 uses [jekyll](https://jekyllrb.com) and is hosted on Github Pages
-([source files](https://github.com/craigsapp/ratioscore/tree/gh-pages).
+([source files](https://github.com/craigsapp/ratioscore/tree/gh-pages)).
 
 
 
