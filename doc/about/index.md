@@ -70,7 +70,8 @@ performance.
 !!!ONB: Prototype (unquantized time, no dynamics)
 !!!ODT: 2020/12
 **time	**ratio	**ratio	**ratio	**ratio
-*	*Icello	*Iviola	*Ivioln	*Ivioln
+!!*	*Icello	*Iviola	*Ivioln	*Ivioln
+*	*Iclars	*Iclars	*Iclars	*Iclars
 *	*ref:C2	*ref:C2	*ref:C2	*ref:C2
 4.231	.	.	27/8	.
 6.182	2	.	.	.

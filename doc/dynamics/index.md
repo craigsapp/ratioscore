@@ -40,8 +40,8 @@ In the following example, the attack velocities start at 10 and
 increase by 10 to 100 at the last note.
 
 
-{% include ratioscore.html id="vstep" %}
-<script type="application/x-ratioscore" id="vstep">
+{% include ratioscore.html id="inline" %}
+<script type="application/x-ratioscore" id="inline">
 **dtime	**ratio
 *	*Ivioln
 *	*ref:C4
@@ -62,8 +62,8 @@ increase by 10 to 100 at the last note.
 The volumne increment of `v` and `V` can be set with `*vstep:#`.  In the following
 example each `v`/`V` adjusts the base velocity by 5 units instead of 10:
 
-{% include ratioscore.html id="vstep2" %}
-<script type="application/x-ratioscore" id="vstep2">
+{% include ratioscore.html id="vstep" %}
+<script type="application/x-ratioscore" id="vstep">
 **dtime	**ratio
 *	*Ivioln
 *	*ref:C4
