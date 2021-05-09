@@ -309,10 +309,11 @@ grouped together:
 </script>
 
 
-References:
+<h2> See also </h2>
 
 <ul>
 <li> <a name="_blank" href="https://en.wikipedia.org/wiki/Limit_(music)#Prime_limit">Prime limit</a> entry on Wikipedia.</li>
+<li> <a name="_blank" href="https://en.wikipedia.org/wiki/List_of_intervals_in_5-limit_just_intonation">List of 5 prime limit intervals</a> on Wikipedia. </li>
 </ul>
 
 

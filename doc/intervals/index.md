@@ -338,4 +338,10 @@ largest.
 {% include ratioscore.html id="perfect-octave" erase="false" %}
 
 
+<h2> See also </h2>
+
+<ul>
+<li> <a target="_blank" href="http://www.huygens-fokker.org/docs/intervals.html">List of intervals</a> at the Huygens-Fokker Center for Microtonal Music </li>
+<li> <a target="_blank" href="https://en.xen.wiki/w/Gallery_of_just_intervals">Gallery of just intervals</a> on the Xenharmonic Wiki. </li>
+</ul>
 

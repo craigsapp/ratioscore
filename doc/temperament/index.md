@@ -38,10 +38,12 @@ fifth between the two adjacent notes by 1/4 of a syntonic comma
 
 <div id="display"></div>
 
+<h2 data-sidebar="Grid">Temperament grid</h2>
+
 <div id="grid"></div>
 
 
-<h2> Ratioscore </h2>
+<h2 data-sidebar="Ratioscore"> Ratioscore sampler of temperament </h2>
 
 {% include ratioscore.html id="tscore" tabsize="15" links="false" erase="false" %}
 <script type="application/x-ratioscore" id="tscore">

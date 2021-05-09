@@ -166,40 +166,40 @@
 
 
 @@BEGIN:	GROUP
-@NAME:		Bach well temperament
+@NAME:		Bach squiggle temperaments
 
 @@BEGIN:	TEMPERAMENT
-@NAME:		Bach/Barnes (D)
+@NAME:		Barnes (D)
 @HASH:		barnes
 @DEFINITION:	-3;-1,-1/6p;4,0;5,-1/6;6,0;8
 @@END:		TEMPERAMENT
 
 @@BEGIN:	TEMPERAMENT
-@NAME:		Bach/Lehman (E)
+@NAME:		Lehman (E)
 @HASH:		lehman
 @DEFINITION:	-1,-1/6p;4,0;7,-1/12;10
 @@END:		TEMPERAMENT
 
 @@BEGIN:	TEMPERAMENT
-@NAME:		Bach/O'Donnell (A)
+@NAME:		O'Donnell (A)
 @HASH:		odonnell
 @DEFINITION:	-2:0,-1/6p;3,0;4,-1/6;5,0;6,-1/12;9
 @@END:		TEMPERAMENT
 
 @@BEGIN:	TEMPERAMENT
-@NAME:		Bach/Hill (G)
+@NAME:		Hill (G)
 @HASH:		hill
 @DEFINITION:	-4;-1,-2/13;4,0;5,-1/13;7
 @@END:		TEMPERAMENT
 
 @@BEGIN:	TEMPERAMENT
-@NAME:		Bach/Swich (G)
+@NAME:		Swich (G)
 @HASH:		swich
 @DEFINITION:	-3,1/36;-2,0;-1,-1/5;4,0;5,-1/12;6,0;7,1/36;8
 @@END:		TEMPERAMENT
 
 @@BEGIN:	TEMPERAMENT
-@NAME:		Bach/Louie (G)
+@NAME:		Louie (G)
 @HASH:		louie
 @DEFINITION:	-4;0,-1/6p;5,-1/18;7
 @@END:		TEMPERAMENT

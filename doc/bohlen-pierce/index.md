@@ -233,12 +233,11 @@ Composition using lambda scale:
 </script>
 
 
-<h2> References </h2>
+<h2> See also </h2>
 
 <ul>
 <li> <a target="_blank" href="https://en.wikipedia.org/wiki/Bohlen%E2%80%93Pierce_scale">Bohlen-Pierce scale</a> Wikipedia entry. </li>
-<li> <a terget="_blank" href="http://www.huygens-fokker.org/bpsite/references2.html">The Bohlen-Pierce Site</a> <li>
+<li> <a terget="_blank" href="http://www.huygens-fokker.org/bpsite/index.html">The Bohlen-Pierce Site</a>  at the Huygens-Fokker Center for Microtonal Music </li>
+<li> <a terget="_blank" href="http://www.huygens-fokker.org/bpsite/modes.html">Bohlen-Pierce modes and tunings</a> </li>
 </ul>
-
-
 
