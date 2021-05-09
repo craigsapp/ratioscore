@@ -477,9 +477,6 @@ function createRatioscore() {
 		value = roundNumber(chroma[i].cents, decimals);
 		if (value == 0) {
 			output += "   ";
-			if (decimals > 0) {
-				value += ".0";
-			}
 		} else if (value < 10) {
 			output += "   ";
 		} else if (value < 100) {
