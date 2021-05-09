@@ -53,7 +53,12 @@ document.addEventListener("mouseover", function (event) {
 	if (!event.target.classList.contains("grid")) {
 		return;
 	}
-	event.target.classList.add("highlight");
+
+	let table = document.querySelector("table.grid");
+	let cents = parseFloat(event.target.textContent);
+	highlightCells(table, cents);
+
+
 	let parent = event.target.parentNode;
 	let th = parent.querySelector("th");
 	if (th) {
@@ -80,7 +85,11 @@ document.addEventListener("mouseout", function (event) {
 	if (!event.target.classList.contains("grid")) {
 		return;
 	}
-	event.target.classList.remove("highlight");
+
+	let table = document.querySelector("table.grid");
+	let cents = parseFloat(event.target.textContent);
+	unhighlightCells(table, cents);
+
 	let parent = event.target.parentNode;
 	let th = parent.querySelector("th");
 	if (th) {

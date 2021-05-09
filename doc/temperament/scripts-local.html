@@ -821,6 +821,55 @@ function getIntervalIndex(cents, justintervals, tolerance) {
 }
 
 
+
+//////////////////////////////
+//
+// highlightCells --
+//
+
+function highlightCells(table, targetCents, tolerance) {
+	if (!tolerance) {
+		tolerance = 50;
+	}
+	if (!table) {
+		return;
+	}
+	cells = table.querySelectorAll("td");
+	for (let i=0; i<cells.length; i++) {
+		let cents = parseFloat(cells[i].textContent);
+		let diff = Math.abs(cents - targetCents)
+		if (diff <= tolerance) {
+			cells[i].classList.add("highlight");
+		}
+	}
+}
+
+
+
+//////////////////////////////
+//
+// unhighlightCells --
+//
+
+function unhighlightCells(table, targetCents, tolerance) {
+	if (!tolerance) {
+		tolerance = 50;
+	}
+	if (!table) {
+		return;
+	}
+	cells = table.querySelectorAll("td");
+	for (let i=0; i<cells.length; i++) {
+		let cents = parseFloat(cells[i].textContent);
+		let diff = Math.abs(cents - targetCents)
+		if (diff <= tolerance) {
+			cells[i].classList.remove("highlight");
+		}
+	}
+}
+
+
+
 </script>
 
 
