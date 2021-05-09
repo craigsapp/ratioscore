@@ -255,7 +255,7 @@ reference pitch. Also: `5/10` is an octave lower than the reference,
 
 <ul>
 <li> See the <a href="/intervals">interval dictionary</a> for a list of various named ratios.</li>
-<li> See the <a href="/grid">interval grid</a> page for uses of interval fractions.</a>
+<li> See the <a href="/grid">interval grid</a> page for uses of interval fractions.</li>
 </ul>
 
 <h2 data-sidebar="Floating-point"> Floating-point numbers </h2>
