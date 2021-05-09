@@ -80,7 +80,7 @@
 @@BEGIN:	TEMPERAMENT
 @NAME:		Kirnberger III
 @HASH:		kirnberger3
-@DEFINITION:	-5;0,-1/4c;4,0;6
+@DEFINITION:	-5;0,-1/4s;4,0;6
 @@END:		TEMPERAMENT
 
 @@BEGIN:	TEMPERAMENT
@@ -138,9 +138,27 @@
 @@END:		TEMPERAMENT
 
 @@BEGIN:	TEMPERAMENT
+@NAME:		Lambert
+@HASH:		lambert
+@DEFINITION:	-6;-1,-1/7p;5
+@@END:		TEMPERAMENT
+
+@@BEGIN:	TEMPERAMENT
+@NAME:		Eighth comma well temperament
+@HASH:		eighth
+@DEFINITION:	-6;-2,-1/8p;5
+@@END:		TEMPERAMENT
+
+@@BEGIN:	TEMPERAMENT
 @NAME:		Niedhardt's Kleine Stadt 1732 (D)
 @HASH:		kleine1732
 @DEFINITION:	-3,-1/12p;-2,0;0,-1/6;4,-1/12;6,0;8
+@@END:		TEMPERAMENT
+
+@@BEGIN:	TEMPERAMENT
+@NAME:		Pinnock Modern
+@HASH:		pinnock
+@DEFINITION:	-2;-1,-1/8p;5,-1/12;7,0;9
 @@END:		TEMPERAMENT
 
 @@END:		GROUP
@@ -154,6 +172,36 @@
 @NAME:		Bach/Barnes (D)
 @HASH:		barnes
 @DEFINITION:	-3;-1,-1/6p;4,0;5,-1/6;6,0;8
+@@END:		TEMPERAMENT
+
+@@BEGIN:	TEMPERAMENT
+@NAME:		Bach/Lehman (E)
+@HASH:		lehman
+@DEFINITION:	-1,-1/6p;4,0;7,-1/12;10
+@@END:		TEMPERAMENT
+
+@@BEGIN:	TEMPERAMENT
+@NAME:		Bach/O'Donnell (A)
+@HASH:		odonnell
+@DEFINITION:	-2:0,-1/6p;3,0;4,-1/6;5,0;6,-1/12;9
+@@END:		TEMPERAMENT
+
+@@BEGIN:	TEMPERAMENT
+@NAME:		Bach/Hill (G)
+@HASH:		hill
+@DEFINITION:	-4;-1,-2/13;4,0;5,-1/13;7
+@@END:		TEMPERAMENT
+
+@@BEGIN:	TEMPERAMENT
+@NAME:		Bach/Swich (G)
+@HASH:		swich
+@DEFINITION:	-3,1/36;-2,0;-1,-1/5;4,0;5,-1/12;6,0;7,1/36;8
+@@END:		TEMPERAMENT
+
+@@BEGIN:	TEMPERAMENT
+@NAME:		Bach/Louie (G)
+@HASH:		louie
+@DEFINITION:	-4;0,-1/6p;5,-1/18;7
 @@END:		TEMPERAMENT
 
 @@END: 		GROUP
