@@ -19,6 +19,9 @@ git clone https://github.com/craigsapp/ratioscore
 This should download the source code into the current directory.  
 
 
+Compiling
+=========
+
 To compile, enter the ratioscore directory and then type:
 
 ```bash
