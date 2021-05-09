@@ -27,7 +27,12 @@ make
 
 This will download and compile two external libraries [midifile](https://github.com/craigsapp/midifile)
 (for MIDI file parsing) and [humlib](https://github.com/craigsapp/humlib) (for Humdrum file
-parsing).  The the ratioscore program will be compiled and placed in the `bin` directory.
+parsing).  The the ratioscore program will be compiled and placed in the `bin` directory.  To
+install in `/usr/local/bin`, allowing the ratioscore program to be run from any directory, type:
+
+```bash
+make install
+```
 
 
 
@@ -35,7 +40,7 @@ Documentation
 =============
 
 The website https://ratioscore.humdrum.org serves as front-end for
-the ratioscore program and provides documentation and online-rendering
+the ratioscore program and provides documentation as well as online-rendering
 of Ratioscores into MIDI and MP3 files.
 
 Timidity and lame are used to create the MP3 files.  See the
