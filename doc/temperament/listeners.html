@@ -35,11 +35,66 @@ document.addEventListener("DOMContentLoaded", function () {
 	let tselect = document.querySelector("#temperament");
 	let index = HASHINDEX[hash] || 0;
 	tselect.selectedIndex = index;
-	createTemperamentLayout();
+	loadTemperament();
 
 });
 
 
+
+//////////////////////////////
+//
+// mouseover event listener --
+//
+
+document.addEventListener("mouseover", function (event) {
+	if (event.target.nodeName !== "TD") {
+		return;
+	}
+	if (!event.target.classList.contains("grid")) {
+		return;
+	}
+	event.target.classList.add("highlight");
+	let parent = event.target.parentNode;
+	let th = parent.querySelector("th");
+	if (th) {
+		th.classList.add("highlight");
+	}
+
+	let cellindex = event.target.cellIndex;
+	let firstrow = document.querySelector("table.grid tr");
+	let cells = firstrow.querySelectorAll("th");
+	cells[cellindex].classList.add("highlight");
+
+});
+
+
+//////////////////////////////
+//
+// mouseout event listener --
+//
+
+document.addEventListener("mouseout", function (event) {
+	if (event.target.nodeName !== "TD") {
+		return;
+	}
+	if (!event.target.classList.contains("grid")) {
+		return;
+	}
+	event.target.classList.remove("highlight");
+	let parent = event.target.parentNode;
+	let th = parent.querySelector("th");
+	if (th) {
+		th.classList.remove("highlight");
+	}
+
+	let cellindex = event.target.cellIndex;
+	let firstrow = document.querySelector("table.grid tr");
+	let cells = firstrow.querySelectorAll("th");
+	for (let i=0; i<cells.length; i++) {
+		cells[i].classList.remove("highlight");
+	}
+
+});
 
 
 </script>

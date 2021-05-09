@@ -307,6 +307,7 @@ function calculateCents() {
 	let cvalue = entries.length * 700 - centsum;
 	celement.innerHTML = roundNumber(cvalue, decimals) + " cents";
 	createRatioscore();
+	createGrid();
 }
 
 
@@ -345,7 +346,12 @@ function roundNumber(number, decimals) {
 		return parseInt(number);
 	}
 	let factor = Math.pow(10, decimals);
-	let output = parseInt(number * factor + 0.5) / factor;
+	let output;
+	if (number >= 0) {
+		output = parseInt(number * factor + 0.5) / factor;
+	} else {
+		output = -parseInt(-number * factor + 0.5) / factor;
+	}
 	return output;
 }
 
@@ -546,8 +552,13 @@ function changeInstrument() {
 function loadTemperament(event) {
 	let tstring = "";
 	if (!event) {
-		tstring = "-3,0;(2);8";
-	} if (typeof event === "string") {
+		let element = document.querySelector("#temperament");
+		if (element) {
+			tstring = element.value;
+		} else {
+			tstring = "-3,0;(2);8";
+		}
+	} else if (typeof event === "string") {
 		tstring = event;
 	} else if (event.target) {
 		// tstring = event.target.options[event.target.selectedIndex].value;
@@ -711,6 +722,106 @@ function getAtonContent(id) {
 	return aton.parse(text);
 }
 
+
+//////////////////////////////
+//
+// createGrid --
+//
+
+function createGrid() {
+	let gelement = document.querySelector("#grid");
+	if (!gelement) {
+		return;
+	}
+
+	let justintervals = [
+		{interval: "9/8", name: "major-second", cents: Math.log2(9/8) * 1200},
+		{interval: "8/7", name: "septimal-major-second", cents: Math.log2(8/7) * 1200},
+
+		{interval: "5/4", name: "major-third", cents: Math.log2(5/4) * 1200},
+		{interval: "6/5", name: "minor-third", cents: Math.log2(6/5) * 1200},
+		{interval: "7/6", name: "septimal-minor-third", cents: Math.log2(7/6) * 1200},
+
+		{interval: "3/2", name: "perfect-fifth", cents: Math.log2(3/2) * 1200},
+
+		{interval: "4/3", name: "perfect-fourth", cents: Math.log2(4/3) * 1200},
+
+		{interval: "5/3", name: "major-sixth", cents: Math.log2(5/3) * 1200},
+		{interval: "12/7", name: "septimal-major-sixth", cents: Math.log2(12/7) * 1200},
+		{interval: "8/5", name: "minor-sixth", cents: Math.log2(8/5) * 1200},
+		{interval: "14/9", name: "septimal-minor-sixth", cents: Math.log2(14/9) * 1200},
+		{interval: "11/7", name: "undecimal-minor-sixth", cents: Math.log2(11/7) * 1200},
+
+		{interval: "7/4", name: "septimal-minor-seventh", cents: Math.log2(7/4) * 1200}
+	]
+
+	delement = document.querySelector("#decimal");
+	let decimals = 3;
+	if (delement) {
+		decimals = parseInt(delement.value);
+	}
+
+	let output  = "<h2>Temperament grid</h2> ";
+	output += "<table class='grid'>";
+	output += "<tr><th></th>";
+	for (let i=0; i<LIST.length; i++) {
+		output += "<th>";
+		output += LIST[i].pname;
+		output += "</th>";
+	}
+	output += "</tr>";
+
+
+	for (let i=0; i<LIST.length; i++) {
+		output += "<tr>";
+		output += "<th>";
+		output += LIST[i].pname;
+		output += "</th>";
+		for (let j=0; j<LIST.length; j++) {
+			let cents = LIST[j].cents - LIST[i].cents;
+			if (cents < 0) {
+				cents += 1200;
+			}
+			let iclass = getIntervalIndex(cents, justintervals);
+			if (iclass >= 0) {
+				let nclass = justintervals[iclass].name;
+				let tclass = justintervals[iclass].interval;
+				tclass += ": " + nclass.replace(/-/g, " ")
+				output += "<td class='grid " + nclass + "' ";
+				output += "title='" + tclass + "'";
+				output += ">";
+			} else {
+				output += "<td class='grid'>";
+			}
+			let rcents = roundNumber(cents, decimals);
+			output += rcents;
+			output += "</td>";
+		}
+		output += "</tr>";
+	}
+
+	output += "</table>";
+	gelement.innerHTML = output;
+}
+
+
+///////////////////////////////
+//
+// getIntervalIndex --
+//
+
+function getIntervalIndex(cents, justintervals, tolerance) {
+	if (!tolerance) {
+		tolerance = 1;
+	}
+	for (let i=0; i<justintervals.length; i++) {
+		let difference = Math.abs(cents - justintervals[i].cents);
+		if (difference < tolerance) {
+			return i;
+		}
+	}
+	return -1;
+}
 
 
 </script>
