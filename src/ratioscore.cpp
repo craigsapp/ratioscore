@@ -1,13 +1,15 @@
 //
 // Programmer:    Craig Stuart Sapp <craig@ccrma.stanford.edu>
 // Creation Date: Wed May 20 09:52:32 PDT 2020
-// Last Modified: Sat 03 Apr 2021 10:58:34 PM PDT
+// Last Modified: Sat May  8 22:57:16 PDT 2021
 // Filename:      ratioscore.cpp
 // URL:           https://github.com/craigsapp/ratioscore/blob/master/src/ratioscore.cpp
 // Syntax:        C++11
 // vim:           ts=3 noexpandtab nowrap
 //
-// Description:   Convert a ratio score into a MIDI file.
+// Documentation: https://ratioscore.humdrum.org
+//
+// Description:   Convert a Ratioscore into a Standard MIDI File.
 //
 // **time	**ratio	**ratio	**mdyn
 // *	*ref:C4	*ref:G3	*
@@ -29,6 +31,9 @@
 // for a list of known instrument labels.
 // H = start of glissando (slide)
 // h = end of glissando (slide)
+// _ = end of glissando (slide)
+// V = accent
+// v = deaccent
 //
 
 #include "humlib.h"
@@ -665,6 +670,7 @@ void addTempoMessages(MidiFile& outfile, HTp sstart) {
 }
 
 
+
 //////////////////////////////
 //
 // buildNullTimemap -- Convert an implicit time spine into
@@ -741,6 +747,7 @@ void buildNullTimemap(HumdrumFile& infile) {
 		}
 	}
 }
+
 
 
 //////////////////////////////
@@ -1598,6 +1605,7 @@ double getPitchAsMidi(HTp token, double reference) {
 }
 
 
+
 //////////////////////////////
 //
 // simplifyOperations --
@@ -1874,7 +1882,6 @@ string getOutputFilename(const string& filename) {
 
 
 
-
 /////////////////////////////
 //
 // getMidiNoteNumber -- Input:
@@ -2001,6 +2008,7 @@ void prepareTimelineTime(vector<double>& timeline, HTp sstart, int lines) {
 		}
 	}
 }
+
 
 
 //////////////////////////////

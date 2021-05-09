@@ -6,15 +6,26 @@ LIBS    = -lhumlib -lmidifile -lpugixml
 BIN     = bin
 SRC     = src
 
-all:
+.PHONY: tests
+
+all: compile
+
+compile:
+	(cd external; make)
 	@mkdir -p bin
 	g++ $(INCDIRS) $(FLAGS) -o $(BIN)/ratioscore $(SRC)/ratioscore.cpp $(LIBDIRS) $(LIBS)
 
 
+install:
+	sudo cp bin/ratioscore /usr/local/bin/ && strip /usr/local/bin/ratioscore
+
+
+tests: test
 test:
 	bin/ratioscore tests/test1.txt
 
-
 update:
 	(cd external; make update)
+	git pull
+
 

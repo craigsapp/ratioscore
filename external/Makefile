@@ -14,3 +14,7 @@ compile:
 	(cd humlib && make)
 
 
+clean:
+	rm -rf midifile
+	rm -rf humlib
+
