@@ -64,7 +64,7 @@ references:
 C4 (middle C) will be used as the reference pitch if none is given
 in a ratio column.  The reference pitch can be tuned off of EQ/A440
 by adding/subtracting a cent interval from the note name.  The cent
-interval should should have the letter "c" following it:
+interval should have the letter "c" following it:
 
 {% include ratioscore.html id="cent-reference" tabsize="12" %}
 <script type="application/x-ratioscore" id="cent-reference">
