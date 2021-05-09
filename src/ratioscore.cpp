@@ -48,6 +48,8 @@ using namespace hum;
 
 #define GLISS_START "H"
 #define GLISS_END "h"
+#define ACCENT "V"
+#define DEACCENT "v"
 
 // function declarations:
 string  getOutputFilename (const string& filename);
@@ -457,7 +459,7 @@ void getSubstitutions(HumdrumFile& infile) {
 
 void sortLongestToShortest(vector<pair<string, string>>& subs) {
 	sort(subs.begin(), subs.end(),
-		[](const pair<string, string> &a, 
+		[](const pair<string, string> &a,
 		   const pair<string, string> &b)
 		{
 			int sizea = (int)a.first.size();
@@ -1047,8 +1049,8 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 
 			if (current->find('_') == string::npos) {
 				outfile.addPitchBend(track, ptime, channel, pbend);
-				outfile.addNoteOn(track, starttime, channel, int(pitch), attack);
-				outfile.addNoteOff(track, endtime, channel, int(pitch), attack);
+				outfile.addNoteOn(track, starttime, channel, int(pitch + 0.5), attack);
+				outfile.addNoteOff(track, endtime, channel, int(pitch + 0.5), attack);
 				lastattack = pitch;
 			} else {
 				// this is a tied note, so ignored for note attacks, but add
@@ -1351,14 +1353,26 @@ int getAttackVelocity(HTp rtoken, int basevel, int velstep) {
 //
 
 double getPitchBend(double pitch, int channel) {
-	double pbend = pitch - int(pitch);
+	int adjpitch = int(pitch);
+	// Adjust pbend to nearsest EQ note rather than flooring:
+	if (pitch - adjpitch >= 0.50) {
+		adjpitch++;
+	}
+
+	double pbend = pitch - adjpitch;
 	double prange = m_pbrange.at(channel);
 	pbend = pbend / prange;  // normalize to pitch bend range
 	return pbend;
 }
 
+
 double getPitchBend(double pitch, double spitch, int channel) {
-	double pbend = pitch - int(spitch);
+	// Adjust pbend to nearsest EQ note rather than flooring:
+	int adjpitch = int(spitch);
+	if (spitch - int(spitch) >= 0.50) {
+		adjpitch++;
+	}
+	double pbend = pitch - adjpitch;
 	double prange = m_pbrange.at(channel);
 	pbend = pbend / prange;  // normalize to pitch bend range
 	return pbend;
@@ -1409,7 +1423,7 @@ double getPitchAsMidi(HTp token, double reference) {
 
 	string tempclean = cleaned;
 	// Remove non-pitch information from token, including whitespace:
-	hre.replaceDestructive(tempclean, "", "[ Hh_]", "g");
+	hre.replaceDestructive(tempclean, "", "[ HhVv_]", "g");
 
 	// Check if only a cent interval (not allowed have expressions yet)::
 	if (hre.search(tempclean, "^([+-]?\\d+\\.?\\d*)c$")) {
