@@ -6,12 +6,12 @@ all:
 update:
 	(cd midifile && git pull)
 	(cd humlib && make update)
-	(cd midifile && make)
-	(cd humlib && make)
+	(cd midifile && make library)
+	(cd humlib && make library)
 
 compile:
-	(cd midifile && make)
-	(cd humlib && make)
+	(cd midifile && make library)
+	(cd humlib && make library)
 
 
 clean:

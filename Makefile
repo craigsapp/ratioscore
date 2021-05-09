@@ -22,7 +22,13 @@ install:
 
 tests: test
 test:
-	bin/ratioscore tests/test1.txt
+	@echo "Creating test MIDI files in the tests directory..."
+	for i in tests/*.txt; do bin/ratioscore $$i; done
+
+cleantests: cleantest
+cleantest:
+	@echo "Deleting MIDI files in tests directory..."
+	rm -f tests/test[0-9][0-9][0-9].mid
 
 update:
 	(cd external; make update)

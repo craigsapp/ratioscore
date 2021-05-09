@@ -1,3 +1,4 @@
+!!!OTL: Harmonic series
 **time	**ratio
 *	*ref:C2
 0	1
