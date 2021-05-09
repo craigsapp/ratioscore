@@ -28,15 +28,14 @@ To compile, enter the ratioscore directory and then type:
 make
 ```
 
-This will download and compile two external libraries [midifile](https://github.com/craigsapp/midifile)
+This will download and compile two external libraries, [midifile](https://github.com/craigsapp/midifile)
 (for MIDI file parsing) and [humlib](https://github.com/craigsapp/humlib) (for Humdrum file
-parsing).  The the ratioscore program will be compiled and placed in the `bin` directory.  To
+parsing).  The ratioscore program will be compiled and placed in the `bin` directory.  To
 install in `/usr/local/bin`, allowing the ratioscore program to be run from any directory, type:
 
 ```bash
 make install
 ```
-
 
 
 Documentation
