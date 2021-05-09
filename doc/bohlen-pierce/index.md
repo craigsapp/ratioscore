@@ -237,7 +237,8 @@ Composition using lambda scale:
 
 <ul>
 <li> <a target="_blank" href="https://en.wikipedia.org/wiki/Bohlen%E2%80%93Pierce_scale">Bohlen-Pierce scale</a> Wikipedia entry. </li>
-<li> <a terget="_blank" href="http://www.huygens-fokker.org/bpsite/index.html">The Bohlen-Pierce Site</a>  at the Huygens-Fokker Center for Microtonal Music </li>
-<li> <a terget="_blank" href="http://www.huygens-fokker.org/bpsite/modes.html">Bohlen-Pierce modes and tunings</a> </li>
+<li> <a target="_blank" href="http://www.huygens-fokker.org/bpsite/index.html">The Bohlen-Pierce Site</a>  at the Huygens-Fokker Center for Microtonal Music </li>
+<li> <a target="_blank" href="http://www.huygens-fokker.org/bpsite/modes.html">Bohlen-Pierce modes and tunings</a> </li>
+<li> <a target="_blank" href="https://clarinet.org/the-bohlen-pierce-clarinet-exploring-a-new-tonality">Bohlen-Pierce clarinets</a> (Clarinets' first overtime is the third harmonic, the tritave of the Bohlen-Pierce scale). </li>
 </ul>
 

@@ -151,7 +151,7 @@ accidentals</a>.
 Ratioscores will be presented at <a href="/tenor2021">TENOR 2021</a>.
 
 
-<h2> Software </h2>
+<h2> Software and website </h2>
 
 Ratioscores on this website are converted into MIDI files using <a
 target="_blank" href="https://github.com/craigsapp/ratioscore">this
@@ -165,8 +165,6 @@ to allow for non-equal temperament pitches.  <a
 href="glissandos">Glissandos</a> up to one octave are also possible,
 with the convert automatically adjusting the pitch-bend depth to
 accomodate the widest glissando in a part.
-
-<h2> Website </h2>
 
 This website is hosted on Github and uses Jekyll for page templating.
 <a target="_blank"
