@@ -10,7 +10,7 @@ vim: ts=8:ft=html
 This page gives live examples from the <a target="_blank"
 href="/doc/tenor2021/TENOR-2021.pdf">TENOR 2021</a> paper about Ratioscores (<a
 target="_blank" href="http://bit.ly/ratioscores-tenor2021">presentation
-slides</a>).
+slides</a>) (<a target="_blank" href="https://www.tenor-conference.org/proceedings.html">TENOR Proceedings</a>).
 
 <h2> Figure 1 </h2>
 

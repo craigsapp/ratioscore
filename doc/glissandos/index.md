@@ -107,6 +107,64 @@ to 1/5 and 1/10 of a second respectivly for the last two glissandos.
 
 <h2 data-sidebar="Examples"> Other examples </h2>
 
+Here is an example of starting at a 5/4 major third, and then glissandoing
+to a 400c major third and back again, with and without the reference pitch:
+
+{% include ratioscore.html id="justeq3" %}
+<script type="application/x-ratioscore" id="justeq3">
+**dtime	**ratio	**ratio
+*	*I#71	*I#71
+*	*ref:C5	*refC5
+*	*vel:60	*vel:50
+1	5/4H	0
+1	_5/4	.
+1	_400c	.
+1	_400c	.
+1	_5/4	.
+1	_5/4h	.
+1	5/4H	1
+1	_5/4	.
+1	_400c	.
+1	_400c	.
+1	_5/4	.
+1	_5/4h	.
+*-	*-	*-
+</script>
+
+
+
+Here is an example of glissandoing up and down a pythagorean comma from a note:
+
+{% include ratioscore.html id="pgliss" %}
+<script type="application/x-ratioscore" id="pgliss">
+**dtime	**ratio	**ratio
+*	*I#71	*I#71
+*	*refF3	*ref:F3
+*	*vel:50	*vel:60
+1	0	3/2H
+1	.	_3/2
+1	.	_(3/2)*(3^12/2^19)
+1	.	_(3/2)*(3^12/2^19)
+1	.	_3/2
+1	.	_3/2
+1	.	_(3/2)/(3^12/2^19)
+1	.	_(3/2)/(3^12/2^19)
+1	.	_3/2h
+1	3/2	3/2H
+1	.	_3/2
+1	.	_(3/2)*(3^12/2^19)
+1	.	_(3/2)*(3^12/2^19)
+1	.	_3/2
+1	.	_3/2
+1	.	_(3/2)/(3^12/2^19)
+1	.	_(3/2)/(3^12/2^19)
+1	.	_3/2
+1	.	_3/2h
+*-	*-	*-
+</script>
+
+
+
 Going from a unison to a first-inversion major triad and back again:
 
 {% include ratioscore.html id="triad" %}

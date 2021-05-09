@@ -20,6 +20,6 @@ vim: ts=3:ft=html
 <h2> References </h2>
 
 <ul>
-<li> <a terget="_blank" href="https://www.youtube.com/watch?v=vfzu33BfRHE">Snarky Puppy: NPR Music Tiny Desk Concert</a> </li>
+<li> <a terget="_blank" href="https://www.youtube.com/watch?v=vfzu33BfRHE&t=406">Snarky Puppy: NPR Music Tiny Desk Concert</a> </li>
 <ul>
 
