@@ -50,3 +50,11 @@ fifth between the two adjacent notes by 1/4 of a syntonic comma
 </script>
 
 
+
+<h2> See also </h2>
+
+<ul>
+<li> <a target="_blank" href="https://www.youtube.com/watch?v=TgwaiEKnMTQ">Temperaments- What you need to know</a> </li>
+</ul>
+
+

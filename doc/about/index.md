@@ -149,7 +149,7 @@ accidentals</a>.
 
 <h2> Conference </h2>
 
-Ratioscores will be presented at <a href="/tenor2021">TENOR 2021</a>.
+Ratioscores is being presented at <a href="/tenor2021">TENOR 2021</a>.
 
 
 <h2> Software and website </h2>
