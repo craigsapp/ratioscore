@@ -80,7 +80,7 @@ function saveRatioscoreRendering(event, id, format) {
 		let url = window.URL.createObjectURL(myblob);
 
 		if (outputformat === "mp3") {
-			console.log("STORING AUDIO in AUDIOurl");
+			console.log("STORING AUDIO in AUDIOurl", url);
 			AUDIOratioscore = inputdata;
 			AUDIOurl = url;
 		}

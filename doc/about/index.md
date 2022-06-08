@@ -230,3 +230,11 @@ Bug reports and feature requests can be submitted to the <a
 target="_blank" href="https://github.com/craigsapp/ratioscore/issues">Ratioscore repository</a> on Github.
 
 
+<h2> Related papers </h2>
+
+Serdar Celik, "<a target="_blank"
+href=http://www.ijesi.org/papers/Vol(5)9/A0590107.pdf">Micro-MIDI: A
+Real Time, Dynamic Microtonal MIDI Application</a>," in <i>International
+Journal of Engineering and Science Invention</i>, Vol. 5/9 (Sep.
+2016), pp 1-7.  ISSN (Online): 2319–6734, (Print): 2319–6726.
+
