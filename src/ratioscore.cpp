@@ -1,7 +1,7 @@
 //
 // Programmer:    Craig Stuart Sapp <craig@ccrma.stanford.edu>
 // Creation Date: Wed May 20 09:52:32 PDT 2020
-// Last Modified: Sat May  8 22:57:16 PDT 2021
+// Last Modified: Tue Jun  7 22:34:22 PDT 2022
 // Filename:      ratioscore.cpp
 // URL:           https://github.com/craigsapp/ratioscore/blob/master/src/ratioscore.cpp
 // Syntax:        C++11
@@ -91,6 +91,7 @@ string  applyDrumSubstitutions(const string& input);
 void    simplifyOperations(string &cleaned);
 void    sortLongestToShortest(vector<pair<string, string>>& subs);
 bool    reallyHasGliss    (HTp token);
+HTp     findReferencePitch(HTp token);
 
 
 // variables:
@@ -119,12 +120,13 @@ int         m_velocity = 64;         // default attack velocity of notes
 vector<int> m_graceDur;              // grace note duration (ms units)
 double      m_maxtime = 0.0;         // maximum time of output MIDI file
 vector<double> m_timeline;           // used with --max-time option
-bool        m_printTimemap = false; // used with -t option
+bool        m_printTimemap = false;  // used with -t option
 bool        m_debugQ = false;        // used with --debug option
 vector<double> m_currTempo;          // used for grate calculations
 vector<pair<string, string>> m_ratioSubs; // used with !!!RDF**ratio:
 vector<pair<string, string>> m_drumSubs;  // used with !!!RDF**drum:
 int         m_pad = 0;
+int         m_refSpineTrack = 0;     // used **ref spine if present
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -178,7 +180,9 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		outfile.addTempo(0, 0, 60.0);
+		if (m_first_tempo_time != 0) {
+			outfile.addTempo(0, 0, 60.0);
+		}
 		outfile.markSequence();
 		outfile.sortTracks();
 
@@ -218,7 +222,9 @@ int main(int argc, char** argv) {
 			}
 		}
 
-		outfile.addTempo(0, 0, 60.0);
+		if (m_first_tempo_time != 0) {
+			outfile.addTempo(0, 0, 60.0);
+		}
 		outfile.markSequence();
 		outfile.sortTracks();
 
@@ -257,7 +263,9 @@ int main(int argc, char** argv) {
 			}
 			string filename = getOutputFilename(options.getArg(i+1));
 
-			outfile.addTempo(0, 0, 60.0);
+			if (m_first_tempo_time != 0) {
+				outfile.addTempo(0, 0, 60.0);
+			}
 			outfile.markSequence();
 			outfile.sortTracks();
 
@@ -284,6 +292,14 @@ bool convertFile(MidiFile& outfile, HumdrumFile& infile) {
 		prepareTimeline(infile);
 	} else {
 		m_timeline.clear();
+	}
+
+	m_refSpineTrack = 0;
+	for (int i=0; i<(int)m_sstarts.size(); i++) {
+		if (*m_sstarts[i] == "**ref") {
+			m_refSpineTrack = m_sstarts[i]->getTrack();
+			break;
+		}
 	}
 
 	m_glissTime.resize(infile.getTrackCount() + 1);
@@ -1010,10 +1026,14 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 					int starttime = m_timemap[current->getLineIndex()] + m_pad;
 					outfile.addController(track, starttime, channel, 10, pan);
 				}
-			} else if (hre.search(current, "^\\*ref[:=]?.*\\d")) {
+			} else if ((!m_refSpineTrack) && hre.search(current, "^\\*ref[:=]?.*\\d")) {
 				reference = getReferencePitchAsMidi(*current);
 			}
 		} else if (current->isData()) {
+			if (m_refSpineTrack) {
+				HTp tcurrent = findReferencePitch(current);
+				reference = getReferencePitchAsMidi(*tcurrent);
+			}
 			if (!wroteBend) {
 				double glissRange = getMaxGlissRange(pstart);
 				// force writing of pitch bend depth (in case the synthesizer
@@ -1068,6 +1088,44 @@ void generateRatioTrack(MidiFile& outfile, int track, HTp pstart, HTp dstart, Hu
 		current = current->getNextToken();
 		continue;
 	}
+}
+
+
+
+//////////////////////////////
+//
+// findReferencePitch -- Find the reference pitch column and the 
+//    pitch in it.  if the pitch is a null token, then resolve it
+//    to the last given pitch in the **ref spine.
+//
+
+HTp findReferencePitch(HTp token) {
+
+	HTp current = token->getPreviousFieldToken();;
+	while (current) {
+		if (current->isDataType("**ref")) {
+			if (!current->isNull()) {
+				return current;
+			} else {
+				return current->resolveNull();
+			}
+		}
+		current = current->getPreviousFieldToken();
+	}
+
+	current = token->getNextFieldToken();;
+	while (current) {
+		if (current->isDataType("**ref")) {
+			if (!current->isNull()) {
+				return current;
+			} else {
+				return current->resolveNull();
+			}
+		}
+		current = current->getNextFieldToken();
+	}
+
+	return NULL;
 }
 
 
@@ -1204,27 +1262,27 @@ double getReferencePitchAsMidi(const string& token) {
 	double reference = 60; // default reference
 
 	// Read reference as frequency:
-	if (hre.search(token, "^\\*ref[:=]?(\\d+\\.?\\d*)z")) {
-		double frequency = hre.getMatchDouble(1);
+	if (hre.search(token, "^(\\*ref[:=]?)?(\\d+\\.?\\d*)z")) {
+		double frequency = hre.getMatchDouble(2);
 		reference = 12.0 * log2(frequency / 440.0) + 69.0;
 	}
-	else if (hre.search(token, "^\\*ref[:=]?(\\d+\\.?\\d*)$")) {
+	else if (hre.search(token, "^(\\*ref[:=]?)?(\\d+\\.?\\d*)$")) {
 		// Allow incorrectly labeled frequency (missing "z"):
-		double frequency = hre.getMatchDouble(1);
+		double frequency = hre.getMatchDouble(2);
 		reference = 12.0 * log2(frequency / 440.0) + 69.0;
 	}
 
 	// Read reference as MIDI key number:
-	else if (hre.search(token, "^\\*ref[:=]?(\\d+\\.?\\d*)m")) {
-		reference = hre.getMatchDouble(1);
+	else if (hre.search(token, "^(\\*ref[:=]?)?(\\d+\\.?\\d*)m")) {
+		reference = hre.getMatchDouble(2);
 	}
 
 	// Read reference as note name:
-	else if (hre.search(token, "^\\*ref[:=]?([A-G][#sbf+]?-?\\d+)([+-]\\d+\\.?\\d*c)?")) {
+	else if (hre.search(token, "^(\\*ref[:=]?)?([A-G][#sbf+]?-?\\d+)([+-]\\d+\\.?\\d*c)?")) {
 		reference = 60.0;  // default reference
-		string refpitch = hre.getMatch(1);
+		string refpitch = hre.getMatch(2);
 		reference = getMidiNoteNumber(refpitch);
-		string refcents = hre.getMatch(2);
+		string refcents = hre.getMatch(3);
 		if (!refcents.empty()) {
 			if (hre.search(refcents, "([+-])(\\d+\\.?\\d*)c")) {
 				string direction = hre.getMatch(1);
