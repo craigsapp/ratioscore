@@ -135,8 +135,8 @@ If the reference pitch changes often and should apply to all
 4	A2+25c	1	6/5	3/2	2
 4	123z	1	7/6	3/2	2
 2	C3	1	8/7H	3/2	2
-2	.	.	5/4h	.	.
-2	.	.	5/4h	.	.
+2	.	.	_5/4	.	.
+2	.	.	_5/4h	.	.
 *-	*-	*-	*-	*-	*-
 </script>
 
