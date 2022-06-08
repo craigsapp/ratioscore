@@ -129,12 +129,13 @@ If the reference pitch changes often and should apply to all
 
 {% include ratioscore.html id="reference-spine" tabsize="12" %}
 <script type="application/x-ratioscore" id="reference-spine">
-**recip	**ref	**ratio	*ratio	*ratio	**ratio
+**recip	**ref	**ratio	**ratio	**ratio	**ratio
 *	*	*Iorgan	*Iorgan	*Iorgan	*Iorgan
 2	G2	1	5/4	3/2	2
 4	A2+25c	1	6/5	3/2	2
 4	123z	1	7/6	3/2	2
 1	C3	1	8/7	3/2	2
+*-	*-	*-	*-	*-	*-
 </script>
 
 
