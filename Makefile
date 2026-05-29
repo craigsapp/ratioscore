@@ -1,6 +1,6 @@
 
 FLAGS   = -O3 -std=c++11
-INCDIRS = -Iexternal/humlib/include -Iexternal/midifile/include
+INCDIRS = -Iexternal/humlib/min -Iexternal/midifile/include
 LIBDIRS = -Lexternal/humlib/lib -Lexternal/midifile/lib
 LIBS    = -lhumlib -lmidifile -lpugixml
 BIN     = bin
